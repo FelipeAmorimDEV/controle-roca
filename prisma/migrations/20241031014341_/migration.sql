@@ -13,6 +13,7 @@ ALTER TABLE "apontamentos" DROP COLUMN "setorId",
 ADD COLUMN     "setor_id" TEXT NOT NULL;
 
 -- AlterTable
+ALTER TABLE "funcionarios" ADD COLUMN     "cargo" TEXT NOT NULL DEFAULT 'teste';
 
 -- AddForeignKey
 ALTER TABLE "apontamentos" ADD CONSTRAINT "apontamentos_setor_id_fkey" FOREIGN KEY ("setor_id") REFERENCES "setores"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
