@@ -1,0 +1,210 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Qrcodes {
+  id            String       @id @default(uuid())
+  usado         Boolean      @default(false)
+  createdAt     DateTime     @default(now())
+  Funcionario   Funcionario? @relation(fields: [funcionarioId], references: [id])
+  funcionarioId String
+
+  pallets   Pallets? @relation(fields: [palletsId], references: [id])
+  palletsId String?
+
+  @@map("qrcodes")
+}
+
+model Pallets {
+  id          String     @id @default(uuid())
+  usado       Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  peso        Int
+  qtdCaixas   Int
+  qtdFeitas   Int        @default(0)
+  Caixa       Caixa?     @relation(fields: [caixaId], references: [id])
+  caixaId     Int
+  Variedade   Variedade? @relation(fields: [variedadeId], references: [id])
+  variedadeId Int
+  Qrcodes     Qrcodes[]
+
+  @@map("pallets")
+}
+
+model Variedade {
+  id      Int       @id @default(autoincrement())
+  nome    String
+  Pallets Pallets[]
+
+  @@map("variedades")
+}
+
+model Caixa {
+  id      Int       @id @default(autoincrement())
+  nome    String
+  Pallets Pallets[]
+
+  @@map("caixas")
+}
+
+model Users {
+  id       String    @id @default(uuid())
+  user     String    @unique
+  password String
+  Entrada  Entrada[]
+  Saida    Saida[]
+
+  @@map("users")
+}
+
+model Product {
+  id           String      @id @default(uuid())
+  name         String      @unique
+  unit         String
+  price        Float       @default(0)
+  quantity     Float?      @default(0)
+  saida        Saida[]
+  entrada      Entrada[]
+  Fornecedor   Fornecedor? @relation(fields: [fornecedorId], references: [id])
+  fornecedorId String
+  Tipo         Tipo?       @relation(fields: [tipoId], references: [id])
+  tipoId       String
+
+  @@map("products")
+}
+
+model Saida {
+  id         String   @id @default(uuid())
+  quantity   Float
+  createdAt  DateTime @default(now())
+  priceSaida Float
+  Product    Product  @relation(fields: [productId], references: [id])
+  productId  String
+  setor      Setor?   @relation(fields: [setorId], references: [id])
+  setorId    String?
+  Users      Users    @relation(fields: [usersId], references: [id])
+  usersId    String
+
+  @@map("saidas")
+}
+
+model Entrada {
+  id           String   @id @default(uuid())
+  quantity     Float
+  priceEntrada Float    @default(0)
+  price        Float    @default(0)
+  createdAt    DateTime
+  Product      Product  @relation(fields: [productId], references: [id])
+  productId    String
+  Users        Users    @relation(fields: [usersId], references: [id])
+  usersId      String
+
+  @@map("entradas")
+}
+
+model Setor {
+  id          String        @id @default(uuid())
+  setorName   String
+  variedade   String
+  filas       String
+  tamanhoArea Float
+  Saida       Saida[]
+  Aplicacao   Aplicacao[]
+  Colheita    Colheita[]
+  Apontamento Apontamento[]
+
+  @@map("setores")
+}
+
+model Aplicacao {
+  id                String   @id @default(uuid())
+  aplicador         String
+  volumeCalda       Int
+  createdAt         DateTime @default(now())
+  produtosAplicados Json
+  setor             Setor?   @relation(fields: [setorId], references: [id])
+  setorId           String?
+
+  @@map("aplicacoes")
+}
+
+model Tratorista {
+  id   String @id @default(uuid())
+  name String
+
+  @@map("tratoristas")
+}
+
+model Fornecedor {
+  id      String    @id @default(uuid())
+  name    String
+  Product Product[]
+
+  @@map("fornecedores")
+}
+
+model Tipo {
+  id      String    @id @default(uuid())
+  name    String
+  Product Product[]
+
+  @@map("tipos")
+}
+
+model Colheita {
+  id        String   @id @default(uuid())
+  pesoCaixa Int
+  pesoTotal Int
+  qntCaixa  Int
+  tipoCaixa String
+  createdAt DateTime @default(now())
+  setor     Setor?   @relation(fields: [setorId], references: [id])
+  setorId   String?
+
+  @@map("colheitas")
+}
+
+model Funcionario {
+  id          String        @id @default(uuid())
+  nome        String        @unique
+  cargo       String        @default("teste")
+  Qrcodes     Qrcodes[]
+  Apontamento Apontamento[]
+
+  @@map("funcionarios")
+}
+
+model Atividade {
+  id          String        @id @default(uuid())
+  nome        String
+  categoria   String
+  Apontamento Apontamento[]
+
+  @@map("atividades")
+}
+
+model Apontamento {
+  id             String      @id @default(uuid())
+  data_inicio    DateTime    @default(now())
+  data_fim       DateTime?
+  status         String      @default("em andamento")
+  funcionario    Funcionario @relation(fields: [funcionario_id], references: [id])
+  funcionario_id String
+  atividade      Atividade   @relation(fields: [atividade_id], references: [id])
+  atividade_id   String
+  setor          Setor       @relation(fields: [setor_id], references: [id])
+  setor_id       String
+
+  @@map("apontamentos")
+}
