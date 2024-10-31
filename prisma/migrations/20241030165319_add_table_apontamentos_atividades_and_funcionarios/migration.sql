@@ -5,7 +5,6 @@
 
 */
 -- AlterTable
-ALTER TABLE "funcionarios" ADD COLUMN     "cargo" TEXT NOT NULL;
 
 -- CreateTable
 CREATE TABLE "atividades" (
