@@ -53,15 +53,14 @@ export class ValidateQrcodeUseCase {
       throw new PalletCheio()
     }
 
-    const colheita = await this.colheitaRepository.createColheita({
-      caixa_id: pallet.caixaId,
+    await this.colheitaRepository.createColheita({
       pesoCaixa: pallet.peso,
       pesoTotal: pallet.peso * pallet.qtdCaixas,
       qntCaixa: pallet.qtdCaixas,
       setorId: pallet.setor_id,
+      caixa_id: pallet.caixaId,
+      createdAt: new Date(),
     })
-
-    console.log(colheita)
 
     await this.qrcodePalletRepository.incrementPalletCaixa(pallet.id)
 
