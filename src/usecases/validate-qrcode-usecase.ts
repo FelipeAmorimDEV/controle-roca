@@ -59,7 +59,7 @@ export class ValidateQrcodeUseCase {
       qntCaixa: pallet.qtdCaixas,
       setorId: pallet.setor_id,
       caixa_id: pallet.caixaId,
-      createdAt: new Date(),
+      createdAt: '2024-10-31',
     })
 
     await this.qrcodePalletRepository.incrementPalletCaixa(pallet.id)
