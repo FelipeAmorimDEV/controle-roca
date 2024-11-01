@@ -49,7 +49,8 @@ export class ValidateQrcodeUseCase {
 
     const palletIsFull = pallet.qtdCaixas === pallet.qtdFeitas
 
-    if (pallet.qtdFeitas + 1 === pallet.qtdCaixas) {
+    /* 
+      if (pallet.qtdFeitas + 1 === pallet.qtdCaixas) {
       await this.colheitaRepository.createColheita({
         caixa_id: pallet.caixaId,
         pesoCaixa: pallet.peso,
@@ -58,6 +59,7 @@ export class ValidateQrcodeUseCase {
         setorId: pallet.setor_id,
       })
     }
+    */
 
     if (palletIsFull) {
       throw new PalletCheio()

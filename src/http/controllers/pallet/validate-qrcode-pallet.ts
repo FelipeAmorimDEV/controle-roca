@@ -1,8 +1,6 @@
 import { PrismaQrcodePalletRepository } from '@/repository/prisma/prisma-qrcode-pallet-repository'
 import { PalletIndisponivel } from '@/usecases/errors/pallet-indisponivel'
 import { PalletNaoExiste } from '@/usecases/errors/pallet-nao-existe'
-import { QrcodeNaoExiste } from '@/usecases/errors/qrcode-nao-existe'
-import { QrcodeUtilizado } from '@/usecases/errors/qrcode-utilizado'
 import { ValidateQrcodePalletUseCase } from '@/usecases/validate-qrcode-pallet-usecase'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
@@ -13,7 +11,7 @@ export async function validateQrcodePallet(
 ) {
   const requestBodySchema = z.object({
     qrCodeData: z.object({
-      palletId: z.string().uuid()
+      palletId: z.string().uuid(),
     }),
   })
 
