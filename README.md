@@ -36,8 +36,8 @@
 - [x] Rota deletar produto
 - [x] Rota deletar pallet
 - [x] Filtrar pallet por data variedade ou classificação // filtrando por data 1 dia a menos
+- [x] Adicionar setor ao pallet
 - [ ] Bug produto negativo ao remover
-- [ ] Adicionar setor ao pallet
 - [ ] Rota Trator
 - [ ] Dashboard
 - [ ] Criar uma rota para fertirrigação

@@ -7,6 +7,7 @@ interface CreateQrcodePalletUseCaseParams {
   variedadeId: number
   peso: number
   caixaId: number
+  setorId: string
 }
 
 interface CreateQrcodePalletUseCaseResponse {
@@ -22,6 +23,7 @@ export class CreateQrcodePalletUseCase {
     qtdCaixas,
     variedadeId,
     quantidade,
+    setorId,
   }: CreateQrcodePalletUseCaseParams): Promise<CreateQrcodePalletUseCaseResponse> {
     const qrcodes = []
 
@@ -31,6 +33,7 @@ export class CreateQrcodePalletUseCase {
         peso,
         qtdCaixas,
         variedadeId,
+        setor_id: setorId,
       })
       const qrcodeData = {
         palletId: qrcode.id,

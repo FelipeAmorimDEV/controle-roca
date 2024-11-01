@@ -7,6 +7,47 @@ import {
 import { prisma } from '@/prisma'
 
 export class PrismaProductRepository implements ProductsRepository {
+  async getProductLowStock(): Promise<Product[]> {
+    const products = await prisma.product.findMany({
+      where: {
+        quantity: {
+          lte: 5,
+        },
+      },
+      include: {
+        Fornecedor: {
+          select: {
+            name: true,
+          },
+        },
+      },
+      take: 5,
+    })
+
+    return products
+  }
+
+  async getPriceProductInStock(): Promise<number> {
+    const products = await prisma.product.findMany({
+      select: {
+        quantity: true,
+        price: true,
+      },
+    })
+
+    const totalValue = products.reduce((sum, product) => {
+      return sum + (product.quantity ?? 0) * product.price
+    }, 0)
+
+    return totalValue
+  }
+
+  async getTotalProduct(): Promise<number> {
+    const totalProduto = await prisma.product.findMany()
+
+    return totalProduto.length
+  }
+
   async deleteProduct(productId: string): Promise<Product> {
     const product = await prisma.product.delete({
       where: {

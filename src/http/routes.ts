@@ -46,6 +46,7 @@ import { concluirApontamento } from './controllers/apontamento/concluir-apontame
 import { deleteApontamento } from './controllers/apontamento/delete-apontamento'
 import { deleteProduct } from './controllers/estoque/delete-product'
 import { deletePallet } from './controllers/pallet/delete-pallet'
+import { getDashboardData } from './controllers/dashboard/get-dashboard-data'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', createProduct)
@@ -107,6 +108,8 @@ export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/apontamento/register', createApontamento)
   app.put('/apotamento/:apontamentoId', concluirApontamento)
   app.delete('/apotamento/:apontamentoId', deleteApontamento)
+
+  app.get('/dashboard', getDashboardData)
 }
 
 // { onRequest: [verifyJWT] }

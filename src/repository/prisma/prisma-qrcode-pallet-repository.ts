@@ -89,6 +89,11 @@ export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
             nome: true,
           },
         },
+        setor: {
+          select: {
+            setorName: true,
+          },
+        },
       },
       orderBy: {
         createdAt: 'desc',
@@ -105,6 +110,11 @@ export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
         },
       },
       include: {
+        setor: {
+          select: {
+            setorName: true,
+          },
+        },
         Caixa: {
           select: {
             nome: true,
@@ -139,7 +149,9 @@ export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
     return pallet
   }
 
-  async createQrcodePallet(data: Prisma.PalletsCreateInput): Promise<Pallets> {
+  async createQrcodePallet(
+    data: Prisma.PalletsUncheckedCreateInput,
+  ): Promise<Pallets> {
     const pallet = await prisma.pallets.create({
       data,
     })

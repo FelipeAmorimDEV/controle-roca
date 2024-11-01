@@ -6,7 +6,13 @@ export interface ColheitaResult {
   totalColhido: number | null
 }
 
+export interface IProducaoMensal {
+  mes: string
+  quantidade: number
+}
+
 export interface ColheitaRepository {
+  getProducaoMensal(): Promise<IProducaoMensal[]>
   createColheita(data: Prisma.ColheitaCreateInput): Promise<Colheita>
   deleteColheita(colheitaId: string): Promise<Colheita>
   fetchAllColheita(

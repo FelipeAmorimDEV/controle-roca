@@ -7,6 +7,18 @@ import {
 import { prisma } from '@/prisma'
 
 export class PrismaStockRepository implements StockRepository {
+  async getTotalEntrada(): Promise<number> {
+    const totalEntrada = await prisma.entrada.findMany()
+
+    return totalEntrada.length
+  }
+
+  async getTotalSaida(): Promise<number> {
+    const totalSaida = await prisma.saida.findMany()
+
+    return totalSaida.length
+  }
+
   async deleteAllSaidas(productId: string): Promise<Prisma.BatchPayload> {
     const saidas = await prisma.saida.deleteMany({
       where: {

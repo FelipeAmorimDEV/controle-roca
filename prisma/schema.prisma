@@ -37,6 +37,8 @@ model Pallets {
   caixaId     Int
   Variedade   Variedade? @relation(fields: [variedadeId], references: [id])
   variedadeId Int
+  setor       Setor      @relation(fields: [setor_id], references: [id])
+  setor_id    String
   Qrcodes     Qrcodes[]
 
   @@map("pallets")
@@ -123,6 +125,7 @@ model Setor {
   Aplicacao   Aplicacao[]
   Colheita    Colheita[]
   Apontamento Apontamento[]
+  Pallets     Pallets[]
 
   @@map("setores")
 }

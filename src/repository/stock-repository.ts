@@ -17,6 +17,8 @@ export interface StockRepository {
   deleteSaida(saidaId: string): Promise<Saida>
   deleteAllEntradas(productId: string): Promise<Prisma.BatchPayload>
   deleteAllSaidas(productId: string): Promise<Prisma.BatchPayload>
+  getTotalEntrada(): Promise<number>
+  getTotalSaida(): Promise<number>
   createWithdrawStockItemLog(
     quantity: number,
     productId: string,
