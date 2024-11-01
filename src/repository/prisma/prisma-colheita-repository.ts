@@ -117,7 +117,7 @@ export class PrismaColheitaRepository implements ColheitaRepository {
   ): Promise<Colheita> {
     const horaAtual = new Date().toISOString().split('T')[1]
     console.log(data.createdAt + horaAtual)
-    const colheita = prisma.colheita.create({
+    const colheita = await prisma.colheita.create({
       data: {
         pesoCaixa: data.pesoCaixa,
         pesoTotal: data.pesoTotal,
