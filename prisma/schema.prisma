@@ -53,9 +53,10 @@ model Variedade {
 }
 
 model Caixa {
-  id      Int       @id @default(autoincrement())
-  nome    String
-  Pallets Pallets[]
+  id       Int        @id @default(autoincrement())
+  nome     String
+  Pallets  Pallets[]
+  Colheita Colheita[]
 
   @@map("caixas")
 }
@@ -170,10 +171,11 @@ model Colheita {
   pesoCaixa Int
   pesoTotal Int
   qntCaixa  Int
-  tipoCaixa String
+  tipoCaixa Caixa    @relation(fields: [caixa_id], references: [id])
   createdAt DateTime @default(now())
   setor     Setor?   @relation(fields: [setorId], references: [id])
   setorId   String?
+  caixa_id  Int      @default(1)
 
   @@map("colheitas")
 }

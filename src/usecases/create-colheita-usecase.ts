@@ -5,7 +5,7 @@ interface CreateColheitaUseCaseParams {
   pesoCaixa: number
   pesoTotal: number
   qntCaixa: number
-  tipoCaixa: string
+  tipoCaixa: number
   setorId: string
   data: string
 }
@@ -30,7 +30,7 @@ export class CreateColheitaUseCase {
       pesoTotal,
       qntCaixa,
       setorId,
-      tipoCaixa,
+      caixa_id: tipoCaixa,
       createdAt: data,
     })
 

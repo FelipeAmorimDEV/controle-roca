@@ -53,6 +53,13 @@ export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
       where: {
         id: qrcodeId,
       },
+      include: {
+        Caixa: {
+          select: {
+            nome: true,
+          },
+        },
+      },
     })
 
     return pallet

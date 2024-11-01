@@ -91,6 +91,13 @@ export class PrismaColheitaRepository implements ColheitaRepository {
           lte: new Date(endDateOfTheDay),
         },
       },
+      include: {
+        tipoCaixa: {
+          select: {
+            nome: true,
+          },
+        },
+      },
       skip: (page - 1) * perPage,
       take: perPage,
       orderBy: {
@@ -105,7 +112,9 @@ export class PrismaColheitaRepository implements ColheitaRepository {
     }
   }
 
-  async createColheita(data: Prisma.ColheitaCreateInput): Promise<Colheita> {
+  async createColheita(
+    data: Prisma.ColheitaUncheckedCreateInput,
+  ): Promise<Colheita> {
     const horaAtual = new Date().toISOString().split('T')[1]
     console.log(data.createdAt + horaAtual)
     const colheita = prisma.colheita.create({
@@ -114,7 +123,7 @@ export class PrismaColheitaRepository implements ColheitaRepository {
         pesoTotal: data.pesoTotal,
         qntCaixa: data.qntCaixa,
         setorId: data.setorId,
-        tipoCaixa: data.tipoCaixa,
+        caixa_id: data.caixa_id,
         createdAt: new Date(data.createdAt + 'T' + horaAtual),
       },
     })

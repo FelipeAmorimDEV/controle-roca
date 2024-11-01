@@ -11,7 +11,7 @@ export async function createColheita(
     pesoCaixa: z.coerce.number(),
     pesoTotal: z.coerce.number(),
     qntCaixa: z.coerce.number(),
-    tipoCaixa: z.string(),
+    tipoCaixa: z.coerce.number(),
     setorId: z.string().uuid(),
     data: z.string(),
   })
