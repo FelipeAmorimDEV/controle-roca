@@ -47,20 +47,24 @@ export class ValidateQrcodeUseCase {
       throw new QrcodeUtilizado()
     }
 
-    const palletIsFull = pallet.qtdCaixas === pallet.qtdFeitas
+    const isPalletFull = pallet.qtdCaixas === pallet.qtdFeitas
+    const isLastBox = pallet.qtdFeitas + 1 === pallet.qtdCaixas
 
-    if (palletIsFull) {
-      throw new PalletCheio()
+    if (isLastBox) {
+      const dateToday = new Date().toISOString().split('T')[0]
+      await this.colheitaRepository.createColheita({
+        pesoCaixa: pallet.peso,
+        pesoTotal: pallet.peso * pallet.qtdCaixas,
+        qntCaixa: pallet.qtdCaixas,
+        setorId: pallet.setor_id,
+        caixa_id: pallet.caixaId,
+        createdAt: dateToday,
+      })
     }
 
-    await this.colheitaRepository.createColheita({
-      pesoCaixa: pallet.peso,
-      pesoTotal: pallet.peso * pallet.qtdCaixas,
-      qntCaixa: pallet.qtdCaixas,
-      setorId: pallet.setor_id,
-      caixa_id: pallet.caixaId,
-      createdAt: '2024-10-31',
-    })
+    if (isPalletFull) {
+      throw new PalletCheio()
+    }
 
     await this.qrcodePalletRepository.incrementPalletCaixa(pallet.id)
 
