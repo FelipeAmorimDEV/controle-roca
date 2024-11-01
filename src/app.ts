@@ -23,5 +23,7 @@ app.setErrorHandler((error, request, reply) => {
     })
   }
 
+  console.error(error.message)
+
   return reply.status(500).send({ message: error.message })
 })
