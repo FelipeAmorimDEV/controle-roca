@@ -44,11 +44,14 @@ import { fetchApontamentosSetor } from './controllers/setor/fetch-apontamentos-s
 import { fetchAtividade } from './controllers/atividades/fetch-atividade'
 import { concluirApontamento } from './controllers/apontamento/concluir-apontamento'
 import { deleteApontamento } from './controllers/apontamento/delete-apontamento'
+import { deleteProduct } from './controllers/estoque/delete-product'
+import { deletePallet } from './controllers/pallet/delete-pallet'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', createProduct)
   app.get('/products', fetchProducts)
   app.get('/products/:id', getProducts)
+  app.delete('/products/:productId', deleteProduct)
   app.post('/products/:id/entrada', { onRequest: [verifyJWT] }, insertProduct)
   app.post('/products/:id/saida', { onRequest: [verifyJWT] }, withdrawProduct)
 
@@ -91,6 +94,7 @@ export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/pallet/generate', generateQrcodesPallet)
   app.post('/pallet/validate', validateQrcodePallet)
   app.get('/pallet', fetchAllPallets)
+  app.delete('/pallet/:palletId', deletePallet)
   app.get('/qrcode', fetchAllQrcode)
   app.post('/variedades/register', createVariedade)
   app.get('/variedades', fetchAllVariedade)

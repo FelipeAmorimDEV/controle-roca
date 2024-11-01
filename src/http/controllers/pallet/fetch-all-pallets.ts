@@ -4,26 +4,41 @@ import { FetchAllPalletsUseCase } from '@/usecases/fetch-all-pallets'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-
-
-export async function fetchAllPallets(request: FastifyRequest, reply: FastifyReply) {
+export async function fetchAllPallets(
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {
   const requestQuerySchema = z.object({
     page: z.coerce.number(),
-    perPage: z.coerce.number()
+    perPage: z.coerce.number(),
+    initialDate: z.string(),
+    endDate: z.string(),
+    classificacaoId: z.coerce.number().optional(),
+    variedadeId: z.coerce.number().optional(),
   })
 
-  const { page, perPage } = requestQuerySchema.parse(request.query)
+  const { page, perPage, endDate, initialDate, classificacaoId, variedadeId } =
+    requestQuerySchema.parse(request.query)
 
   const prismaQrcodePalletRepository = new PrismaQrcodePalletRepository()
-  const fetchAllPallets = new FetchAllPalletsUseCase(prismaQrcodePalletRepository)
+  const fetchAllPallets = new FetchAllPalletsUseCase(
+    prismaQrcodePalletRepository,
+  )
 
   try {
-    const { pallets, totalPallets } = await fetchAllPallets.execute({page, perPage})
+    const { pallets, totalPallets } = await fetchAllPallets.execute({
+      page,
+      perPage,
+      endDate,
+      initialDate,
+      classificacaoId,
+      variedadeId,
+    })
 
     return reply.status(201).send({ pallets, totalPallets })
   } catch (error) {
     if (error instanceof FuncionarioNaoExiste) {
-      return reply.status(400).send({message: error.message})
+      return reply.status(400).send({ message: error.message })
     }
 
     throw error

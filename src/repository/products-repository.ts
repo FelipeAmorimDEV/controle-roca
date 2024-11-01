@@ -15,6 +15,7 @@ export interface FetchAllProduct {
 
 export interface ProductsRepository {
   createProduct(data: CreateProduct): Promise<Product>
+  deleteProduct(productId: string): Promise<Product>
   fetchAllProduct(
     page: number,
     perPage: number,

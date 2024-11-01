@@ -9,7 +9,7 @@ export async function createProduct(
 ) {
   const requestBodySchema = z.object({
     name: z.string(),
-    unit: z.enum(['l', 'kg']),
+    unit: z.enum(['l', 'kg', 'ud']),
     fornecedorId: z.string().uuid(),
     tipoId: z.string().uuid(),
   })

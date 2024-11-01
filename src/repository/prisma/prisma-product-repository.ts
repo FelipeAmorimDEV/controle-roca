@@ -7,6 +7,16 @@ import {
 import { prisma } from '@/prisma'
 
 export class PrismaProductRepository implements ProductsRepository {
+  async deleteProduct(productId: string): Promise<Product> {
+    const product = await prisma.product.delete({
+      where: {
+        id: productId,
+      },
+    })
+
+    return product
+  }
+
   async createProduct(data: CreateProduct): Promise<Product> {
     const product = await prisma.product.create({
       data: {

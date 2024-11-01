@@ -1,4 +1,4 @@
-import { Saida, Entrada } from '@prisma/client'
+import { Saida, Entrada, Prisma } from '@prisma/client'
 import {
   EntradasResult,
   SaidasResult,
@@ -7,6 +7,26 @@ import {
 import { prisma } from '@/prisma'
 
 export class PrismaStockRepository implements StockRepository {
+  async deleteAllSaidas(productId: string): Promise<Prisma.BatchPayload> {
+    const saidas = await prisma.saida.deleteMany({
+      where: {
+        productId,
+      },
+    })
+
+    return saidas
+  }
+
+  async deleteAllEntradas(productId: string): Promise<Prisma.BatchPayload> {
+    const entradas = await prisma.entrada.deleteMany({
+      where: {
+        productId,
+      },
+    })
+
+    return entradas
+  }
+
   async deleteSaida(saidaId: string): Promise<Saida> {
     const saida = await prisma.saida.delete({
       where: {

@@ -1,4 +1,4 @@
-import { Entrada, Saida } from '@prisma/client'
+import { Entrada, Prisma, Saida } from '@prisma/client'
 
 export interface EntradasResult {
   entradas: Entrada[]
@@ -15,6 +15,8 @@ export interface SaidasResult {
 export interface StockRepository {
   deleteEntrada(entradaId: string): Promise<Entrada>
   deleteSaida(saidaId: string): Promise<Saida>
+  deleteAllEntradas(productId: string): Promise<Prisma.BatchPayload>
+  deleteAllSaidas(productId: string): Promise<Prisma.BatchPayload>
   createWithdrawStockItemLog(
     quantity: number,
     productId: string,
