@@ -53,8 +53,8 @@ export class ValidateQrcodeUseCase {
     if (isLastBox) {
       const dateToday = new Date().toISOString().split('T')[0]
       await this.colheitaRepository.createColheita({
-        pesoCaixa: pallet.peso,
-        pesoTotal: pallet.peso * pallet.qtdCaixas,
+        pesoCaixa: pallet.peso / 1000,
+        pesoTotal: (pallet.peso / 1000) * pallet.qtdCaixas,
         qntCaixa: pallet.qtdCaixas,
         setorId: pallet.setor_id,
         caixa_id: pallet.caixaId,
