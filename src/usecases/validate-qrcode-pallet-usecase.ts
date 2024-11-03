@@ -25,8 +25,9 @@ export class ValidateQrcodePalletUseCase {
   }: ValidateQrcodePalletUseCaseParams): Promise<ValidateQrcodePalletUseCaseResponse> {
     const qrcodeExist = await this.qrcodePalletRepository.findPalletQrcodeById(
       qrCodeData.palletId,
-      fazenda_id,
     )
+
+    console.log('pallet', qrcodeExist)
 
     if (!qrcodeExist) {
       throw new PalletNaoExiste()
@@ -34,7 +35,6 @@ export class ValidateQrcodePalletUseCase {
 
     const qrcode = await this.qrcodePalletRepository.changeQrcodePalletUsado(
       qrcodeExist.id,
-      fazenda_id,
     )
 
     return { qrcode }

@@ -22,6 +22,8 @@ export async function validateQrcodePallet(
     prismaQrcodePalletRepository,
   )
 
+  console.log('teste', request.user.fazenda_id)
+
   try {
     const { qrcode } = await validateQrcodePalletUsecase.execute({
       qrCodeData,

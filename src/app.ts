@@ -23,7 +23,7 @@ app.setErrorHandler((error, request, reply) => {
     })
   }
 
-  console.error(error.message)
+  console.log(error.message)
 
   return reply.status(500).send({ message: error.message })
 })
