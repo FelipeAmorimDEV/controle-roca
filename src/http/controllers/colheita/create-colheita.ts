@@ -14,10 +14,18 @@ export async function createColheita(
     tipoCaixa: z.coerce.number(),
     setorId: z.string().uuid(),
     data: z.string(),
+    variedade: z.string(),
   })
 
-  const { pesoCaixa, pesoTotal, qntCaixa, setorId, tipoCaixa, data } =
-    requestBodySchema.parse(request.body)
+  const {
+    pesoCaixa,
+    pesoTotal,
+    qntCaixa,
+    setorId,
+    tipoCaixa,
+    data,
+    variedade,
+  } = requestBodySchema.parse(request.body)
 
   const prismaColheitaRepository = new PrismaColheitaRepository()
   const createColheitaUseCase = new CreateColheitaUseCase(
@@ -31,6 +39,7 @@ export async function createColheita(
     setorId,
     tipoCaixa,
     data,
+    variedade,
   })
 
   return reply.status(201).send(colheita)

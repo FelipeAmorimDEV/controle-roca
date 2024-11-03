@@ -3,6 +3,19 @@ import { prisma } from '@/prisma'
 import { FetchPallets, QrcodePalletRepository } from '../pallet-repository'
 
 export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
+  async finalizarPallet(palletId: string): Promise<Pallets> {
+    const pallet = await prisma.pallets.update({
+      where: {
+        id: palletId,
+      },
+      data: {
+        finalizado: true,
+      },
+    })
+
+    return pallet
+  }
+
   async deletePallet(palletId: string): Promise<Pallets> {
     const pallet = await prisma.pallets.delete({
       where: {
@@ -70,16 +83,20 @@ export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
     perPage: number,
     initialDate: string,
     endDate: string,
+    status?: string,
     classificacaoId?: number,
     variedadeId?: number,
   ): Promise<FetchPallets> {
     const endDateOfTheDay = new Date(endDate)
     endDateOfTheDay.setUTCHours(23, 59, 59, 999)
 
+    console.log('status', status)
+
     const totalPallets = await prisma.pallets.findMany({
       where: {
         variedadeId,
         caixaId: classificacaoId,
+        finalizado: status === 'true',
         createdAt: {
           gte: new Date(initialDate),
           lte: new Date(endDateOfTheDay),
@@ -111,6 +128,7 @@ export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
       where: {
         variedadeId,
         caixaId: classificacaoId,
+        finalizado: status === 'true',
         createdAt: {
           gte: new Date(initialDate),
           lte: new Date(endDateOfTheDay),

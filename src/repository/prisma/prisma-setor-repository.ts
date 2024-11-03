@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { Prisma, Setor } from '@prisma/client'
 import { prisma } from '@/prisma'
 import { SetorRepository } from '../setor-repository'
 
@@ -25,36 +25,11 @@ export interface LoteRelatorio {
   atividades: Atividade[]
 }
 
-/* 
-  [
-	{
-		"id": "1a805459-99fd-4a5a-b017-8cccbcffc6d2",
-		"data_inicio": "2024-10-30T17:18:14.834Z",
-		"data_fim": null,
-		"status": "em andamento",
-		"funcionario_id": "40d7ee68-a2a7-43b3-991f-16ab2df9eeab",
-		"atividade_id": "21358b90-0a8a-4e1f-bd25-8e5f0e23883c",
-		"setor_id": "0f121a99-af13-49be-8ddb-397fc902a633",
-		"atividade": {
-			"id": "21358b90-0a8a-4e1f-bd25-8e5f0e23883c",
-			"nome": "PODA",
-			"categoria": "Campo"
-		},
-		"funcionario": {
-			"id": "40d7ee68-a2a7-43b3-991f-16ab2df9eeab",
-			"nome": "LEO",
-			"cargo": "Tarefa"
-		}
-	}
-]
-
-*/
-
-interface Setor {
+interface SetorI {
   id: string
   setorName: string
   filas: string
-  variedade: string
+  variedade_id: number
   tamanhoArea: number
 }
 
@@ -66,7 +41,7 @@ export interface ApontamentosI {
   atividade: string
   funcionario: string
   duracao: number | null
-  setor: Setor
+  setor: SetorI
 }
 
 export class PrismaSetorRepository implements SetorRepository {
@@ -109,9 +84,14 @@ export class PrismaSetorRepository implements SetorRepository {
     return setores
   }
 
-  async createSetor(data: Prisma.SetorCreateInput) {
+  async createSetor(data: Prisma.SetorUncheckedCreateInput) {
     const setor = prisma.setor.create({
-      data,
+      data: {
+        filas: data.filas,
+        setorName: data.setorName,
+        variedade_id: data.variedade_id,
+        tamanhoArea: data.tamanhoArea,
+      },
     })
 
     return setor

@@ -6,6 +6,7 @@ import { QrcodeUtilizado } from './errors/qrcode-utilizado'
 import { QrcodePalletRepository } from '@/repository/pallet-repository'
 import { PalletCheio } from './errors/pallet-cheio'
 import { ColheitaRepository } from '@/repository/colheita-repository'
+import { VariedadeRepository } from '@/repository/variedade-repository'
 
 export interface QrcodeI {
   nome: string
@@ -27,6 +28,7 @@ export class ValidateQrcodeUseCase {
     private qrcodeRepository: QrcodeRepository,
     private qrcodePalletRepository: QrcodePalletRepository,
     private colheitaRepository: ColheitaRepository,
+    private variedadeRepository: VariedadeRepository,
   ) {}
 
   async execute({
@@ -47,6 +49,9 @@ export class ValidateQrcodeUseCase {
       throw new QrcodeUtilizado()
     }
 
+    const variedade = await this.variedadeRepository.findById(
+      pallet.variedadeId,
+    )
     const isPalletFull = pallet.qtdCaixas === pallet.qtdFeitas
     const isLastBox = pallet.qtdFeitas + 1 === pallet.qtdCaixas
 
@@ -59,7 +64,10 @@ export class ValidateQrcodeUseCase {
         setorId: pallet.setor_id,
         caixa_id: pallet.caixaId,
         createdAt: dateToday,
+        variedade: variedade!.nome,
       })
+
+      await this.qrcodePalletRepository.finalizarPallet(pallet.id)
     }
 
     if (isPalletFull) {

@@ -11,5 +11,5 @@ export async function fetchSetores(
 
   const { setores } = await fetchAllSetorUseCase.execute()
 
-  return reply.status(201).send(setores)
+  return reply.status(200).send(setores)
 }

@@ -8,5 +8,5 @@ export async function fetchTipos(request: FastifyRequest, reply: FastifyReply) {
 
   const { tipos } = await fetchAllTiposUseCase.execute()
 
-  return reply.status(201).send(tipos)
+  return reply.status(200).send(tipos)
 }

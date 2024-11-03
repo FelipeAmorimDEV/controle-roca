@@ -33,6 +33,7 @@ model Pallets {
   peso        Int
   qtdCaixas   Int
   qtdFeitas   Int        @default(0)
+  finalizado  Boolean    @default(false)
   Caixa       Caixa?     @relation(fields: [caixaId], references: [id])
   caixaId     Int
   Variedade   Variedade? @relation(fields: [variedadeId], references: [id])
@@ -48,6 +49,7 @@ model Variedade {
   id      Int       @id @default(autoincrement())
   nome    String
   Pallets Pallets[]
+  Setor   Setor[]
 
   @@map("variedades")
 }
@@ -117,16 +119,17 @@ model Entrada {
 }
 
 model Setor {
-  id          String        @id @default(uuid())
-  setorName   String
-  variedade   String
-  filas       String
-  tamanhoArea Float
-  Saida       Saida[]
-  Aplicacao   Aplicacao[]
-  Colheita    Colheita[]
-  Apontamento Apontamento[]
-  Pallets     Pallets[]
+  id           String        @id @default(uuid())
+  setorName    String
+  variedade    Variedade     @relation(fields: [variedade_id], references: [id])
+  filas        String
+  tamanhoArea  Float
+  Saida        Saida[]
+  Aplicacao    Aplicacao[]
+  Colheita     Colheita[]
+  Apontamento  Apontamento[]
+  Pallets      Pallets[]
+  variedade_id Int
 
   @@map("setores")
 }
@@ -173,6 +176,7 @@ model Colheita {
   qntCaixa  Int
   tipoCaixa Caixa    @relation(fields: [caixa_id], references: [id])
   createdAt DateTime @default(now())
+  variedade String
   setor     Setor?   @relation(fields: [setorId], references: [id])
   setorId   String?
   caixa_id  Int      @default(1)

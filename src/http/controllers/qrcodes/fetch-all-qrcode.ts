@@ -18,11 +18,7 @@ export async function fetchAllQrcode(
     prismaQrcodeRepository,
   )
 
-  try {
-    const { qrcodes } = await fetchAllQrcodeUsecase.execute({ funcionarioId })
+  const { qrcodes } = await fetchAllQrcodeUsecase.execute({ funcionarioId })
 
-    return reply.status(201).send(qrcodes)
-  } catch (error) {
-    throw error
-  }
+  return reply.status(200).send(qrcodes)
 }

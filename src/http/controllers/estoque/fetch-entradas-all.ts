@@ -29,5 +29,5 @@ export async function fetchEntradasAll(
     perPage,
   })
 
-  return reply.status(201).send({ entradas, total, entradasTotal })
+  return reply.status(200).send({ entradas, total, entradasTotal })
 }

@@ -13,5 +13,5 @@ export async function fetchTratoristas(
 
   const { tratoristas } = await fetchAllTratoristaUseCase.execute()
 
-  return reply.status(201).send(tratoristas)
+  return reply.status(200).send(tratoristas)
 }

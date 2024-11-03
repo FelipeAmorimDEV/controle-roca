@@ -1,9 +1,9 @@
 /* eslint-disable no-useless-constructor */
+import { ApontamentosI } from '@/repository/prisma/prisma-setor-repository'
 import { SetorRepository } from '@/repository/setor-repository'
-import { Apontamento } from '@prisma/client'
 
 interface FetchAllApontamentoLoteUseCaseResponse {
-  apontamentos: Apontamento[]
+  apontamentos: ApontamentosI[]
 }
 
 interface FetchAllApontamentoLoteUseCaseParams {

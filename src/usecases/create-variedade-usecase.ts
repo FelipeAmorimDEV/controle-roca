@@ -1,6 +1,5 @@
-import { FuncionarioRepository } from '@/repository/funcionario-repository'
 import { VariedadeRepository } from '@/repository/variedade-repository'
-import {  Variedade } from '@prisma/client'
+import { Variedade } from '@prisma/client'
 
 interface CreateVariedadeUseCaseParams {
   nome: string

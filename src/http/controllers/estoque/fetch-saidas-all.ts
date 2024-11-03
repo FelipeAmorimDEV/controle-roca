@@ -31,5 +31,5 @@ export async function fetchSaidasAll(
     perPage,
   })
 
-  return reply.status(201).send({ saidas, total, saidasTotal })
+  return reply.status(200).send({ saidas, total, saidasTotal })
 }

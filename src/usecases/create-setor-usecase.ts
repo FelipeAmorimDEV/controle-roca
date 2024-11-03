@@ -4,7 +4,7 @@ import { SetorRepository } from '@/repository/setor-repository'
 
 interface CreateSetorUseCaseParams {
   setorName: string
-  variedade: string
+  variedade: number
   tamanhoArea: number
   filas: string
 }
@@ -26,7 +26,7 @@ export class CreateSetorUseCase {
       setorName,
       filas,
       tamanhoArea,
-      variedade,
+      variedade_id: variedade,
     })
 
     return { setor }

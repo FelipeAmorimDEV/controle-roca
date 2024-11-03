@@ -13,5 +13,5 @@ export async function fetchFornecedor(
 
   const { fornecedores } = await fetchAllFornecedoresUseCase.execute()
 
-  return reply.status(201).send(fornecedores)
+  return reply.status(200).send(fornecedores)
 }

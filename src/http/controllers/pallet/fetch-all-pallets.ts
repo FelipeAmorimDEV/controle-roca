@@ -15,10 +15,18 @@ export async function fetchAllPallets(
     endDate: z.string(),
     classificacaoId: z.coerce.number().optional(),
     variedadeId: z.coerce.number().optional(),
+    status: z.string().optional(),
   })
 
-  const { page, perPage, endDate, initialDate, classificacaoId, variedadeId } =
-    requestQuerySchema.parse(request.query)
+  const {
+    page,
+    perPage,
+    endDate,
+    initialDate,
+    classificacaoId,
+    variedadeId,
+    status,
+  } = requestQuerySchema.parse(request.query)
 
   const prismaQrcodePalletRepository = new PrismaQrcodePalletRepository()
   const fetchAllPallets = new FetchAllPalletsUseCase(
@@ -33,9 +41,10 @@ export async function fetchAllPallets(
       initialDate,
       classificacaoId,
       variedadeId,
+      status,
     })
 
-    return reply.status(201).send({ pallets, totalPallets })
+    return reply.status(200).send({ pallets, totalPallets })
   } catch (error) {
     if (error instanceof FuncionarioNaoExiste) {
       return reply.status(400).send({ message: error.message })

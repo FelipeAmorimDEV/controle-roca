@@ -20,7 +20,7 @@ export async function getProducts(
   try {
     const { product } = await findProductUseCase.execute({ id })
 
-    return reply.status(201).send(product)
+    return reply.status(200).send(product)
   } catch (error) {
     if (error instanceof ResouceNotFoundError) {
       return reply.status(404).send({

@@ -20,5 +20,5 @@ export async function fetchAllFuncionariosWithQrcode(
 
   const { funcionarios } = await fetchAllFuncionariosUseCase.execute({ q })
 
-  return reply.status(201).send(funcionarios)
+  return reply.status(200).send(funcionarios)
 }

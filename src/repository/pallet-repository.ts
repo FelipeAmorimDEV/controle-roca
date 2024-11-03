@@ -10,6 +10,7 @@ export interface QrcodePalletRepository {
     perPage: number,
     initialDate: string,
     endDate: string,
+    status?: string,
     classificacaoId?: number,
     variedadeId?: number,
   ): Promise<FetchPallets>
@@ -18,4 +19,5 @@ export interface QrcodePalletRepository {
   deletePallet(palletId: string): Promise<Pallets>
   vincularCaixaAoPallet(palletId: string, caixaId: string): Promise<Pallets>
   incrementPalletCaixa(palletId: string): Promise<Pallets>
+  finalizarPallet(palletId: string): Promise<Pallets>
 }

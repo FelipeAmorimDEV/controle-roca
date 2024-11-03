@@ -8,7 +8,7 @@ export interface ColheitaResult {
 
 export interface IProducaoMensal {
   mes: string
-  quantidade: number
+  TOTAL: number
 }
 
 export interface ColheitaRepository {

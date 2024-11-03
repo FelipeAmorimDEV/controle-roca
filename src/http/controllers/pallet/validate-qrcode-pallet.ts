@@ -25,7 +25,7 @@ export async function validateQrcodePallet(
   try {
     const { qrcode } = await validateQrcodePalletUsecase.execute({ qrCodeData })
 
-    return reply.status(201).send(qrcode)
+    return reply.status(200).send(qrcode)
   } catch (error) {
     if (error instanceof PalletNaoExiste) {
       return reply.status(409).send({ message: error.message })

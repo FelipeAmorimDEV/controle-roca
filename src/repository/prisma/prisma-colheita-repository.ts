@@ -11,15 +11,16 @@ export class PrismaColheitaRepository implements ColheitaRepository {
   async getProducaoMensal(): Promise<IProducaoMensal[]> {
     const resultados = []
 
-    // Loop através dos meses de Janeiro (0) até Dezembro (11)
     for (let i = 0; i < 12; i++) {
-      const anoAtual = new Date().getFullYear() // Obtendo o ano atual
+      const anoAtual = new Date().getFullYear()
       const inicioMes = startOfMonth(
         set(new Date(), { month: i, year: anoAtual }),
-      ) // Definindo o primeiro dia do mês
-      const fimMes = endOfMonth(inicioMes) // Definindo o último dia do mês
+      )
+      const fimMes = endOfMonth(inicioMes)
 
-      const producaoMensal = await prisma.colheita.aggregate({
+      // Agregação por variedade e soma de peso total
+      const producoesPorVariedade = await prisma.colheita.groupBy({
+        by: ['variedade'],
         where: {
           createdAt: {
             gte: inicioMes,
@@ -31,9 +32,23 @@ export class PrismaColheitaRepository implements ColheitaRepository {
         },
       })
 
+      // Constrói o objeto de variedades com a quantidade total por variedade
+      const variedades: { [variedade: string]: number } = {}
+      producoesPorVariedade.forEach((producao) => {
+        variedades[producao.variedade.toUpperCase()] =
+          producao._sum.pesoTotal || 0
+      })
+
+      // Calcula a quantidade total do mês
+      const quantidadeTotalMes = producoesPorVariedade.reduce(
+        (total, producao) => total + (producao._sum.pesoTotal || 0),
+        0,
+      )
+
       resultados.push({
-        mes: inicioMes.toLocaleString('default', { month: 'short' }), // Nome do mês
-        quantidade: producaoMensal._sum.pesoTotal || 0, // Total produzido
+        mes: inicioMes.toLocaleString('default', { month: 'short' }),
+        TOTAL: quantidadeTotalMes,
+        ...variedades,
       })
     }
 
@@ -125,6 +140,7 @@ export class PrismaColheitaRepository implements ColheitaRepository {
         setorId: data.setorId,
         caixa_id: data.caixa_id,
         createdAt: new Date(data.createdAt + 'T' + horaAtual),
+        variedade: data.variedade,
       },
     })
 

@@ -32,5 +32,5 @@ export async function fetchColheitas(
       setorId,
     })
 
-  return reply.status(201).send({ colheitas, total, totalColhido })
+  return reply.status(200).send({ colheitas, total, totalColhido })
 }

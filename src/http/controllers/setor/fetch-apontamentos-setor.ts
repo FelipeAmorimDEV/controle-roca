@@ -13,5 +13,5 @@ export async function fetchApontamentosSetor(
 
   const { apontamentos } = await fetchApontamentos.execute({})
 
-  return reply.status(201).send(apontamentos)
+  return reply.status(200).send(apontamentos)
 }

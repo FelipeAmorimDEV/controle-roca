@@ -29,5 +29,5 @@ export async function fetchProducts(
       perPage,
     })
 
-  return reply.status(201).send({ products, total, totalEstoque })
+  return reply.status(200).send({ products, total, totalEstoque })
 }

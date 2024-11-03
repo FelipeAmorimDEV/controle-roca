@@ -1,6 +1,5 @@
-import { FuncionarioRepository } from '@/repository/funcionario-repository'
 import { QrcodeRepository } from '@/repository/qrcode-repository'
-import { Funcionario, Qrcodes } from '@prisma/client'
+import { Qrcodes } from '@prisma/client'
 
 interface FetchAllQrcodeUseCaseParams {
   funcionarioId?: string

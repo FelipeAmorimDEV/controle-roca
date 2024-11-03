@@ -13,5 +13,5 @@ export async function fetchAplicacoes(
 
   const { aplicacoes } = await fetchAllAplicacoes.execute()
 
-  return reply.status(201).send({ aplicacoes })
+  return reply.status(200).send({ aplicacoes })
 }

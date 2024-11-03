@@ -1,10 +1,5 @@
 import { CaixaRepository } from '@/repository/caixa-repository'
-import { FuncionarioRepository } from '@/repository/funcionario-repository'
-import { Caixa, Funcionario } from '@prisma/client'
-
-interface FetchAllCaixasUseCaseParams {
-  nome: string
-}
+import { Caixa } from '@prisma/client'
 
 interface FetchAllCaixasUseCaseResponse {
   caixas: Caixa[]
@@ -13,7 +8,7 @@ interface FetchAllCaixasUseCaseResponse {
 export class FetchAllCaixasUseCase {
   constructor(private caixaRepository: CaixaRepository) {}
 
-  async execute({}): Promise<FetchAllCaixasUseCaseResponse> {
+  async execute(): Promise<FetchAllCaixasUseCaseResponse> {
     const caixas = await this.caixaRepository.fetchAllCaixa()
 
     return { caixas }
