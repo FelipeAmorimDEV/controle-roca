@@ -3,7 +3,14 @@ import { FuncionarioRepository } from '../funcionario-repository'
 import { prisma } from '@/prisma'
 
 export class PrismaFuncionarioRepository implements FuncionarioRepository {
-  async fetchAllFuncionariosWithQrcodes(q?: string): Promise<Funcionario[]> {
+  async fetchAllFuncionariosWithQrcodes(
+    initialDate: string,
+    endDate: string,
+    q?: string,
+  ): Promise<Funcionario[]> {
+    const endDateOfTheDay = new Date(endDate)
+    endDateOfTheDay.setUTCHours(23, 59, 59, 999)
+
     const funcionarios = await prisma.funcionario.findMany({
       where: {
         nome: {
@@ -15,6 +22,10 @@ export class PrismaFuncionarioRepository implements FuncionarioRepository {
         Qrcodes: {
           where: {
             usado: true,
+            createdAt: {
+              gte: new Date(initialDate),
+              lte: new Date(endDateOfTheDay),
+            },
           },
         },
       },

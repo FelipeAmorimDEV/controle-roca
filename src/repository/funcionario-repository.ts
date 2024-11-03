@@ -4,5 +4,9 @@ export interface FuncionarioRepository {
   createFuncionario(data: Prisma.FuncionarioCreateInput): Promise<Funcionario>
   findFuncionarioById(funcionarioId: string): Promise<Funcionario | null>
   fetchAllFuncionarios(): Promise<Funcionario[]>
-  fetchAllFuncionariosWithQrcodes(q?: string): Promise<Funcionario[]>
+  fetchAllFuncionariosWithQrcodes(
+    initialDate: string,
+    endDate: string,
+    q?: string,
+  ): Promise<Funcionario[]>
 }

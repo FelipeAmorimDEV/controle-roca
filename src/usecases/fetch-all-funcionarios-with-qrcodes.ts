@@ -3,6 +3,8 @@ import { Funcionario } from '@prisma/client'
 
 interface FetchAllFuncionariosWithQrcodeUseCaseParams {
   q?: string
+  initialDate: string
+  endDate: string
 }
 
 interface FetchAllFuncionariosWithQrcodeUseCaseResponse {
@@ -14,6 +16,8 @@ export class FetchAllFuncionariosWithQrcodeUseCase {
 
   async execute({
     q,
+    endDate,
+    initialDate,
   }: FetchAllFuncionariosWithQrcodeUseCaseParams): Promise<FetchAllFuncionariosWithQrcodeUseCaseResponse> {
     const funcionarios =
       await this.funcionarioRepository.fetchAllFuncionariosWithQrcodes(q)
