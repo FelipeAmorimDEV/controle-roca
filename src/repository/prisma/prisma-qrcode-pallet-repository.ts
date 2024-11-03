@@ -90,7 +90,7 @@ export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
     const endDateOfTheDay = new Date(endDate)
     endDateOfTheDay.setUTCHours(23, 59, 59, 999)
 
-    console.log('status', status)
+    console.log('status', variedadeId)
 
     const totalPallets = await prisma.pallets.findMany({
       where: {

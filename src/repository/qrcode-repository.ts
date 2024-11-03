@@ -14,7 +14,11 @@ export interface IStatus {
 
 export interface QrcodeRepository {
   findQrcodeById(qrcodeId: string): Promise<Qrcodes | null>
-  fetchAllQrcode(functionarioId?: string): Promise<Qrcodes[]>
+  fetchAllQrcode(
+    initialDate: string,
+    endDate: string,
+    functionarioId?: string,
+  ): Promise<Qrcodes[]>
   changeQrcodeUsado(qrcodeId: string): Promise<Qrcodes | null>
   createQrcode(data: Prisma.QrcodesUncheckedCreateInput): Promise<Qrcodes>
 }

@@ -3,21 +3,21 @@ import { prisma } from '@/prisma'
 import { QrcodeRepository } from '../qrcode-repository'
 
 export class PrismaQrcodeRepository implements QrcodeRepository {
-  async fetchAllQrcode(functionarioId?: string): Promise<Qrcodes[]> {
-    let qrcodes
-    if (functionarioId) {
-      qrcodes = await prisma.qrcodes.findMany({
-        where: {
-          funcionarioId: functionarioId,
-        },
-      })
+  async fetchAllQrcode(
+    initialDate: string,
+    endDate: string,
+    functionarioId?: string,
+  ): Promise<Qrcodes[]> {
+    const endDateOfTheDay = new Date(endDate)
+    endDateOfTheDay.setUTCHours(23, 59, 59, 999)
 
-      return qrcodes
-    }
-
-    qrcodes = await prisma.qrcodes.findMany({
+    const qrcodes = await prisma.qrcodes.findMany({
       where: {
         funcionarioId: functionarioId,
+        createdAt: {
+          gte: new Date(initialDate),
+          lte: new Date(endDateOfTheDay),
+        },
       },
     })
 
