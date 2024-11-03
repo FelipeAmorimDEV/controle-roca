@@ -43,14 +43,10 @@ export class PrismaQrcodeRepository implements QrcodeRepository {
     return qrcode
   }
 
-  async findQrcodeById(
-    qrcodeId: string,
-    fazendaId: string,
-  ): Promise<Qrcodes | null> {
+  async findQrcodeById(qrcodeId: string): Promise<Qrcodes | null> {
     const qrcode = await prisma.qrcodes.findUnique({
       where: {
         id: qrcodeId,
-        fazenda_id: fazendaId,
       },
     })
 
