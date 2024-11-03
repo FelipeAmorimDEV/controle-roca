@@ -9,16 +9,22 @@ export async function fetchAllFuncionariosWithQrcode(
 ) {
   const requestQuerySchema = z.object({
     q: z.string().optional(),
+    initialDate: z.string(),
+    endDate: z.string(),
   })
 
-  const { q } = requestQuerySchema.parse(request.query)
+  const { q, endDate, initialDate } = requestQuerySchema.parse(request.query)
 
   const prismaFuncionarioRepository = new PrismaFuncionarioRepository()
   const fetchAllFuncionariosUseCase = new FetchAllFuncionariosWithQrcodeUseCase(
     prismaFuncionarioRepository,
   )
 
-  const { funcionarios } = await fetchAllFuncionariosUseCase.execute({ q })
+  const { funcionarios } = await fetchAllFuncionariosUseCase.execute({
+    q,
+    initialDate,
+    endDate,
+  })
 
   return reply.status(200).send(funcionarios)
 }
