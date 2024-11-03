@@ -19,7 +19,11 @@ export class FetchAllQrcodeUseCase {
     endDate,
     initialDate,
   }: FetchAllQrcodeUseCaseParams): Promise<FetchAllQrcodeUseCaseResponse> {
-    const qrcodes = await this.qrcodeRepository.fetchAllQrcode(funcionarioId)
+    const qrcodes = await this.qrcodeRepository.fetchAllQrcode(
+      initialDate,
+      endDate,
+      funcionarioId,
+    )
 
     return { qrcodes }
   }
