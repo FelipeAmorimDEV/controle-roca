@@ -4,10 +4,7 @@ export interface FetchPallets {
   totalPallets: number
 }
 export interface QrcodePalletRepository {
-  findPalletQrcodeById(
-    qrcodeId: string,
-    fazendaId: string,
-  ): Promise<Pallets | null>
+  findPalletQrcodeById(qrcodeId: string): Promise<Pallets | null>
   fetchAllPalletQrcode(
     page: number,
     perPage: number,
@@ -18,10 +15,7 @@ export interface QrcodePalletRepository {
     classificacaoId?: number,
     variedadeId?: number,
   ): Promise<FetchPallets>
-  changeQrcodePalletUsado(
-    qrcodeId: string,
-    fazendaId: string,
-  ): Promise<Pallets | null>
+  changeQrcodePalletUsado(qrcodeId: string): Promise<Pallets | null>
   createQrcodePallet(data: Prisma.PalletsUncheckedCreateInput): Promise<Pallets>
   deletePallet(palletId: string, fazendaId: string): Promise<Pallets>
   vincularCaixaAoPallet(
