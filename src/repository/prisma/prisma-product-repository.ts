@@ -117,6 +117,7 @@ export class PrismaProductRepository implements ProductsRepository {
 
     const totalProduto = await prisma.product.findMany({
       where: {
+        fazenda_id: fazendaId,
         name: {
           contains: q,
           mode: 'insensitive',
@@ -126,6 +127,7 @@ export class PrismaProductRepository implements ProductsRepository {
 
     const products = await prisma.product.findMany({
       where: {
+        fazenda_id: fazendaId,
         name: {
           contains: q,
           mode: 'insensitive',

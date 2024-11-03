@@ -145,6 +145,7 @@ export class PrismaStockRepository implements StockRepository {
     endDate: string,
     page: number,
     perPage: number,
+    fazendaId: string,
     productId?: string,
   ): Promise<EntradasResult> {
     const endDateOfTheDay = new Date(endDate)
@@ -152,6 +153,7 @@ export class PrismaStockRepository implements StockRepository {
 
     const totalEntradas = await prisma.entrada.findMany({
       where: {
+        fazenda_id: fazendaId,
         productId,
         createdAt: {
           lte: new Date(endDateOfTheDay),
@@ -162,6 +164,7 @@ export class PrismaStockRepository implements StockRepository {
 
     const totalValue = await prisma.entrada.aggregate({
       where: {
+        fazenda_id: fazendaId,
         productId,
         createdAt: {
           gte: new Date(initialDate),
@@ -175,6 +178,7 @@ export class PrismaStockRepository implements StockRepository {
 
     const entradas = await prisma.entrada.findMany({
       where: {
+        fazenda_id: fazendaId,
         productId,
         createdAt: {
           lte: new Date(endDateOfTheDay),

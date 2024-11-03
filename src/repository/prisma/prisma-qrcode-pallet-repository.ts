@@ -139,6 +139,7 @@ export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
     const pallets = await prisma.pallets.findMany({
       where: {
         variedadeId,
+        fazenda_id: fazendaId,
         caixaId: classificacaoId,
         finalizado: status === 'true',
         createdAt: {

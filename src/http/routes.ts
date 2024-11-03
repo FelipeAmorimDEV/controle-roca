@@ -47,6 +47,7 @@ import { deleteApontamento } from './controllers/apontamento/delete-apontamento'
 import { deleteProduct } from './controllers/estoque/delete-product'
 import { deletePallet } from './controllers/pallet/delete-pallet'
 import { getDashboardData } from './controllers/dashboard/get-dashboard-data'
+import { createFazenda } from './controllers/fazenda/create-fazenda'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -59,7 +60,11 @@ export async function estoqueRoutes(app: FastifyInstance) {
   // Setor
   app.post('/setor', { onRequest: [verifyJWT] }, createSetor)
   app.get('/setor', { onRequest: [verifyJWT] }, fetchSetores)
-  app.get('/setor/apontamentos', fetchApontamentosSetor)
+  app.get(
+    '/setor/apontamentos',
+    { onRequest: [verifyJWT] },
+    fetchApontamentosSetor,
+  )
 
   app.get('/entradas', { onRequest: [verifyJWT] }, fetchEntradasAll)
   app.delete('/entradas/:entradaId', { onRequest: [verifyJWT] }, deleteEntrada)
@@ -88,6 +93,7 @@ export async function estoqueRoutes(app: FastifyInstance) {
 
   app.post('/users/register', createUser)
   app.post('/users/authenticate', authenticateUser)
+  app.post('/fazenda/register', createFazenda)
 
   // Qrcode
 

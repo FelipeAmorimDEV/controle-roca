@@ -40,7 +40,10 @@ export class CreateAplicacaoUseCase {
   }: CreateAplicacaoUseCaseParams): Promise<CreateAplicacaoUseCaseResponse> {
     for (const product of produtos) {
       const qntProduto = product.total / 1000
-      const produto = await this.productRepository.findProduct(product.produto)
+      const produto = await this.productRepository.findProduct(
+        product.produto,
+        fazenda_id,
+      )
 
       if (produto) {
         const quantidadeEstoque = produto.quantity
@@ -54,7 +57,10 @@ export class CreateAplicacaoUseCase {
 
     for (const product of produtos) {
       const qntProduto = product.total / 1000
-      const produto = await this.productRepository.findProduct(product.produto)
+      const produto = await this.productRepository.findProduct(
+        product.produto,
+        fazenda_id,
+      )
 
       if (produto) {
         const createdAt = new Date().toISOString().split('T')[0]
@@ -67,11 +73,13 @@ export class CreateAplicacaoUseCase {
           priceSaida,
           createdAt,
           userId,
+          fazenda_id,
         )
 
         await this.productRepository.decrementProductQuantity(
           qntProduto,
           produto.id,
+          fazenda_id,
         )
       }
     }
