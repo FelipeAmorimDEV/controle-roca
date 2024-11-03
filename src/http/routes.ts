@@ -117,7 +117,7 @@ export async function estoqueRoutes(app: FastifyInstance) {
   )
   app.post('/pallet/validate', validateQrcodePallet)
   app.get('/pallet', { onRequest: [verifyJWT] }, fetchAllPallets)
-  app.delete('/pallet/:palletId', deletePallet)
+  app.delete('/pallet/:palletId', { onRequest: [verifyJWT] }, deletePallet)
   app.get('/qrcode', { onRequest: [verifyJWT] }, fetchAllQrcode)
   app.post('/variedades/register', { onRequest: [verifyJWT] }, createVariedade)
   app.get('/variedades', { onRequest: [verifyJWT] }, fetchAllVariedade)

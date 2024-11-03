@@ -13,7 +13,7 @@ export interface IStatus {
 }
 
 export interface QrcodeRepository {
-  findQrcodeById(qrcodeId: string, fazendaId: string): Promise<Qrcodes | null>
+  findQrcodeById(qrcodeId: string): Promise<Qrcodes | null>
   fetchAllQrcode(
     initialDate: string,
     endDate: string,
