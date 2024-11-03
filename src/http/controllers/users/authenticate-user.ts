@@ -19,10 +19,14 @@ export async function authenticateUser(
   const authenticateUsecase = new AuthenticateUserUseCase(prismaUserRepository)
 
   try {
-    const { users } = await authenticateUsecase.execute({ user, password })
+    const { users } = await authenticateUsecase.execute({
+      user,
+      password,
+    })
     const token = await reply.jwtSign(
       {
         fazenda_id: users.fazenda_id,
+        fazendaNome: users.fazenda_nome,
       },
       {
         sign: {

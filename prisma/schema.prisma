@@ -95,13 +95,14 @@ model Caixa {
 }
 
 model Users {
-  id         String    @id @default(uuid())
-  user       String    @unique
-  password   String
-  fazenda    Fazenda   @relation(fields: [fazenda_id], references: [id])
-  fazenda_id String
-  Entrada    Entrada[]
-  Saida      Saida[]
+  id           String    @id @default(uuid())
+  user         String    @unique
+  password     String
+  fazenda      Fazenda   @relation(fields: [fazenda_id], references: [id])
+  fazenda_id   String
+  fazenda_nome String    @default("Fazenda Nicole")
+  Entrada      Entrada[]
+  Saida        Saida[]
 
   @@map("users")
 }

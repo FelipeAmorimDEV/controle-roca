@@ -8,6 +8,13 @@ export class PrismaUserRepository implements UserRepository {
       where: {
         user: username,
       },
+      include: {
+        fazenda: {
+          select: {
+            nome: true,
+          },
+        },
+      },
     })
 
     return user
