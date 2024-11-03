@@ -5,6 +5,7 @@ export interface CreateProduct {
   unit: string
   fornecedorId: string
   tipoId: string
+  fazenda_id: string
 }
 
 export interface FetchAllProduct {
@@ -15,23 +16,26 @@ export interface FetchAllProduct {
 
 export interface ProductsRepository {
   createProduct(data: CreateProduct): Promise<Product>
-  deleteProduct(productId: string): Promise<Product>
-  getTotalProduct(): Promise<number>
-  getProductLowStock(): Promise<Product[]>
-  getPriceProductInStock(): Promise<number>
+  deleteProduct(productId: string, fazendaId: string): Promise<Product>
+  getTotalProduct(fazendaId: string): Promise<number>
+  getProductLowStock(fazendaId: string): Promise<Product[]>
+  getPriceProductInStock(fazendaId: string): Promise<number>
   fetchAllProduct(
     page: number,
     perPage: number,
+    fazendaId: string,
     q?: string,
     all?: boolean,
   ): Promise<FetchAllProduct>
-  findProduct(id: string): Promise<Product | null>
+  findProduct(id: string, fazendaId: string): Promise<Product | null>
   decrementProductQuantity(
     quantity: number,
     productId: string,
+    fazendaId: string,
   ): Promise<Product>
   incrementProductQuantity(
     quantity: number,
     productId: string,
+    fazendaId: string,
   ): Promise<Product>
 }

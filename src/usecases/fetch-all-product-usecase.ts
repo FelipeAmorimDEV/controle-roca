@@ -7,6 +7,7 @@ interface FetchAllProductsUseCaseParams {
   all?: boolean
   page: number
   perPage: number
+  fazenda_id: string
 }
 
 interface FetchAllProductsUseCaseResponse {
@@ -23,9 +24,16 @@ export class FetchAllProductsUseCase {
     page,
     all,
     perPage,
+    fazenda_id,
   }: FetchAllProductsUseCaseParams): Promise<FetchAllProductsUseCaseResponse> {
     const { products, total, totalEstoque } =
-      await this.productsRepository.fetchAllProduct(page, perPage, q, all)
+      await this.productsRepository.fetchAllProduct(
+        page,
+        perPage,
+        fazenda_id,
+        q,
+        all,
+      )
 
     return { products, total, totalEstoque }
   }

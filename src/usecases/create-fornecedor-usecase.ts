@@ -4,6 +4,7 @@ import { FornecedorRepository } from '@/repository/fornecedor-repository'
 
 interface CreateFornecedorUseCaseParams {
   name: string
+  fazenda_id: string
 }
 
 interface CreateFornecedorUseCaseResponse {
@@ -15,9 +16,11 @@ export class CreateFornecedorUseCase {
 
   async execute({
     name,
+    fazenda_id,
   }: CreateFornecedorUseCaseParams): Promise<CreateFornecedorUseCaseResponse> {
     const fornecedor = await this.fornecedorRepository.createFornecedor({
       name,
+      fazenda_id,
     })
 
     return { fornecedor }

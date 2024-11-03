@@ -22,6 +22,7 @@ export async function createFuncionario(
   const { funcionario } = await createFuncionarioUseCase.execute({
     nome: nome.toUpperCase(),
     cargo,
+    fazenda_id: request.user.fazenda_id,
   })
   return reply.status(201).send(funcionario)
 }

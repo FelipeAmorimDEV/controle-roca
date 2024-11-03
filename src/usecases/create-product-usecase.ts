@@ -7,6 +7,7 @@ interface CreateProductUseCaseParams {
   unit: string
   fornecedorId: string
   tipoId: string
+  fazenda_id: string
 }
 
 interface CreateProductsUseCaseResponse {
@@ -21,12 +22,14 @@ export class CreateProductUseCase {
     unit,
     fornecedorId,
     tipoId,
+    fazenda_id,
   }: CreateProductUseCaseParams): Promise<CreateProductsUseCaseResponse> {
     const product = await this.productsRepository.createProduct({
       name,
       unit,
       fornecedorId,
       tipoId,
+      fazenda_id,
     })
 
     return { product }

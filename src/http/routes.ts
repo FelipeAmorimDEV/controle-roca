@@ -49,67 +49,95 @@ import { deletePallet } from './controllers/pallet/delete-pallet'
 import { getDashboardData } from './controllers/dashboard/get-dashboard-data'
 
 export async function estoqueRoutes(app: FastifyInstance) {
-  app.post('/products', createProduct)
-  app.get('/products', fetchProducts)
-  app.get('/products/:id', getProducts)
-  app.delete('/products/:productId', deleteProduct)
+  app.post('/products', { onRequest: [verifyJWT] }, createProduct)
+  app.get('/products', { onRequest: [verifyJWT] }, fetchProducts)
+  app.get('/products/:id', { onRequest: [verifyJWT] }, getProducts)
+  app.delete('/products/:productId', { onRequest: [verifyJWT] }, deleteProduct)
   app.post('/products/:id/entrada', { onRequest: [verifyJWT] }, insertProduct)
   app.post('/products/:id/saida', { onRequest: [verifyJWT] }, withdrawProduct)
 
   // Setor
-  app.post('/setor', createSetor)
-  app.get('/setor', fetchSetores)
+  app.post('/setor', { onRequest: [verifyJWT] }, createSetor)
+  app.get('/setor', { onRequest: [verifyJWT] }, fetchSetores)
   app.get('/setor/apontamentos', fetchApontamentosSetor)
 
-  app.get('/entradas', fetchEntradasAll)
-  app.delete('/entradas/:entradaId', deleteEntrada)
-  app.get('/saidas', fetchSaidasAll)
-  app.delete('/saidas/:saidaId', deleteSaida)
+  app.get('/entradas', { onRequest: [verifyJWT] }, fetchEntradasAll)
+  app.delete('/entradas/:entradaId', { onRequest: [verifyJWT] }, deleteEntrada)
+  app.get('/saidas', { onRequest: [verifyJWT] }, fetchSaidasAll)
+  app.delete('/saidas/:saidaId', { onRequest: [verifyJWT] }, deleteSaida)
 
   app.post('/aplicacoes', { onRequest: [verifyJWT] }, createAplicacao)
-  app.get('/aplicacoes', fetchAplicacoes)
+  app.get('/aplicacoes', { onRequest: [verifyJWT] }, fetchAplicacoes)
 
-  app.post('/tratoristas', createTratorista)
-  app.get('/tratoristas', fetchTratoristas)
+  app.post('/tratoristas', { onRequest: [verifyJWT] }, createTratorista)
+  app.get('/tratoristas', { onRequest: [verifyJWT] }, fetchTratoristas)
 
-  app.post('/fornecedores', createFornecedor)
-  app.get('/fornecedores', fetchFornecedor)
+  app.post('/fornecedores', { onRequest: [verifyJWT] }, createFornecedor)
+  app.get('/fornecedores', { onRequest: [verifyJWT] }, fetchFornecedor)
 
-  app.post('/tipos', createTipo)
-  app.get('/tipos', fetchTipos)
+  app.post('/tipos', { onRequest: [verifyJWT] }, createTipo)
+  app.get('/tipos', { onRequest: [verifyJWT] }, fetchTipos)
 
-  app.post('/colheita', createColheita)
-  app.get('/colheita', fetchColheitas)
-  app.delete('/colheita/:colheitaId', deleteColheita)
+  app.post('/colheita', { onRequest: [verifyJWT] }, createColheita)
+  app.get('/colheita', { onRequest: [verifyJWT] }, fetchColheitas)
+  app.delete(
+    '/colheita/:colheitaId',
+    { onRequest: [verifyJWT] },
+    deleteColheita,
+  )
 
   app.post('/users/register', createUser)
   app.post('/users/authenticate', authenticateUser)
 
   // Qrcode
 
-  app.post('/funcionarios/register', createFuncionario)
-  app.get('/funcionarios', fetchAllFuncionarios)
-  app.get('/funcionarios/qrcodes', fetchAllFuncionariosWithQrcode)
-  app.post('/qrcode/generate', generateQrcodes)
-  app.post('/qrcode/validate', validateQrcode)
-  app.post('/pallet/generate', generateQrcodesPallet)
-  app.post('/pallet/validate', validateQrcodePallet)
-  app.get('/pallet', fetchAllPallets)
-  app.delete('/pallet/:palletId', deletePallet)
-  app.get('/qrcode', fetchAllQrcode)
-  app.post('/variedades/register', createVariedade)
-  app.get('/variedades', fetchAllVariedade)
+  app.post(
+    '/funcionarios/register',
+    { onRequest: [verifyJWT] },
+    createFuncionario,
+  )
+  app.get('/funcionarios', { onRequest: [verifyJWT] }, fetchAllFuncionarios)
+  app.get(
+    '/funcionarios/qrcodes',
+    { onRequest: [verifyJWT] },
+    fetchAllFuncionariosWithQrcode,
+  )
+  app.post('/qrcode/generate', { onRequest: [verifyJWT] }, generateQrcodes)
+  app.post('/qrcode/validate', { onRequest: [verifyJWT] }, validateQrcode)
+  app.post(
+    '/pallet/generate',
+    { onRequest: [verifyJWT] },
+    generateQrcodesPallet,
+  )
+  app.post('/pallet/validate', { onRequest: [verifyJWT] }, validateQrcodePallet)
+  app.get('/pallet', { onRequest: [verifyJWT] }, fetchAllPallets)
+  app.delete('/pallet/:palletId', { onRequest: [verifyJWT] }, deletePallet)
+  app.get('/qrcode', { onRequest: [verifyJWT] }, fetchAllQrcode)
+  app.post('/variedades/register', { onRequest: [verifyJWT] }, createVariedade)
+  app.get('/variedades', { onRequest: [verifyJWT] }, fetchAllVariedade)
 
-  app.post('/caixas/register', createCaixa)
-  app.get('/caixas', fetchCaixas)
+  app.post('/caixas/register', { onRequest: [verifyJWT] }, createCaixa)
+  app.get('/caixas', { onRequest: [verifyJWT] }, fetchCaixas)
 
-  app.post('/atividade/register', createAtividade)
-  app.get('/atividade', fetchAtividade)
-  app.post('/apontamento/register', createApontamento)
-  app.put('/apotamento/:apontamentoId', concluirApontamento)
-  app.delete('/apotamento/:apontamentoId', deleteApontamento)
+  app.post('/atividade/register', { onRequest: [verifyJWT] }, createAtividade)
+  app.get('/atividade', { onRequest: [verifyJWT] }, fetchAtividade)
+  app.post(
+    '/apontamento/register',
+    { onRequest: [verifyJWT] },
+    createApontamento,
+  )
+  app.put(
+    '/apotamento/:apontamentoId',
+    { onRequest: [verifyJWT] },
+    concluirApontamento,
+  )
+  app.delete(
+    '/apotamento/:apontamentoId',
+    { onRequest: [verifyJWT] },
+    deleteApontamento,
+  )
 
-  app.get('/dashboard', getDashboardData)
+  app.get('/dashboard', { onRequest: [verifyJWT] }, getDashboardData)
 }
 
 // { onRequest: [verifyJWT] }

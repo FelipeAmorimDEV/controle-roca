@@ -14,6 +14,7 @@ interface FetchAllColheitasUseCaseParams {
   endDate: string
   page: number
   perPage: number
+  fazenda_id: string
 }
 
 export class FetchAllColheitasUseCase {
@@ -25,6 +26,7 @@ export class FetchAllColheitasUseCase {
     endDate,
     page,
     perPage,
+    fazenda_id,
   }: FetchAllColheitasUseCaseParams): Promise<FetchAllColheitasUseCaseResponse> {
     const { colheita, total, totalColhido } =
       await this.colheitaRepository.fetchAllColheita(
@@ -32,6 +34,7 @@ export class FetchAllColheitasUseCase {
         endDate,
         page,
         perPage,
+        fazenda_id,
         setorId,
       )
 

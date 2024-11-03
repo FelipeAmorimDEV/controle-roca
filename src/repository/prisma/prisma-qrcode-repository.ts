@@ -6,6 +6,7 @@ export class PrismaQrcodeRepository implements QrcodeRepository {
   async fetchAllQrcode(
     initialDate: string,
     endDate: string,
+    fazendaId: string,
     functionarioId?: string,
   ): Promise<Qrcodes[]> {
     const endDateOfTheDay = new Date(endDate)
@@ -13,6 +14,7 @@ export class PrismaQrcodeRepository implements QrcodeRepository {
 
     const qrcodes = await prisma.qrcodes.findMany({
       where: {
+        fazenda_id: fazendaId,
         funcionarioId: functionarioId,
         createdAt: {
           gte: new Date(initialDate),
@@ -24,10 +26,14 @@ export class PrismaQrcodeRepository implements QrcodeRepository {
     return qrcodes
   }
 
-  async changeQrcodeUsado(qrcodeId: string): Promise<Qrcodes | null> {
+  async changeQrcodeUsado(
+    qrcodeId: string,
+    fazendaId: string,
+  ): Promise<Qrcodes | null> {
     const qrcode = await prisma.qrcodes.update({
       where: {
         id: qrcodeId,
+        fazenda_id: fazendaId,
       },
       data: {
         usado: true,
@@ -37,10 +43,14 @@ export class PrismaQrcodeRepository implements QrcodeRepository {
     return qrcode
   }
 
-  async findQrcodeById(qrcodeId: string): Promise<Qrcodes | null> {
+  async findQrcodeById(
+    qrcodeId: string,
+    fazendaId: string,
+  ): Promise<Qrcodes | null> {
     const qrcode = await prisma.qrcodes.findUnique({
       where: {
         id: qrcodeId,
+        fazenda_id: fazendaId,
       },
     })
 
@@ -55,6 +65,11 @@ export class PrismaQrcodeRepository implements QrcodeRepository {
         Funcionario: {
           connect: {
             id: data.funcionarioId,
+          },
+        },
+        fazenda: {
+          connect: {
+            id: data.fazenda_id,
           },
         },
       },

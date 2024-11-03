@@ -24,7 +24,9 @@ export async function getDashboardData(
     totalSaida,
     colheitaMes,
     estoqueBaixo,
-  } = await getDashBoardData.execute()
+  } = await getDashBoardData.execute({
+    fazenda_id: request.user.fazenda_id,
+  })
 
   return reply.status(200).send({
     totalEmStock,

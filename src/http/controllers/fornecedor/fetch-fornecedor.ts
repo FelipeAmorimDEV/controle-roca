@@ -11,7 +11,9 @@ export async function fetchFornecedor(
     prismaFornecedorRepository,
   )
 
-  const { fornecedores } = await fetchAllFornecedoresUseCase.execute()
+  const { fornecedores } = await fetchAllFornecedoresUseCase.execute({
+    fazenda_id: request.user.fazenda_id,
+  })
 
   return reply.status(200).send(fornecedores)
 }

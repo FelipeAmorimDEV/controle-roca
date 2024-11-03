@@ -9,9 +9,10 @@ export interface CreateAplicacao {
     dosagem: number
     total: number
   }[]
+  fazenda_id: string
 }
 
 export interface AplicacaoRepository {
   createAplicacao(data: CreateAplicacao): Promise<Aplicacao>
-  fetchAplicacao(): Promise<Aplicacao[]>
+  fetchAplicacao(fazendaId: string): Promise<Aplicacao[]>
 }

@@ -5,6 +5,7 @@ interface FetchAllFuncionariosWithQrcodeUseCaseParams {
   q?: string
   initialDate: string
   endDate: string
+  fazenda_id: string
 }
 
 interface FetchAllFuncionariosWithQrcodeUseCaseResponse {
@@ -18,11 +19,13 @@ export class FetchAllFuncionariosWithQrcodeUseCase {
     q,
     endDate,
     initialDate,
+    fazenda_id,
   }: FetchAllFuncionariosWithQrcodeUseCaseParams): Promise<FetchAllFuncionariosWithQrcodeUseCaseResponse> {
     const funcionarios =
       await this.funcionarioRepository.fetchAllFuncionariosWithQrcodes(
         initialDate,
         endDate,
+        fazenda_id,
         q,
       )
 

@@ -13,6 +13,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Fazenda {
+  id          String        @id @default(uuid())
+  nome        String        @unique
+  Qrcodes     Qrcodes[]
+  Pallets     Pallets[]
+  Variedade   Variedade[]
+  Caixa       Caixa[]
+  Users       Users[]
+  Product     Product[]
+  Saida       Saida[]
+  Entrada     Entrada[]
+  Setor       Setor[]
+  Aplicacao   Aplicacao[]
+  Fornecedor  Fornecedor[]
+  Tipo        Tipo[]
+  Colheita    Colheita[]
+  Funcionario Funcionario[]
+  Atividade   Atividade[]
+  Apontamento Apontamento[]
+
+  @@map("fazendas")
+}
+
 model Qrcodes {
   id            String       @id @default(uuid())
   usado         Boolean      @default(false)
@@ -20,8 +43,10 @@ model Qrcodes {
   Funcionario   Funcionario? @relation(fields: [funcionarioId], references: [id])
   funcionarioId String
 
-  pallets   Pallets? @relation(fields: [palletsId], references: [id])
-  palletsId String?
+  pallets    Pallets? @relation(fields: [palletsId], references: [id])
+  palletsId  String?
+  fazenda    Fazenda  @relation(fields: [fazenda_id], references: [id])
+  fazenda_id String
 
   @@map("qrcodes")
 }
@@ -41,34 +66,42 @@ model Pallets {
   setor       Setor      @relation(fields: [setor_id], references: [id])
   setor_id    String
   Qrcodes     Qrcodes[]
+  fazenda     Fazenda    @relation(fields: [fazenda_id], references: [id])
+  fazenda_id  String
 
   @@map("pallets")
 }
 
 model Variedade {
-  id      Int       @id @default(autoincrement())
-  nome    String
-  Pallets Pallets[]
-  Setor   Setor[]
+  id         Int       @id @default(autoincrement())
+  nome       String
+  fazenda    Fazenda   @relation(fields: [fazenda_id], references: [id])
+  fazenda_id String
+  Pallets    Pallets[]
+  Setor      Setor[]
 
   @@map("variedades")
 }
 
 model Caixa {
-  id       Int        @id @default(autoincrement())
-  nome     String
-  Pallets  Pallets[]
-  Colheita Colheita[]
+  id         Int        @id @default(autoincrement())
+  nome       String
+  fazenda    Fazenda    @relation(fields: [fazenda_id], references: [id])
+  fazenda_id String
+  Pallets    Pallets[]
+  Colheita   Colheita[]
 
   @@map("caixas")
 }
 
 model Users {
-  id       String    @id @default(uuid())
-  user     String    @unique
-  password String
-  Entrada  Entrada[]
-  Saida    Saida[]
+  id         String    @id @default(uuid())
+  user       String    @unique
+  password   String
+  fazenda    Fazenda   @relation(fields: [fazenda_id], references: [id])
+  fazenda_id String
+  Entrada    Entrada[]
+  Saida      Saida[]
 
   @@map("users")
 }
@@ -85,6 +118,8 @@ model Product {
   fornecedorId String
   Tipo         Tipo?       @relation(fields: [tipoId], references: [id])
   tipoId       String
+  fazenda      Fazenda     @relation(fields: [fazenda_id], references: [id])
+  fazenda_id   String
 
   @@map("products")
 }
@@ -100,6 +135,8 @@ model Saida {
   setorId    String?
   Users      Users    @relation(fields: [usersId], references: [id])
   usersId    String
+  fazenda    Fazenda  @relation(fields: [fazenda_id], references: [id])
+  fazenda_id String
 
   @@map("saidas")
 }
@@ -114,6 +151,8 @@ model Entrada {
   productId    String
   Users        Users    @relation(fields: [usersId], references: [id])
   usersId      String
+  fazenda      Fazenda  @relation(fields: [fazenda_id], references: [id])
+  fazenda_id   String
 
   @@map("entradas")
 }
@@ -130,6 +169,8 @@ model Setor {
   Apontamento  Apontamento[]
   Pallets      Pallets[]
   variedade_id Int
+  fazenda      Fazenda       @relation(fields: [fazenda_id], references: [id])
+  fazenda_id   String
 
   @@map("setores")
 }
@@ -142,6 +183,8 @@ model Aplicacao {
   produtosAplicados Json
   setor             Setor?   @relation(fields: [setorId], references: [id])
   setorId           String?
+  fazenda           Fazenda  @relation(fields: [fazenda_id], references: [id])
+  fazenda_id        String
 
   @@map("aplicacoes")
 }
@@ -154,32 +197,38 @@ model Tratorista {
 }
 
 model Fornecedor {
-  id      String    @id @default(uuid())
-  name    String
-  Product Product[]
+  id         String    @id @default(uuid())
+  name       String
+  Product    Product[]
+  fazenda    Fazenda   @relation(fields: [fazenda_id], references: [id])
+  fazenda_id String
 
   @@map("fornecedores")
 }
 
 model Tipo {
-  id      String    @id @default(uuid())
-  name    String
-  Product Product[]
+  id         String    @id @default(uuid())
+  name       String
+  Product    Product[]
+  fazenda    Fazenda   @relation(fields: [fazenda_id], references: [id])
+  fazenda_id String
 
   @@map("tipos")
 }
 
 model Colheita {
-  id        String   @id @default(uuid())
-  pesoCaixa Int
-  pesoTotal Int
-  qntCaixa  Int
-  tipoCaixa Caixa    @relation(fields: [caixa_id], references: [id])
-  createdAt DateTime @default(now())
-  variedade String
-  setor     Setor?   @relation(fields: [setorId], references: [id])
-  setorId   String?
-  caixa_id  Int      @default(1)
+  id         String   @id @default(uuid())
+  pesoCaixa  Int
+  pesoTotal  Int
+  qntCaixa   Int
+  tipoCaixa  Caixa    @relation(fields: [caixa_id], references: [id])
+  createdAt  DateTime @default(now())
+  variedade  String
+  setor      Setor?   @relation(fields: [setorId], references: [id])
+  setorId    String?
+  caixa_id   Int      @default(1)
+  fazenda    Fazenda  @relation(fields: [fazenda_id], references: [id])
+  fazenda_id String
 
   @@map("colheitas")
 }
@@ -190,6 +239,8 @@ model Funcionario {
   cargo       String        @default("teste")
   Qrcodes     Qrcodes[]
   Apontamento Apontamento[]
+  fazenda     Fazenda       @relation(fields: [fazenda_id], references: [id])
+  fazenda_id  String
 
   @@map("funcionarios")
 }
@@ -199,6 +250,8 @@ model Atividade {
   nome        String
   categoria   String
   Apontamento Apontamento[]
+  fazenda     Fazenda       @relation(fields: [fazenda_id], references: [id])
+  fazenda_id  String
 
   @@map("atividades")
 }
@@ -214,6 +267,8 @@ model Apontamento {
   atividade_id   String
   setor          Setor       @relation(fields: [setor_id], references: [id])
   setor_id       String
+  fazenda        Fazenda     @relation(fields: [fazenda_id], references: [id])
+  fazenda_id     String
 
   @@map("apontamentos")
 }

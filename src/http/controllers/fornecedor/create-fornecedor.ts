@@ -18,6 +18,7 @@ export async function createFornecedor(
 
   const { fornecedor } = await createFornecedor.execute({
     name: name.toUpperCase(),
+    fazenda_id: request.user.fazenda_id,
   })
 
   return reply.status(201).send(fornecedor)

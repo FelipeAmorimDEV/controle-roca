@@ -18,7 +18,10 @@ export async function getProducts(
   const findProductUseCase = new FindProductUsecase(prismaCreateProductUseCase)
 
   try {
-    const { product } = await findProductUseCase.execute({ id })
+    const { product } = await findProductUseCase.execute({
+      id,
+      fazenda_id: request.user.fazenda_id,
+    })
 
     return reply.status(200).send(product)
   } catch (error) {

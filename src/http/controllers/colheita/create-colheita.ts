@@ -40,6 +40,7 @@ export async function createColheita(
     tipoCaixa,
     data,
     variedade,
+    fazenda_id: request.user.fazenda_id,
   })
 
   return reply.status(201).send(colheita)

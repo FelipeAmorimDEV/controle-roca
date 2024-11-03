@@ -7,6 +7,7 @@ import { FuncionarioNaoExiste } from './errors/funcionario-nao-existe'
 interface CreateQrcodeUseCaseParams {
   funcionarioId: string
   quantidade: number
+  fazenda_id: string
 }
 
 interface CreateQrcodeUseCaseResponse {
@@ -22,9 +23,12 @@ export class CreateQrcodeUseCase {
   async execute({
     funcionarioId,
     quantidade,
+    fazenda_id,
   }: CreateQrcodeUseCaseParams): Promise<CreateQrcodeUseCaseResponse> {
-    const funcionario =
-      await this.funcionarioRepository.findFuncionarioById(funcionarioId)
+    const funcionario = await this.funcionarioRepository.findFuncionarioById(
+      funcionarioId,
+      fazenda_id,
+    )
 
     if (!funcionario) {
       throw new FuncionarioNaoExiste()
@@ -33,7 +37,10 @@ export class CreateQrcodeUseCase {
     const qrcodes = []
 
     for (let index = 0; index < quantidade; index++) {
-      const qrcode = await this.qrcodeRepository.createQrcode({ funcionarioId })
+      const qrcode = await this.qrcodeRepository.createQrcode({
+        funcionarioId,
+        fazenda_id,
+      })
       const qrcodeData = {
         nome: funcionario.nome,
         qrcodeId: qrcode.id,

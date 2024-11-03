@@ -3,8 +3,12 @@ import { prisma } from '@/prisma'
 import { AplicacaoRepository, CreateAplicacao } from '../aplicacao-repository'
 
 export class PrismaAplicacaoRepository implements AplicacaoRepository {
-  async fetchAplicacao(): Promise<Aplicacao[]> {
-    const aplicacoes = await prisma.aplicacao.findMany()
+  async fetchAplicacao(fazendaId: string): Promise<Aplicacao[]> {
+    const aplicacoes = await prisma.aplicacao.findMany({
+      where: {
+        fazenda_id: fazendaId,
+      },
+    })
 
     return aplicacoes
   }

@@ -9,6 +9,7 @@ interface FetchAllPalletsUseCaseParams {
   classificacaoId?: number
   variedadeId?: number
   status?: string
+  fazenda_id: string
 }
 interface FetchAllPalletsUseCaseResponse {
   pallets: Pallets[]
@@ -26,6 +27,7 @@ export class FetchAllPalletsUseCase {
     classificacaoId,
     variedadeId,
     status,
+    fazenda_id,
   }: FetchAllPalletsUseCaseParams): Promise<FetchAllPalletsUseCaseResponse> {
     const { pallets, totalPallets } =
       await this.qrcodePalletRepository.fetchAllPalletQrcode(
@@ -33,6 +35,7 @@ export class FetchAllPalletsUseCase {
         perPage,
         initialDate,
         endDate,
+        fazenda_id,
         status,
         classificacaoId,
         variedadeId,

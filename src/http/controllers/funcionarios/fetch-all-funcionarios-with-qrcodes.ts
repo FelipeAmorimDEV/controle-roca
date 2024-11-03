@@ -24,6 +24,7 @@ export async function fetchAllFuncionariosWithQrcode(
     q,
     initialDate,
     endDate,
+    fazenda_id: request.user.fazenda_id,
   })
 
   return reply.status(200).send(funcionarios)

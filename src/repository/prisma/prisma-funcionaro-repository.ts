@@ -6,6 +6,7 @@ export class PrismaFuncionarioRepository implements FuncionarioRepository {
   async fetchAllFuncionariosWithQrcodes(
     initialDate: string,
     endDate: string,
+    fazendaId: string,
     q?: string,
   ): Promise<Funcionario[]> {
     const endDateOfTheDay = new Date(endDate)
@@ -13,6 +14,7 @@ export class PrismaFuncionarioRepository implements FuncionarioRepository {
 
     const funcionarios = await prisma.funcionario.findMany({
       where: {
+        fazenda_id: fazendaId,
         nome: {
           contains: q,
           mode: 'insensitive',
@@ -34,18 +36,24 @@ export class PrismaFuncionarioRepository implements FuncionarioRepository {
     return funcionarios
   }
 
-  async fetchAllFuncionarios(): Promise<Funcionario[]> {
-    const funcionarios = await prisma.funcionario.findMany()
+  async fetchAllFuncionarios(fazendaId: string): Promise<Funcionario[]> {
+    const funcionarios = await prisma.funcionario.findMany({
+      where: {
+        fazenda_id: fazendaId,
+      },
+    })
 
     return funcionarios
   }
 
   async findFuncionarioById(
     funcionarioId: string,
+    fazendaId: string,
   ): Promise<Funcionario | null> {
     const funcionario = await prisma.funcionario.findUnique({
       where: {
         id: funcionarioId,
+        fazenda_id: fazendaId,
       },
     })
 
@@ -53,7 +61,7 @@ export class PrismaFuncionarioRepository implements FuncionarioRepository {
   }
 
   async createFuncionario(
-    data: Prisma.FuncionarioCreateInput,
+    data: Prisma.FuncionarioUncheckedCreateInput,
   ): Promise<Funcionario> {
     const funcionario = await prisma.funcionario.create({
       data,

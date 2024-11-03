@@ -14,6 +14,7 @@ interface FetchTodasEntradasUseCaseParams {
   endDate: string
   page: number
   perPage: number
+  fazenda_id: string
 }
 
 export class FetchTodasEntradasUseCase {
@@ -25,6 +26,7 @@ export class FetchTodasEntradasUseCase {
     endDate,
     page,
     perPage,
+    fazenda_id,
   }: FetchTodasEntradasUseCaseParams): Promise<FetchTodasEntradasUseCaseResponse> {
     const { entradas, total, entradasTotal } =
       await this.stockRepository.fetchEntradas(
@@ -32,6 +34,7 @@ export class FetchTodasEntradasUseCase {
         endDate,
         page,
         perPage,
+        fazenda_id,
         productId,
       )
 

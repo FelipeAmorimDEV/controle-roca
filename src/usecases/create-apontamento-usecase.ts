@@ -5,6 +5,7 @@ interface CreateApontamentoUseCaseParams {
   funcionarioId: string
   atividadeId: string
   setorId: string
+  fazenda_id: string
 }
 
 interface CreateApontamentoUseCaseResponse {
@@ -18,11 +19,13 @@ export class CreateApontamentoUseCase {
     atividadeId,
     funcionarioId,
     setorId,
+    fazenda_id,
   }: CreateApontamentoUseCaseParams): Promise<CreateApontamentoUseCaseResponse> {
     const apontamento = await this.apontamentoRepository.createApontamento({
       atividade_id: atividadeId,
       funcionario_id: funcionarioId,
       setor_id: setorId,
+      fazenda_id,
     })
 
     return { apontamento }

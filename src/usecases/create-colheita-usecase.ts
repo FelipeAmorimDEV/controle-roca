@@ -9,6 +9,7 @@ interface CreateColheitaUseCaseParams {
   setorId: string
   data: string
   variedade: string
+  fazenda_id: string
 }
 
 interface CreateColheitaUseCaseResponse {
@@ -26,6 +27,7 @@ export class CreateColheitaUseCase {
     tipoCaixa,
     data,
     variedade,
+    fazenda_id,
   }: CreateColheitaUseCaseParams): Promise<CreateColheitaUseCaseResponse> {
     const colheita = await this.colheitaRepository.createColheita({
       pesoCaixa,
@@ -35,6 +37,7 @@ export class CreateColheitaUseCase {
       caixa_id: tipoCaixa,
       createdAt: data,
       variedade,
+      fazenda_id,
     })
 
     return { colheita }

@@ -12,6 +12,7 @@ interface WithdrawStockProductUseCaseParams {
   setorId: string
   createdIn: string
   userId: string
+  fazenda_id: string
 }
 
 interface WithdrawStockProductUseCaseResponse {
@@ -31,6 +32,7 @@ export class WithdrawStockUseCase {
     setorId,
     createdIn,
     userId,
+    fazenda_id,
   }: WithdrawStockProductUseCaseParams): Promise<WithdrawStockProductUseCaseResponse> {
     const isNotValidQuantity = quantity <= 0
 
@@ -38,7 +40,10 @@ export class WithdrawStockUseCase {
       throw new QuantityInvalidError('Quantity') // Testar
     }
 
-    const product = await this.productsRepository.findProduct(productId)
+    const product = await this.productsRepository.findProduct(
+      productId,
+      fazenda_id,
+    )
 
     if (!product) {
       throw new ResouceNotFoundError()
@@ -57,12 +62,14 @@ export class WithdrawStockUseCase {
       priceSaida,
       createdIn,
       userId,
+      fazenda_id,
     )
 
     const produtoAtualizado =
       await this.productsRepository.decrementProductQuantity(
         quantity,
         productId,
+        fazenda_id,
       )
 
     return { withdrawLog, produtoAtualizado }

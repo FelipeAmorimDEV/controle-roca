@@ -27,6 +27,7 @@ export async function generateQrcodes(
     const { qrcodes } = await createQrcodeUseCase.execute({
       funcionarioId,
       quantidade,
+      fazenda_id: request.user.fazenda_id,
     })
 
     return reply.status(201).send(qrcodes)

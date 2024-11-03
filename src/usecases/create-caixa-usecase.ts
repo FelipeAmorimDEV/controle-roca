@@ -3,6 +3,7 @@ import { Caixa } from '@prisma/client'
 
 interface CreateCaixaUseCaseParams {
   nome: string
+  fazenda_id: string
 }
 
 interface CreateCaixaUseCaseResponse {
@@ -14,8 +15,9 @@ export class CreateCaixaUseCase {
 
   async execute({
     nome,
+    fazenda_id,
   }: CreateCaixaUseCaseParams): Promise<CreateCaixaUseCaseResponse> {
-    const caixa = await this.caixaRepository.createCaixa({ nome })
+    const caixa = await this.caixaRepository.createCaixa({ nome, fazenda_id })
 
     return { caixa }
   }

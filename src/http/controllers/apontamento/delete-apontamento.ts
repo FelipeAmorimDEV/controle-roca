@@ -18,6 +18,7 @@ export async function deleteApontamento(
 
   const { apontamento } = await deleteApontamento.execute({
     apontamentoId,
+    fazenda_id: request.user.fazenda_id,
   })
 
   return reply.status(200).send(apontamento)

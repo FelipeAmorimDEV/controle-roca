@@ -7,52 +7,70 @@ import {
 import { prisma } from '@/prisma'
 
 export class PrismaStockRepository implements StockRepository {
-  async getTotalEntrada(): Promise<number> {
-    const totalEntrada = await prisma.entrada.findMany()
+  async getTotalEntrada(fazendaId: string): Promise<number> {
+    const totalEntrada = await prisma.entrada.findMany({
+      where: {
+        fazenda_id: fazendaId,
+      },
+    })
 
     return totalEntrada.length
   }
 
-  async getTotalSaida(): Promise<number> {
-    const totalSaida = await prisma.saida.findMany()
+  async getTotalSaida(fazendaId: string): Promise<number> {
+    const totalSaida = await prisma.saida.findMany({
+      where: {
+        fazenda_id: fazendaId,
+      },
+    })
 
     return totalSaida.length
   }
 
-  async deleteAllSaidas(productId: string): Promise<Prisma.BatchPayload> {
+  async deleteAllSaidas(
+    productId: string,
+    fazendaId: string,
+  ): Promise<Prisma.BatchPayload> {
     const saidas = await prisma.saida.deleteMany({
       where: {
         productId,
+        fazenda_id: fazendaId,
       },
     })
 
     return saidas
   }
 
-  async deleteAllEntradas(productId: string): Promise<Prisma.BatchPayload> {
+  async deleteAllEntradas(
+    productId: string,
+    fazendaId: string,
+  ): Promise<Prisma.BatchPayload> {
     const entradas = await prisma.entrada.deleteMany({
       where: {
         productId,
+        fazenda_id: fazendaId,
       },
     })
 
     return entradas
   }
 
-  async deleteSaida(saidaId: string): Promise<Saida> {
+  async deleteSaida(saidaId: string, fazendaId: string): Promise<Saida> {
     const saida = await prisma.saida.delete({
       where: {
         id: saidaId,
+        fazenda_id: fazendaId,
       },
     })
 
     return saida
   }
 
-  async deleteEntrada(entradaId: string): Promise<Entrada> {
+  async deleteEntrada(entradaId: string, fazendaId: string): Promise<Entrada> {
     const entrada = await prisma.entrada.delete({
       where: {
         id: entradaId,
+        fazenda_id: fazendaId,
       },
     })
 
@@ -64,6 +82,7 @@ export class PrismaStockRepository implements StockRepository {
     endDate: string,
     page: number,
     perPage: number,
+    fazendaId: string,
     productId?: string,
     setorId?: string,
   ): Promise<SaidasResult> {
@@ -72,6 +91,7 @@ export class PrismaStockRepository implements StockRepository {
 
     const totalSaidas = await prisma.saida.findMany({
       where: {
+        fazenda_id: fazendaId,
         productId,
         setorId,
         createdAt: {
@@ -83,6 +103,7 @@ export class PrismaStockRepository implements StockRepository {
 
     const totalValue = await prisma.saida.aggregate({
       where: {
+        fazenda_id: fazendaId,
         productId,
         setorId,
         createdAt: {
@@ -97,6 +118,7 @@ export class PrismaStockRepository implements StockRepository {
 
     const saidas = await prisma.saida.findMany({
       where: {
+        fazenda_id: fazendaId,
         productId,
         setorId,
         createdAt: {
@@ -176,6 +198,7 @@ export class PrismaStockRepository implements StockRepository {
     priceSaida: number,
     createdIn: string,
     userId: string,
+    fazendaId: string,
   ): Promise<Saida> {
     console.log(createdIn)
     const dateTime = new Date().toISOString().split('T')[1]
@@ -189,6 +212,7 @@ export class PrismaStockRepository implements StockRepository {
         priceSaida,
         createdAt: new Date(dataReal),
         usersId: userId,
+        fazenda_id: fazendaId,
       },
     })
 
@@ -202,6 +226,7 @@ export class PrismaStockRepository implements StockRepository {
     createdIn: string,
     price: number,
     userId: string,
+    fazendaId: string,
   ): Promise<Entrada> {
     const dateTime = new Date().toISOString().split('T')[1]
     const dataReal = createdIn + 'T' + dateTime
@@ -214,6 +239,7 @@ export class PrismaStockRepository implements StockRepository {
         createdAt: new Date(dataReal),
         price,
         usersId: userId,
+        fazenda_id: fazendaId,
       },
     })
 

@@ -3,6 +3,7 @@ import { Apontamento } from '@prisma/client'
 
 interface ConcluirApontamentoUseCaseParams {
   apontamentoId: string
+  fazenda_id: string
 }
 
 interface ConcluirApontamentoUseCaseResponse {
@@ -14,9 +15,12 @@ export class ConcluirApontamentoUseCase {
 
   async execute({
     apontamentoId,
+    fazenda_id,
   }: ConcluirApontamentoUseCaseParams): Promise<ConcluirApontamentoUseCaseResponse> {
-    const apontamento =
-      await this.apontamentoRepository.concluirApontamento(apontamentoId)
+    const apontamento = await this.apontamentoRepository.concluirApontamento(
+      apontamentoId,
+      fazenda_id,
+    )
 
     return { apontamento }
   }

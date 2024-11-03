@@ -11,6 +11,7 @@ interface InsertStockProductUseCaseParams {
   createdIn: string
   valorUnidade: number
   userId: string
+  fazenda_id: string
 }
 
 interface InsertStockProductUseCaseResponse {
@@ -30,6 +31,7 @@ export class IncrementStockUseCase {
     createdIn,
     valorUnidade,
     userId,
+    fazenda_id,
   }: InsertStockProductUseCaseParams): Promise<InsertStockProductUseCaseResponse> {
     const isNotValidQuantity = quantity <= 0
 
@@ -37,7 +39,10 @@ export class IncrementStockUseCase {
       throw new QuantityInvalidError('Quantity') // Testar
     }
 
-    const product = await this.productsRepository.findProduct(productId)
+    const product = await this.productsRepository.findProduct(
+      productId,
+      fazenda_id,
+    )
 
     if (!product) {
       throw new ResouceNotFoundError()
@@ -52,12 +57,14 @@ export class IncrementStockUseCase {
       createdIn,
       valorUnidade,
       userId,
+      fazenda_id,
     )
 
     const produtoAtualizado =
       await this.productsRepository.incrementProductQuantity(
         quantity,
         productId,
+        fazenda_id,
       )
 
     return { withdrawLog, produtoAtualizado }

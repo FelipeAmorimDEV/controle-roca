@@ -26,6 +26,7 @@ export async function createSetor(
     filas,
     tamanhoArea,
     variedade,
+    fazenda_id: request.user.fazenda_id,
   })
 
   return reply.status(201).send(setor)

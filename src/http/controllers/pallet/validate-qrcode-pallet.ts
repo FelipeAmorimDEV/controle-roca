@@ -23,7 +23,10 @@ export async function validateQrcodePallet(
   )
 
   try {
-    const { qrcode } = await validateQrcodePalletUsecase.execute({ qrCodeData })
+    const { qrcode } = await validateQrcodePalletUsecase.execute({
+      qrCodeData,
+      fazenda_id: request.user.fazenda_id,
+    })
 
     return reply.status(200).send(qrcode)
   } catch (error) {

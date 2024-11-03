@@ -3,10 +3,11 @@ import { prisma } from '@/prisma'
 import { FetchPallets, QrcodePalletRepository } from '../pallet-repository'
 
 export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
-  async finalizarPallet(palletId: string): Promise<Pallets> {
+  async finalizarPallet(palletId: string, fazendaId: string): Promise<Pallets> {
     const pallet = await prisma.pallets.update({
       where: {
         id: palletId,
+        fazenda_id: fazendaId,
       },
       data: {
         finalizado: true,
@@ -16,20 +17,25 @@ export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
     return pallet
   }
 
-  async deletePallet(palletId: string): Promise<Pallets> {
+  async deletePallet(palletId: string, fazendaId: string): Promise<Pallets> {
     const pallet = await prisma.pallets.delete({
       where: {
         id: palletId,
+        fazenda_id: fazendaId,
       },
     })
 
     return pallet
   }
 
-  async incrementPalletCaixa(palletId: string): Promise<Pallets> {
+  async incrementPalletCaixa(
+    palletId: string,
+    fazendaId: string,
+  ): Promise<Pallets> {
     const pallet = await prisma.pallets.update({
       where: {
         id: palletId,
+        fazenda_id: fazendaId,
       },
       data: {
         qtdFeitas: {
@@ -44,10 +50,12 @@ export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
   async vincularCaixaAoPallet(
     palletId: string,
     caixaId: string,
+    fazendaId: string,
   ): Promise<Pallets> {
     const pallet = await prisma.pallets.update({
       where: {
         id: palletId,
+        fazenda_id: fazendaId,
       },
       data: {
         Qrcodes: {
@@ -61,10 +69,14 @@ export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
     return pallet
   }
 
-  async findPalletQrcodeById(qrcodeId: string): Promise<Pallets | null> {
+  async findPalletQrcodeById(
+    qrcodeId: string,
+    fazendaId: string,
+  ): Promise<Pallets | null> {
     const pallet = await prisma.pallets.findUnique({
       where: {
         id: qrcodeId,
+        fazenda_id: fazendaId,
       },
       include: {
         Caixa: {
@@ -83,6 +95,7 @@ export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
     perPage: number,
     initialDate: string,
     endDate: string,
+    fazendaId: string,
     status?: string,
     classificacaoId?: number,
     variedadeId?: number,
@@ -90,11 +103,10 @@ export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
     const endDateOfTheDay = new Date(endDate)
     endDateOfTheDay.setUTCHours(23, 59, 59, 999)
 
-    console.log('status', variedadeId)
-
     const totalPallets = await prisma.pallets.findMany({
       where: {
         variedadeId,
+        fazenda_id: fazendaId,
         caixaId: classificacaoId,
         finalizado: status === 'true',
         createdAt: {
@@ -161,10 +173,14 @@ export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
     return { pallets, totalPallets: totalPallets.length }
   }
 
-  async changeQrcodePalletUsado(qrcodeId: string): Promise<Pallets | null> {
+  async changeQrcodePalletUsado(
+    qrcodeId: string,
+    fazendaId: string,
+  ): Promise<Pallets | null> {
     const pallet = await prisma.pallets.update({
       where: {
         id: qrcodeId,
+        fazenda_id: fazendaId,
       },
       data: {
         usado: true,

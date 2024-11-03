@@ -9,6 +9,7 @@ export interface QrcodeI {
 
 interface ValidateQrcodePalletUseCaseParams {
   qrCodeData: QrcodeI
+  fazenda_id: string
 }
 
 interface ValidateQrcodePalletUseCaseResponse {
@@ -20,9 +21,11 @@ export class ValidateQrcodePalletUseCase {
 
   async execute({
     qrCodeData,
+    fazenda_id,
   }: ValidateQrcodePalletUseCaseParams): Promise<ValidateQrcodePalletUseCaseResponse> {
     const qrcodeExist = await this.qrcodePalletRepository.findPalletQrcodeById(
       qrCodeData.palletId,
+      fazenda_id,
     )
 
     if (!qrcodeExist) {
@@ -31,6 +34,7 @@ export class ValidateQrcodePalletUseCase {
 
     const qrcode = await this.qrcodePalletRepository.changeQrcodePalletUsado(
       qrcodeExist.id,
+      fazenda_id,
     )
 
     return { qrcode }

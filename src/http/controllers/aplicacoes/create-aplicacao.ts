@@ -41,6 +41,7 @@ export async function createAplicacao(
       setorId,
       volumeCalda,
       userId: request.user.sub,
+      fazenda_id: request.user.fazenda_id,
     })
 
     return reply.status(201).send(aplicacao)

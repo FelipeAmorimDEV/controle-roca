@@ -3,20 +3,28 @@ import { prisma } from '@/prisma'
 import { ApontamentoRepository } from '../apontamento-repository'
 
 export class PrismaApontamentoRepository implements ApontamentoRepository {
-  async deleteApontamento(apontamentoId: string): Promise<Apontamento> {
+  async deleteApontamento(
+    apontamentoId: string,
+    fazendaId: string,
+  ): Promise<Apontamento> {
     const apontamento = await prisma.apontamento.delete({
       where: {
         id: apontamentoId,
+        fazenda_id: fazendaId,
       },
     })
 
     return apontamento
   }
 
-  async concluirApontamento(apontamentoId: string): Promise<Apontamento> {
+  async concluirApontamento(
+    apontamentoId: string,
+    fazendaId: string,
+  ): Promise<Apontamento> {
     const apontamento = await prisma.apontamento.update({
       where: {
         id: apontamentoId,
+        fazenda_id: fazendaId,
       },
       data: {
         data_fim: new Date(),

@@ -9,7 +9,9 @@ export async function fetchAtividade(
   const atividadeRepository = new PrismaAtividadeRepository()
   const fetchAtividades = new FetchAtividadeUseCase(atividadeRepository)
 
-  const { atividades } = await fetchAtividades.execute()
+  const { atividades } = await fetchAtividades.execute({
+    fazenda_id: request.user.fazenda_id,
+  })
 
   return reply.status(200).send(atividades)
 }

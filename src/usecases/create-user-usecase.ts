@@ -6,6 +6,7 @@ import { hash } from 'bcryptjs'
 interface CreateUserUseCaseParams {
   user: string
   password: string
+  fazendaId: string
 }
 
 interface CreateUserUseCaseResponse {
@@ -18,6 +19,7 @@ export class CreateUserUseCase {
   async execute({
     user,
     password,
+    fazendaId,
   }: CreateUserUseCaseParams): Promise<CreateUserUseCaseResponse> {
     const userAlreadyExist = await this.userRepository.findUserByUsername(user)
 
@@ -30,6 +32,7 @@ export class CreateUserUseCase {
     const users = await this.userRepository.createUser({
       user,
       password: password_hash,
+      fazenda_id: fazendaId,
     })
 
     return { users }

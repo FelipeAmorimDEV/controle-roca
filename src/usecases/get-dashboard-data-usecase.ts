@@ -15,6 +15,10 @@ interface GetDashboardDataUseCaseResponse {
   estoqueBaixo: Product[]
 }
 
+interface GetDashboardDataUseCaseParams {
+  fazenda_id: string
+}
+
 export class GetDashboardDataUseCase {
   constructor(
     private productRepository: ProductsRepository,
@@ -22,13 +26,19 @@ export class GetDashboardDataUseCase {
     private colheitaRepository: ColheitaRepository,
   ) {}
 
-  async execute(): Promise<GetDashboardDataUseCaseResponse> {
-    const totalProduto = await this.productRepository.getTotalProduct()
-    const totalEntrada = await this.stockRepository.getTotalEntrada()
-    const totalSaida = await this.stockRepository.getTotalSaida()
-    const totalEmStock = await this.productRepository.getPriceProductInStock()
-    const colheitaMes = await this.colheitaRepository.getProducaoMensal()
-    const estoqueBaixo = await this.productRepository.getProductLowStock()
+  async execute({
+    fazenda_id,
+  }: GetDashboardDataUseCaseParams): Promise<GetDashboardDataUseCaseResponse> {
+    const totalProduto =
+      await this.productRepository.getTotalProduct(fazenda_id)
+    const totalEntrada = await this.stockRepository.getTotalEntrada(fazenda_id)
+    const totalSaida = await this.stockRepository.getTotalSaida(fazenda_id)
+    const totalEmStock =
+      await this.productRepository.getPriceProductInStock(fazenda_id)
+    const colheitaMes =
+      await this.colheitaRepository.getProducaoMensal(fazenda_id)
+    const estoqueBaixo =
+      await this.productRepository.getProductLowStock(fazenda_id)
 
     return {
       totalProduto,

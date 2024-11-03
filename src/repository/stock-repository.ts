@@ -13,12 +13,18 @@ export interface SaidasResult {
 }
 
 export interface StockRepository {
-  deleteEntrada(entradaId: string): Promise<Entrada>
-  deleteSaida(saidaId: string): Promise<Saida>
-  deleteAllEntradas(productId: string): Promise<Prisma.BatchPayload>
-  deleteAllSaidas(productId: string): Promise<Prisma.BatchPayload>
-  getTotalEntrada(): Promise<number>
-  getTotalSaida(): Promise<number>
+  deleteEntrada(entradaId: string, fazendaId: string): Promise<Entrada>
+  deleteSaida(saidaId: string, fazendaId: string): Promise<Saida>
+  deleteAllEntradas(
+    productId: string,
+    fazendaId: string,
+  ): Promise<Prisma.BatchPayload>
+  deleteAllSaidas(
+    productId: string,
+    fazendaId: string,
+  ): Promise<Prisma.BatchPayload>
+  getTotalEntrada(fazendaId: string): Promise<number>
+  getTotalSaida(fazendaId: string): Promise<number>
   createWithdrawStockItemLog(
     quantity: number,
     productId: string,
@@ -26,6 +32,7 @@ export interface StockRepository {
     priceSaida: number,
     createdIn: string,
     userId: string,
+    fazendaId: string,
   ): Promise<Saida>
   createInsertStockItemLog(
     priceEntrada: number,
@@ -34,12 +41,14 @@ export interface StockRepository {
     createdIn: string,
     price: number,
     userId: string,
+    fazendaId: string,
   ): Promise<Entrada>
   fetchEntradas(
     initialDate: string,
     endDate: string,
     page: number,
     perPage: number,
+    fazendaId: string,
     productId?: string,
   ): Promise<EntradasResult>
   fetchSaidas(
@@ -47,6 +56,7 @@ export interface StockRepository {
     endDate: string,
     page: number,
     perPage: number,
+    fazendaId: string,
     productId?: string,
     setorId?: string,
   ): Promise<SaidasResult>

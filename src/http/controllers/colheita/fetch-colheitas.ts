@@ -30,6 +30,7 @@ export async function fetchColheitas(
       page,
       perPage,
       setorId,
+      fazenda_id: request.user.fazenda_id,
     })
 
   return reply.status(200).send({ colheitas, total, totalColhido })

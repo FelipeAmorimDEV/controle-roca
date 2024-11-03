@@ -5,6 +5,7 @@ import { Product } from '@prisma/client'
 
 interface DeleteProductUseCaseParams {
   productId: string
+  fazenda_id: string
 }
 
 interface DeleteProductsUseCaseResponse {
@@ -19,10 +20,14 @@ export class DeleteProductUseCase {
 
   async execute({
     productId,
+    fazenda_id,
   }: DeleteProductUseCaseParams): Promise<DeleteProductsUseCaseResponse> {
-    await this.stockRepository.deleteAllEntradas(productId)
-    await this.stockRepository.deleteAllSaidas(productId)
-    const product = await this.productsRepository.deleteProduct(productId)
+    await this.stockRepository.deleteAllEntradas(productId, fazenda_id)
+    await this.stockRepository.deleteAllSaidas(productId, fazenda_id)
+    const product = await this.productsRepository.deleteProduct(
+      productId,
+      fazenda_id,
+    )
 
     return { product }
   }

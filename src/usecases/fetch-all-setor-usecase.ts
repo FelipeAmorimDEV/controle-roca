@@ -6,11 +6,17 @@ interface FetchAllSetorUseCaseResponse {
   setores: Setor[]
 }
 
+interface FetchAllSetorUseCaseParams {
+  fazenda_id: string
+}
+
 export class FetchAllSetorUseCase {
   constructor(private setorRepository: SetorRepository) {}
 
-  async execute(): Promise<FetchAllSetorUseCaseResponse> {
-    const setores = await this.setorRepository.fetchAllSetor()
+  async execute({
+    fazenda_id,
+  }: FetchAllSetorUseCaseParams): Promise<FetchAllSetorUseCaseResponse> {
+    const setores = await this.setorRepository.fetchAllSetor(fazenda_id)
 
     return { setores }
   }

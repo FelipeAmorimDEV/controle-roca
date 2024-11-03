@@ -45,8 +45,11 @@ export interface ApontamentosI {
 }
 
 export class PrismaSetorRepository implements SetorRepository {
-  async fetchAllApontamentos(): Promise<ApontamentosI[]> {
+  async fetchAllApontamentos(fazendaId: string): Promise<ApontamentosI[]> {
     const apontamentos = await prisma.apontamento.findMany({
+      where: {
+        fazenda_id: fazendaId,
+      },
       include: {
         atividade: true,
         funcionario: true,
@@ -74,8 +77,11 @@ export class PrismaSetorRepository implements SetorRepository {
     return relatorio
   }
 
-  async fetchAllSetor(): Promise<Setor[]> {
+  async fetchAllSetor(fazendaId: string): Promise<Setor[]> {
     const setores = prisma.setor.findMany({
+      where: {
+        fazenda_id: fazendaId,
+      },
       orderBy: {
         setorName: 'asc',
       },
@@ -91,6 +97,7 @@ export class PrismaSetorRepository implements SetorRepository {
         setorName: data.setorName,
         variedade_id: data.variedade_id,
         tamanhoArea: data.tamanhoArea,
+        fazenda_id: data.fazenda_id,
       },
     })
 

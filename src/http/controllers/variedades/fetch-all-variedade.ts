@@ -11,7 +11,9 @@ export async function fetchAllVariedade(
     prismaVariedadeRepository,
   )
 
-  const { variedades } = await fetchVariedadesUseCase.execute()
+  const { variedades } = await fetchVariedadesUseCase.execute({
+    fazenda_id: request.user.fazenda_id,
+  })
 
   return reply.status(200).send(variedades)
 }

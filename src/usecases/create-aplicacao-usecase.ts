@@ -16,6 +16,7 @@ interface CreateAplicacaoUseCaseParams {
   volumeCalda: number
   produtos: ProdutosAplicacao[]
   userId: string
+  fazenda_id: string
 }
 
 interface CreateAplicacaoUseCaseResponse {
@@ -35,6 +36,7 @@ export class CreateAplicacaoUseCase {
     setorId,
     volumeCalda,
     userId,
+    fazenda_id,
   }: CreateAplicacaoUseCaseParams): Promise<CreateAplicacaoUseCaseResponse> {
     for (const product of produtos) {
       const qntProduto = product.total / 1000
@@ -79,6 +81,7 @@ export class CreateAplicacaoUseCase {
       volumeCalda,
       setorId,
       produtosAplicados: produtos,
+      fazenda_id,
     })
 
     return { aplicacao }

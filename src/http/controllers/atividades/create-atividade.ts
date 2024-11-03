@@ -20,6 +20,7 @@ export async function createAtividade(
   const { atividade } = await createAtividade.execute({
     nome: nome.toUpperCase(),
     categoria,
+    fazenda_id: request.user.fazenda_id,
   })
 
   return reply.status(201).send(atividade)

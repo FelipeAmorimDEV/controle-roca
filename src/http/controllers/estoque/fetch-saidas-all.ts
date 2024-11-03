@@ -29,6 +29,7 @@ export async function fetchSaidasAll(
     endDate,
     page,
     perPage,
+    fazenda_id: request.user.fazenda_id,
   })
 
   return reply.status(200).send({ saidas, total, saidasTotal })

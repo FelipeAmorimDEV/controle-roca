@@ -33,6 +33,7 @@ export async function generateQrcodesPallet(
       variedadeId,
       qtdCaixas,
       setorId,
+      fazenda_id: request.user.fazenda_id,
     })
 
     return reply.status(201).send(qrcodes)

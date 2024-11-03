@@ -42,6 +42,7 @@ export async function fetchAllPallets(
       classificacaoId,
       variedadeId,
       status,
+      fazenda_id: request.user.fazenda_id,
     })
 
     return reply.status(200).send({ pallets, totalPallets })

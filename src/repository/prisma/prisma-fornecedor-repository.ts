@@ -5,7 +5,7 @@ import { FornecedorRepository } from '../fornecedor-repository'
 
 export class PrismaFornecedorRepository implements FornecedorRepository {
   async createFornecedor(
-    data: Prisma.FornecedorCreateInput,
+    data: Prisma.FornecedorUncheckedCreateInput,
   ): Promise<Fornecedor> {
     const fornecedor = await prisma.fornecedor.create({
       data,
@@ -14,8 +14,12 @@ export class PrismaFornecedorRepository implements FornecedorRepository {
     return fornecedor
   }
 
-  async fetchAllFornecedor(): Promise<Fornecedor[]> {
-    const fornecedores = await prisma.fornecedor.findMany()
+  async fetchAllFornecedor(fazendaId: string): Promise<Fornecedor[]> {
+    const fornecedores = await prisma.fornecedor.findMany({
+      where: {
+        fazenda_id: fazendaId,
+      },
+    })
 
     return fornecedores
   }

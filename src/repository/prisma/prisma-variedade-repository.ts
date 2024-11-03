@@ -3,17 +3,23 @@ import { VariedadeRepository } from '../variedade-repository'
 import { prisma } from '@/prisma'
 
 export class PrismaVariedadeRepository implements VariedadeRepository {
-  async findById(variedadeId: number): Promise<Variedade | null> {
+  async findById(
+    variedadeId: number,
+    fazendaId: string,
+  ): Promise<Variedade | null> {
     const variedade = await prisma.variedade.findUnique({
       where: {
         id: variedadeId,
+        fazenda_id: fazendaId,
       },
     })
 
     return variedade
   }
 
-  async createVariedade(data: Prisma.VariedadeCreateInput): Promise<Variedade> {
+  async createVariedade(
+    data: Prisma.VariedadeUncheckedCreateInput,
+  ): Promise<Variedade> {
     const variedade = await prisma.variedade.create({
       data,
     })
@@ -21,8 +27,12 @@ export class PrismaVariedadeRepository implements VariedadeRepository {
     return variedade
   }
 
-  async fetchAllVariedades(): Promise<Variedade[]> {
-    const variedades = await prisma.variedade.findMany()
+  async fetchAllVariedades(fazendaId: string): Promise<Variedade[]> {
+    const variedades = await prisma.variedade.findMany({
+      where: {
+        fazenda_id: fazendaId,
+      },
+    })
 
     return variedades
   }

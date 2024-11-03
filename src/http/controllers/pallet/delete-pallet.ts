@@ -18,6 +18,7 @@ export async function deletePallet(
 
   await deletePallet.execute({
     palletId,
+    fazenda_id: request.user.fazenda_id,
   })
 
   return reply.status(200).send()

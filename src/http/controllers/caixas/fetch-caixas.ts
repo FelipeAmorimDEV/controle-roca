@@ -9,6 +9,8 @@ export async function fetchCaixas(
   const prismaCaixaRepository = new PrismaCaixaRepository()
   const fetchAllCaixaUseCase = new FetchAllCaixasUseCase(prismaCaixaRepository)
 
-  const { caixas } = await fetchAllCaixaUseCase.execute()
+  const { caixas } = await fetchAllCaixaUseCase.execute({
+    fazenda_id: request.user.fazenda_id,
+  })
   return reply.status(200).send(caixas)
 }

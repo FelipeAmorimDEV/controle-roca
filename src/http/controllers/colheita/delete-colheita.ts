@@ -18,6 +18,7 @@ export async function deleteColheita(
 
   await deleteColheita.execute({
     colheitaId,
+    fazenda_id: request.user.fazenda_id,
   })
 
   return reply.status(200).send()

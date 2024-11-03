@@ -1,6 +1,6 @@
-import {  Caixa, Prisma, Qrcodes } from '@prisma/client'
+import { Caixa, Prisma } from '@prisma/client'
 
 export interface CaixaRepository {
-  fetchAllCaixa(): Promise<Caixa[]>
-  createCaixa(data: Prisma.CaixaCreateInput): Promise<Caixa>
+  fetchAllCaixa(fazendaId: string): Promise<Caixa[]>
+  createCaixa(data: Prisma.CaixaUncheckedCreateInput): Promise<Caixa>
 }

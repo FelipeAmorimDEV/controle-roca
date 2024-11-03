@@ -37,6 +37,7 @@ export async function withdrawProduct(
       setorId,
       createdIn,
       userId: request.user.sub,
+      fazenda_id: request.user.fazenda_id,
     })
 
     return reply.status(201).send(produtoAtualizado)

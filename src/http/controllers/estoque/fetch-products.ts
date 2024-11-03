@@ -27,6 +27,7 @@ export async function fetchProducts(
       page,
       all,
       perPage,
+      fazenda_id: request.user.fazenda_id,
     })
 
   return reply.status(200).send({ products, total, totalEstoque })

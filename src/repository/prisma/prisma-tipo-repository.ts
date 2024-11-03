@@ -3,7 +3,7 @@ import { TipoRepository } from '../tipo-repository'
 import { Prisma, Tipo } from '@prisma/client'
 
 export class PrismaTipoRepository implements TipoRepository {
-  async createTipo(data: Prisma.TipoCreateInput): Promise<Tipo> {
+  async createTipo(data: Prisma.TipoUncheckedCreateInput): Promise<Tipo> {
     const tipo = await prisma.tipo.create({
       data,
     })
@@ -11,8 +11,12 @@ export class PrismaTipoRepository implements TipoRepository {
     return tipo
   }
 
-  async fetchAllTipos(): Promise<Tipo[]> {
-    const tipos = await prisma.tipo.findMany()
+  async fetchAllTipos(fazendaId: string): Promise<Tipo[]> {
+    const tipos = await prisma.tipo.findMany({
+      where: {
+        fazenda_id: fazendaId,
+      },
+    })
 
     return tipos
   }

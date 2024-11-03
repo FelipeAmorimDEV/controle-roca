@@ -13,7 +13,10 @@ export async function createTipo(request: FastifyRequest, reply: FastifyReply) {
   const prismaTipoRespository = new PrismaTipoRepository()
   const createTipoUsecase = new CreateTipoUseCase(prismaTipoRespository)
 
-  const { tipo } = await createTipoUsecase.execute({ name: name.toUpperCase() })
+  const { tipo } = await createTipoUsecase.execute({
+    name: name.toUpperCase(),
+    fazenda_id: request.user.fazenda_id,
+  })
 
   return reply.status(201).send(tipo)
 }

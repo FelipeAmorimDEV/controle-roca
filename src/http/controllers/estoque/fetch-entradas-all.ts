@@ -27,6 +27,7 @@ export async function fetchEntradasAll(
     productId,
     page,
     perPage,
+    fazenda_id: request.user.fazenda_id,
   })
 
   return reply.status(200).send({ entradas, total, entradasTotal })

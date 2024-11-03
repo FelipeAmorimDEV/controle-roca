@@ -20,6 +20,8 @@ export async function createVariedade(
 
   const { variedade } = await createVariedadeUsecase.execute({
     nome: nome.toUpperCase(),
+    fazenda_id: request.user.fazenda_id,
   })
+
   return reply.status(201).send(variedade)
 }

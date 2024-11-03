@@ -40,6 +40,7 @@ export async function validateQrcode(
     const { qrcode } = await validateQrcodeUsecase.execute({
       qrCodeData,
       palletId,
+      fazenda_id: request.user.fazenda_id,
     })
 
     return reply.status(200).send(qrcode)

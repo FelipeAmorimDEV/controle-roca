@@ -15,6 +15,7 @@ interface FetchTodasSaidasUseCaseParams {
   setorId?: string
   page: number
   perPage: number
+  fazenda_id: string
 }
 
 export class FetchTodasSaidasUseCase {
@@ -27,6 +28,7 @@ export class FetchTodasSaidasUseCase {
     endDate,
     page,
     perPage,
+    fazenda_id,
   }: FetchTodasSaidasUseCaseParams): Promise<FetchTodasSaidasUseCaseResponse> {
     const { saidas, total, saidasTotal } =
       await this.stockRepository.fetchSaidas(
@@ -34,6 +36,7 @@ export class FetchTodasSaidasUseCase {
         endDate,
         page,
         perPage,
+        fazenda_id,
         productId,
         setorId,
       )

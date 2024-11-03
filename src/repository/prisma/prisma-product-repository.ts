@@ -7,9 +7,10 @@ import {
 import { prisma } from '@/prisma'
 
 export class PrismaProductRepository implements ProductsRepository {
-  async getProductLowStock(): Promise<Product[]> {
+  async getProductLowStock(fazendaId: string): Promise<Product[]> {
     const products = await prisma.product.findMany({
       where: {
+        fazenda_id: fazendaId,
         quantity: {
           lte: 5,
         },
@@ -27,8 +28,11 @@ export class PrismaProductRepository implements ProductsRepository {
     return products
   }
 
-  async getPriceProductInStock(): Promise<number> {
+  async getPriceProductInStock(fazendaId: string): Promise<number> {
     const products = await prisma.product.findMany({
+      where: {
+        fazenda_id: fazendaId,
+      },
       select: {
         quantity: true,
         price: true,
@@ -42,16 +46,21 @@ export class PrismaProductRepository implements ProductsRepository {
     return totalValue
   }
 
-  async getTotalProduct(): Promise<number> {
-    const totalProduto = await prisma.product.findMany()
+  async getTotalProduct(fazendaId: string): Promise<number> {
+    const totalProduto = await prisma.product.findMany({
+      where: {
+        fazenda_id: fazendaId,
+      },
+    })
 
     return totalProduto.length
   }
 
-  async deleteProduct(productId: string): Promise<Product> {
+  async deleteProduct(productId: string, fazendaId: string): Promise<Product> {
     const product = await prisma.product.delete({
       where: {
         id: productId,
+        fazenda_id: fazendaId,
       },
     })
 
@@ -65,6 +74,7 @@ export class PrismaProductRepository implements ProductsRepository {
         tipoId: data.tipoId,
         fornecedorId: data.fornecedorId,
         unit: data.unit,
+        fazenda_id: data.fazenda_id,
       },
     })
 
@@ -74,16 +84,24 @@ export class PrismaProductRepository implements ProductsRepository {
   async fetchAllProduct(
     page: number,
     perPage: number,
+    fazendaId: string,
     q?: string,
     all?: boolean,
   ): Promise<FetchAllProduct> {
     if (all) {
-      const products = await prisma.product.findMany()
+      const products = await prisma.product.findMany({
+        where: {
+          fazenda_id: fazendaId,
+        },
+      })
 
       return { products, total: products.length }
     }
 
     const produtos = await prisma.product.findMany({
+      where: {
+        fazenda_id: fazendaId,
+      },
       select: {
         quantity: true,
         price: true,
@@ -127,10 +145,11 @@ export class PrismaProductRepository implements ProductsRepository {
     }
   }
 
-  async findProduct(id: string): Promise<Product | null> {
+  async findProduct(id: string, fazendaId: string): Promise<Product | null> {
     const product = await prisma.product.findFirst({
       where: {
         id,
+        fazenda_id: fazendaId,
       },
     })
 
@@ -140,10 +159,12 @@ export class PrismaProductRepository implements ProductsRepository {
   async decrementProductQuantity(
     quantity: number,
     productId: string,
+    fazendaId: string,
   ): Promise<Product> {
     const product = await prisma.product.update({
       where: {
         id: productId,
+        fazenda_id: fazendaId,
       },
       data: {
         quantity: {
@@ -158,10 +179,13 @@ export class PrismaProductRepository implements ProductsRepository {
   async incrementProductQuantity(
     quantity: number,
     productId: string,
+    fazendaId: string,
   ): Promise<Product> {
     const entradas = await prisma.entrada.findMany({
+      // MELHORAR LOGICA FIX
       where: {
         productId,
+        fazenda_id: fazendaId,
       },
     })
 
@@ -178,6 +202,7 @@ export class PrismaProductRepository implements ProductsRepository {
     const product = await prisma.product.update({
       where: {
         id: productId,
+        fazenda_id: fazendaId,
       },
       data: {
         quantity: {

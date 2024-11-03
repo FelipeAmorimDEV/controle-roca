@@ -8,7 +8,7 @@ import { prisma } from '@/prisma'
 import { endOfMonth, set, startOfMonth } from 'date-fns'
 
 export class PrismaColheitaRepository implements ColheitaRepository {
-  async getProducaoMensal(): Promise<IProducaoMensal[]> {
+  async getProducaoMensal(fazendaId: string): Promise<IProducaoMensal[]> {
     const resultados = []
 
     for (let i = 0; i < 12; i++) {
@@ -22,6 +22,7 @@ export class PrismaColheitaRepository implements ColheitaRepository {
       const producoesPorVariedade = await prisma.colheita.groupBy({
         by: ['variedade'],
         where: {
+          fazenda_id: fazendaId,
           createdAt: {
             gte: inicioMes,
             lte: fimMes,
@@ -55,10 +56,14 @@ export class PrismaColheitaRepository implements ColheitaRepository {
     return resultados
   }
 
-  async deleteColheita(colheitaId: string): Promise<Colheita> {
+  async deleteColheita(
+    colheitaId: string,
+    fazendaId: string,
+  ): Promise<Colheita> {
     const colheita = await prisma.colheita.delete({
       where: {
         id: colheitaId,
+        fazenda_id: fazendaId,
       },
     })
 
@@ -70,6 +75,7 @@ export class PrismaColheitaRepository implements ColheitaRepository {
     endDate: string,
     page: number,
     perPage: number,
+    fazendaId: string,
     setorId?: string,
   ): Promise<ColheitaResult> {
     const endDateOfTheDay = new Date(endDate)
@@ -77,6 +83,7 @@ export class PrismaColheitaRepository implements ColheitaRepository {
 
     const totalColhido = await prisma.colheita.aggregate({
       where: {
+        fazenda_id: fazendaId,
         setorId,
         createdAt: {
           gte: new Date(initialDate),
@@ -90,6 +97,7 @@ export class PrismaColheitaRepository implements ColheitaRepository {
 
     const totalColheita = await prisma.colheita.findMany({
       where: {
+        fazenda_id: fazendaId,
         setorId,
         createdAt: {
           gte: new Date(initialDate),
@@ -100,6 +108,7 @@ export class PrismaColheitaRepository implements ColheitaRepository {
 
     const colheita = await prisma.colheita.findMany({
       where: {
+        fazenda_id: fazendaId,
         setorId,
         createdAt: {
           gte: new Date(initialDate),
@@ -131,7 +140,6 @@ export class PrismaColheitaRepository implements ColheitaRepository {
     data: Prisma.ColheitaUncheckedCreateInput,
   ): Promise<Colheita> {
     const horaAtual = new Date().toISOString().split('T')[1]
-    console.log(data.createdAt + horaAtual)
     const colheita = await prisma.colheita.create({
       data: {
         pesoCaixa: data.pesoCaixa,
@@ -141,6 +149,7 @@ export class PrismaColheitaRepository implements ColheitaRepository {
         caixa_id: data.caixa_id,
         createdAt: new Date(data.createdAt + 'T' + horaAtual),
         variedade: data.variedade,
+        fazenda_id: data.fazenda_id,
       },
     })
 

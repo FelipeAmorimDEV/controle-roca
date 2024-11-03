@@ -7,6 +7,7 @@ interface CreateSetorUseCaseParams {
   variedade: number
   tamanhoArea: number
   filas: string
+  fazenda_id: string
 }
 
 interface CreateSetorUseCaseResponse {
@@ -21,12 +22,14 @@ export class CreateSetorUseCase {
     filas,
     tamanhoArea,
     variedade,
+    fazenda_id,
   }: CreateSetorUseCaseParams): Promise<CreateSetorUseCaseResponse> {
     const setor = await this.setorRepository.createSetor({
       setorName,
       filas,
       tamanhoArea,
       variedade_id: variedade,
+      fazenda_id,
     })
 
     return { setor }

@@ -20,6 +20,7 @@ export async function concluirApontamento(
 
   const { apontamento } = await createApontamento.execute({
     apontamentoId,
+    fazenda_id: request.user.fazenda_id,
   })
 
   return reply.status(200).send(apontamento)

@@ -4,6 +4,7 @@ import { Funcionario } from '@prisma/client'
 interface CreateFuncionarioUseCaseParams {
   nome: string
   cargo: string
+  fazenda_id: string
 }
 
 interface CreateFuncionarioUseCaseResponse {
@@ -16,10 +17,12 @@ export class CreateFuncionarioUseCase {
   async execute({
     nome,
     cargo,
+    fazenda_id,
   }: CreateFuncionarioUseCaseParams): Promise<CreateFuncionarioUseCaseResponse> {
     const funcionario = await this.funcionarioRepository.createFuncionario({
       nome,
       cargo,
+      fazenda_id,
     })
 
     return { funcionario }

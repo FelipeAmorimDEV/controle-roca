@@ -17,6 +17,7 @@ export interface QrcodeI {
 interface ValidateQrcodeUseCaseParams {
   qrCodeData: QrcodeI
   palletId: string
+  fazenda_id: string
 }
 
 interface ValidateQrcodeUseCaseResponse {
@@ -34,11 +35,15 @@ export class ValidateQrcodeUseCase {
   async execute({
     qrCodeData,
     palletId,
+    fazenda_id,
   }: ValidateQrcodeUseCaseParams): Promise<ValidateQrcodeUseCaseResponse> {
-    const pallet =
-      await this.qrcodePalletRepository.findPalletQrcodeById(palletId)
+    const pallet = await this.qrcodePalletRepository.findPalletQrcodeById(
+      palletId,
+      fazenda_id,
+    )
     const qrcoded = await this.qrcodeRepository.findQrcodeById(
       qrCodeData.qrcodeId,
+      fazenda_id,
     )
 
     if (!pallet || !qrcoded) {
@@ -51,6 +56,7 @@ export class ValidateQrcodeUseCase {
 
     const variedade = await this.variedadeRepository.findById(
       pallet.variedadeId,
+      fazenda_id,
     )
     const isPalletFull = pallet.qtdCaixas === pallet.qtdFeitas
     const isLastBox = pallet.qtdFeitas + 1 === pallet.qtdCaixas
@@ -65,21 +71,29 @@ export class ValidateQrcodeUseCase {
         caixa_id: pallet.caixaId,
         createdAt: dateToday,
         variedade: variedade!.nome,
+        fazenda_id,
       })
 
-      await this.qrcodePalletRepository.finalizarPallet(pallet.id)
+      await this.qrcodePalletRepository.finalizarPallet(pallet.id, fazenda_id)
     }
 
     if (isPalletFull) {
       throw new PalletCheio()
     }
 
-    await this.qrcodePalletRepository.incrementPalletCaixa(pallet.id)
+    await this.qrcodePalletRepository.incrementPalletCaixa(
+      pallet.id,
+      fazenda_id,
+    )
 
-    const qrcode = await this.qrcodeRepository.changeQrcodeUsado(qrcoded.id)
+    const qrcode = await this.qrcodeRepository.changeQrcodeUsado(
+      qrcoded.id,
+      fazenda_id,
+    )
     await this.qrcodePalletRepository.vincularCaixaAoPallet(
       pallet.id,
       qrcoded.id,
+      fazenda_id,
     )
 
     return { qrcode }

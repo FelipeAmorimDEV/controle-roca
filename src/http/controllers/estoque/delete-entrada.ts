@@ -23,6 +23,7 @@ export async function deleteEntrada(
 
   await deleteEntradaUseCase.execute({
     entradaId,
+    fazenda_id: request.user.fazenda_id,
   })
 
   return reply.status(200).send()

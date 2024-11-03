@@ -11,7 +11,9 @@ export async function fetchApontamentosSetor(
     prismaSetorRepository,
   )
 
-  const { apontamentos } = await fetchApontamentos.execute({})
+  const { apontamentos } = await fetchApontamentos.execute({
+    fazenda_id: request.user.fazenda_id,
+  })
 
   return reply.status(200).send(apontamentos)
 }

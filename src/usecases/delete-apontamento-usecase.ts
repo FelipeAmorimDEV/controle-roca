@@ -3,6 +3,7 @@ import { Apontamento } from '@prisma/client'
 
 interface DeleteApontamentoUseCaseParams {
   apontamentoId: string
+  fazenda_id: string
 }
 
 interface DeleteApontamentoUseCaseResponse {
@@ -14,9 +15,12 @@ export class DeleteApontamentoUseCase {
 
   async execute({
     apontamentoId,
+    fazenda_id,
   }: DeleteApontamentoUseCaseParams): Promise<DeleteApontamentoUseCaseResponse> {
-    const apontamento =
-      await this.apontamentoRepository.deleteApontamento(apontamentoId)
+    const apontamento = await this.apontamentoRepository.deleteApontamento(
+      apontamentoId,
+      fazenda_id,
+    )
 
     return { apontamento }
   }

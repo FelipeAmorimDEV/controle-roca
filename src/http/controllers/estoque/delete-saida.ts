@@ -23,6 +23,7 @@ export async function deleteSaida(
 
   await deleteSaida.execute({
     saidaId,
+    fazenda_id: request.user.fazenda_id,
   })
 
   return reply.status(200).send()

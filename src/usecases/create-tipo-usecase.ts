@@ -4,6 +4,7 @@ import { TipoRepository } from '@/repository/tipo-repository'
 
 interface CreateTipoUseCaseParams {
   name: string
+  fazenda_id: string
 }
 
 interface CreateTipoUseCaseResponse {
@@ -15,8 +16,9 @@ export class CreateTipoUseCase {
 
   async execute({
     name,
+    fazenda_id,
   }: CreateTipoUseCaseParams): Promise<CreateTipoUseCaseResponse> {
-    const tipo = await this.tipoRepository.createTipo({ name })
+    const tipo = await this.tipoRepository.createTipo({ name, fazenda_id })
 
     return { tipo }
   }

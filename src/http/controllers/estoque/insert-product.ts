@@ -38,6 +38,7 @@ export async function insertProduct(
       createdIn,
       valorUnidade,
       userId: request.user.sub,
+      fazenda_id: request.user.fazenda_id,
     })
 
     return reply.status(201).send(withdrawLog)

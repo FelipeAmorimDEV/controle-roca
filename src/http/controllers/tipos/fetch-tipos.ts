@@ -6,7 +6,9 @@ export async function fetchTipos(request: FastifyRequest, reply: FastifyReply) {
   const prismaTiposRepository = new PrismaTipoRepository()
   const fetchAllTiposUseCase = new FetchAllTiposUseCase(prismaTiposRepository)
 
-  const { tipos } = await fetchAllTiposUseCase.execute()
+  const { tipos } = await fetchAllTiposUseCase.execute({
+    fazendaId: request.user.fazenda_id,
+  })
 
   return reply.status(200).send(tipos)
 }

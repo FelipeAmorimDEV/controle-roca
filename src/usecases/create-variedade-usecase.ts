@@ -3,6 +3,7 @@ import { Variedade } from '@prisma/client'
 
 interface CreateVariedadeUseCaseParams {
   nome: string
+  fazenda_id: string
 }
 
 interface CreateVariedadeUseCaseResponse {
@@ -14,9 +15,11 @@ export class CreateVariedadeUseCase {
 
   async execute({
     nome,
+    fazenda_id,
   }: CreateVariedadeUseCaseParams): Promise<CreateVariedadeUseCaseResponse> {
     const variedade = await this.variedadeRepository.createVariedade({
       nome,
+      fazenda_id,
     })
 
     return { variedade }

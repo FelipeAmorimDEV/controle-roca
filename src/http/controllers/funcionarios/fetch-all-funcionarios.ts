@@ -10,7 +10,9 @@ export async function fetchAllFuncionarios(
   const fetchAllFuncionariosUseCase = new FetchAllFuncionariosUseCase(
     prismaFuncionarioRepository,
   )
-  const { funcionarios } = await fetchAllFuncionariosUseCase.execute()
+  const { funcionarios } = await fetchAllFuncionariosUseCase.execute({
+    fazenda_id: request.user.fazenda_id,
+  })
 
   return reply.status(200).send(funcionarios)
 }

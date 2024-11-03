@@ -5,6 +5,7 @@ interface FetchAllQrcodeUseCaseParams {
   funcionarioId?: string
   initialDate: string
   endDate: string
+  fazenda_id: string
 }
 
 interface FetchAllQrcodeUseCaseResponse {
@@ -18,10 +19,12 @@ export class FetchAllQrcodeUseCase {
     funcionarioId,
     endDate,
     initialDate,
+    fazenda_id,
   }: FetchAllQrcodeUseCaseParams): Promise<FetchAllQrcodeUseCaseResponse> {
     const qrcodes = await this.qrcodeRepository.fetchAllQrcode(
       initialDate,
       endDate,
+      fazenda_id,
       funcionarioId,
     )
 

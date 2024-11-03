@@ -21,7 +21,9 @@ export async function authenticateUser(
   try {
     const { users } = await authenticateUsecase.execute({ user, password })
     const token = await reply.jwtSign(
-      {},
+      {
+        fazenda_id: users.fazenda_id,
+      },
       {
         sign: {
           sub: users.id,

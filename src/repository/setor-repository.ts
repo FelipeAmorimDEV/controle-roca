@@ -3,6 +3,6 @@ import { ApontamentosI } from './prisma/prisma-setor-repository'
 
 export interface SetorRepository {
   createSetor(data: Prisma.SetorUncheckedCreateInput): Promise<Setor>
-  fetchAllSetor(): Promise<Setor[]>
-  fetchAllApontamentos(): Promise<ApontamentosI[]>
+  fetchAllSetor(fazendaId: string): Promise<Setor[]>
+  fetchAllApontamentos(fazendaId: string): Promise<ApontamentosI[]>
 }
