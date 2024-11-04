@@ -34,18 +34,19 @@ export async function fetchAllPallets(
   )
 
   try {
-    const { pallets, totalPallets } = await fetchAllPallets.execute({
-      page,
-      perPage,
-      endDate,
-      initialDate,
-      classificacaoId,
-      variedadeId,
-      status,
-      fazenda_id: request.user.fazenda_id,
-    })
+    const { pallets, totalPallets, totalColhido } =
+      await fetchAllPallets.execute({
+        page,
+        perPage,
+        endDate,
+        initialDate,
+        classificacaoId,
+        variedadeId,
+        status,
+        fazenda_id: request.user.fazenda_id,
+      })
 
-    return reply.status(200).send({ pallets, totalPallets })
+    return reply.status(200).send({ pallets, totalPallets, totalColhido })
   } catch (error) {
     if (error instanceof FuncionarioNaoExiste) {
       return reply.status(400).send({ message: error.message })

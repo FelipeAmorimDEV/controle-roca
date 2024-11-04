@@ -167,7 +167,14 @@ export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
       take: perPage,
     })
 
-    return { pallets, totalPallets: totalPallets.length }
+    const totalColhido = totalPallets.reduce((acc, item) => {
+      const qtdFeitas = item.qtdFeitas ?? 0
+      const peso = item.peso ?? 0
+
+      return acc + qtdFeitas * (peso / 1000)
+    }, 0)
+
+    return { pallets, totalPallets: totalPallets.length, totalColhido }
   }
 
   async changeQrcodePalletUsado(qrcodeId: string): Promise<Pallets | null> {

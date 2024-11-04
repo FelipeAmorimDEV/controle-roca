@@ -2,6 +2,7 @@ import { Pallets, Prisma } from '@prisma/client'
 export interface FetchPallets {
   pallets: Pallets[]
   totalPallets: number
+  totalColhido: number
 }
 export interface QrcodePalletRepository {
   findPalletQrcodeById(qrcodeId: string): Promise<Pallets | null>
