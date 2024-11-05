@@ -10,13 +10,10 @@ export async function createProduct(
   const requestBodySchema = z.object({
     name: z.string(),
     unit: z.enum(['l', 'kg', 'ud']),
-    fornecedorId: z.string().uuid(),
     tipoId: z.string().uuid(),
   })
 
-  const { name, unit, fornecedorId, tipoId } = requestBodySchema.parse(
-    request.body,
-  )
+  const { name, unit, tipoId } = requestBodySchema.parse(request.body)
 
   const prismaCreateProductUseCase = new PrismaProductRepository()
   const createProductUseCase = new CreateProductUseCase(
@@ -26,7 +23,6 @@ export async function createProduct(
   const { product } = await createProductUseCase.execute({
     name: name.toUpperCase(),
     unit,
-    fornecedorId,
     tipoId,
     fazenda_id: request.user.fazenda_id,
   })

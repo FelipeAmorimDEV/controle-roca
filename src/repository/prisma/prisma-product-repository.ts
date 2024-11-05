@@ -1,9 +1,5 @@
-import { Product } from '@prisma/client'
-import {
-  CreateProduct,
-  FetchAllProduct,
-  ProductsRepository,
-} from '../products-repository'
+import { Prisma, Product } from '@prisma/client'
+import { FetchAllProduct, ProductsRepository } from '../products-repository'
 import { prisma } from '@/prisma'
 
 export class PrismaProductRepository implements ProductsRepository {
@@ -67,15 +63,11 @@ export class PrismaProductRepository implements ProductsRepository {
     return product
   }
 
-  async createProduct(data: CreateProduct): Promise<Product> {
+  async createProduct(
+    data: Prisma.ProductUncheckedCreateInput,
+  ): Promise<Product> {
     const product = await prisma.product.create({
-      data: {
-        name: data.name,
-        tipoId: data.tipoId,
-        fornecedorId: data.fornecedorId,
-        unit: data.unit,
-        fazenda_id: data.fazenda_id,
-      },
+      data,
     })
 
     return product

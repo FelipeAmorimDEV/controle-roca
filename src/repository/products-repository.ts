@@ -1,9 +1,8 @@
-import { Product } from '@prisma/client'
+import { Prisma, Product } from '@prisma/client'
 
 export interface CreateProduct {
   name: string
   unit: string
-  fornecedorId: string
   tipoId: string
   fazenda_id: string
 }
@@ -15,7 +14,7 @@ export interface FetchAllProduct {
 }
 
 export interface ProductsRepository {
-  createProduct(data: CreateProduct): Promise<Product>
+  createProduct(data: Prisma.ProductUncheckedCreateInput): Promise<Product>
   deleteProduct(productId: string, fazendaId: string): Promise<Product>
   getTotalProduct(fazendaId: string): Promise<number>
   getProductLowStock(fazendaId: string): Promise<Product[]>

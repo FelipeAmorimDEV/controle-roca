@@ -143,13 +143,13 @@ model Product {
   quantity     Float?        @default(0)
   saida        Saida[]
   entrada      Entrada[]
-  Fornecedor   Fornecedor?   @relation(fields: [fornecedorId], references: [id])
-  fornecedorId String
   Tipo         Tipo?         @relation(fields: [tipoId], references: [id])
   tipoId       String
   fazenda      Fazenda       @relation(fields: [fazenda_id], references: [id])
   fazenda_id   String
   ProdutoNota  ProdutoNota[]
+  Fornecedor   Fornecedor?   @relation(fields: [fornecedorId], references: [id])
+  fornecedorId String?
 
   @@map("products")
 }

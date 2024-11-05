@@ -5,7 +5,6 @@ import { Product } from '@prisma/client'
 interface CreateProductUseCaseParams {
   name: string
   unit: string
-  fornecedorId: string
   tipoId: string
   fazenda_id: string
 }
@@ -20,14 +19,12 @@ export class CreateProductUseCase {
   async execute({
     name,
     unit,
-    fornecedorId,
     tipoId,
     fazenda_id,
   }: CreateProductUseCaseParams): Promise<CreateProductsUseCaseResponse> {
     const product = await this.productsRepository.createProduct({
       name,
       unit,
-      fornecedorId,
       tipoId,
       fazenda_id,
     })
