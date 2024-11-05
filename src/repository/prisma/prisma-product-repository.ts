@@ -67,7 +67,15 @@ export class PrismaProductRepository implements ProductsRepository {
     data: Prisma.ProductUncheckedCreateInput,
   ): Promise<Product> {
     const product = await prisma.product.create({
-      data,
+      data: {
+        name: data.name,
+        unit: data.unit,
+        fazenda: {
+          connect: {
+            id: data.fazenda_id,
+          },
+        },
+      },
     })
 
     return product
