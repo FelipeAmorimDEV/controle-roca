@@ -137,7 +137,7 @@ model Users {
 
 model Product {
   id           String        @id @default(uuid())
-  name         String        @unique
+  name         String
   unit         String
   price        Float         @default(0)
   quantity     Float?        @default(0)
