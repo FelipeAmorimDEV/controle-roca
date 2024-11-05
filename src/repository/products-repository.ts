@@ -30,7 +30,6 @@ export interface ProductsRepository {
   decrementProductQuantity(
     quantity: number,
     productId: string,
-    fazendaId: string,
   ): Promise<Product>
   incrementProductQuantity(
     quantity: number,

@@ -66,11 +66,10 @@ export class PrismaStockRepository implements StockRepository {
     return saida
   }
 
-  async deleteEntrada(entradaId: string, fazendaId: string): Promise<Entrada> {
+  async deleteEntrada(entradaId: string): Promise<Entrada> {
     const entrada = await prisma.entrada.delete({
       where: {
         id: entradaId,
-        fazenda_id: fazendaId,
       },
     })
 

@@ -13,7 +13,7 @@ export interface SaidasResult {
 }
 
 export interface StockRepository {
-  deleteEntrada(entradaId: string, fazendaId: string): Promise<Entrada>
+  deleteEntrada(entradaId: string): Promise<Entrada>
   deleteSaida(saidaId: string, fazendaId: string): Promise<Saida>
   deleteAllEntradas(
     productId: string,

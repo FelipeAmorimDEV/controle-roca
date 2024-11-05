@@ -1,4 +1,6 @@
 import { PrismaNotaFiscalRepository } from '@/repository/prisma/prisma-nota-fiscal-repository'
+import { PrismaProductRepository } from '@/repository/prisma/prisma-product-repository'
+import { PrismaStockRepository } from '@/repository/prisma/prisma-stock-repository'
 import { DeleteNotaFiscalUseCase } from '@/usecases/delete-nota-fiscal-usecase'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
@@ -14,7 +16,13 @@ export async function deleteNotaFiscal(
   const { id } = requestParamsSchema.parse(request.params)
 
   const notaFiscalRepository = new PrismaNotaFiscalRepository()
-  const deleteNotaFiscal = new DeleteNotaFiscalUseCase(notaFiscalRepository)
+  const stockRepository = new PrismaStockRepository()
+  const productRepository = new PrismaProductRepository()
+  const deleteNotaFiscal = new DeleteNotaFiscalUseCase(
+    notaFiscalRepository,
+    stockRepository,
+    productRepository,
+  )
 
   await deleteNotaFiscal.execute({
     notaFiscalId: id,

@@ -166,12 +166,10 @@ export class PrismaProductRepository implements ProductsRepository {
   async decrementProductQuantity(
     quantity: number,
     productId: string,
-    fazendaId: string,
   ): Promise<Product> {
     const product = await prisma.product.update({
       where: {
         id: productId,
-        fazenda_id: fazendaId,
       },
       data: {
         quantity: {
