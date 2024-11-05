@@ -5,6 +5,29 @@ import { NotaFiscalRepository } from '../nota-fiscal-repository'
 import { ProdutosNotaFiscal } from '@/usecases/create-nota-fiscal-usecase'
 
 export class PrismaNotaFiscalRepository implements NotaFiscalRepository {
+  async fetchNotasFiscaisVencendo(fazendaId: string, dataLimite: Date) {
+    const notasFiscais = await prisma.notaFiscal.findMany({
+      where: {
+        fazenda_id: fazendaId,
+        dataPagamento: {
+          gte: new Date(),
+          lte: dataLimite,
+        },
+        statusPagamento: 'pendente',
+      },
+      include: {
+        fornecedor: {
+          select: {
+            name: true,
+          },
+        },
+        produtos: true,
+      },
+    })
+
+    return notasFiscais
+  }
+
   async fetchNotasFiscais(
     fazendaId: string,
     page: number,

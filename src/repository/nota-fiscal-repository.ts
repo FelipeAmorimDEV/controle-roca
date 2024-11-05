@@ -15,4 +15,8 @@ export interface NotaFiscalRepository {
     fornecedorId?: string,
     status?: string,
   ): Promise<NotaFiscal[]>
+  fetchNotasFiscaisVencendo(
+    fazendaId: string,
+    dataLimite: Date,
+  ): Promise<NotaFiscal[]>
 }
