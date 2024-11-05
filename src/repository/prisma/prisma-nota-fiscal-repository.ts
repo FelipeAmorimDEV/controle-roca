@@ -7,11 +7,12 @@ import { ProdutosNotaFiscal } from '@/usecases/create-nota-fiscal-usecase'
 export class PrismaNotaFiscalRepository implements NotaFiscalRepository {
   async fetchNotasFiscaisVencendo(fazendaId: string, dataLimite: Date) {
     dataLimite.setUTCHours(23, 59, 59, 999)
+    const startOfDay = new Date().setUTCHours(0, 0, 0, 0)
     const notasFiscais = await prisma.notaFiscal.findMany({
       where: {
         fazenda_id: fazendaId,
         dataPagamento: {
-          gte: new Date(),
+          gte: new Date(startOfDay),
           lte: dataLimite,
         },
         statusPagamento: 'pendente',
