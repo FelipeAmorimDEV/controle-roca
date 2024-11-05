@@ -70,6 +70,11 @@ export class PrismaProductRepository implements ProductsRepository {
       data: {
         name: data.name,
         unit: data.unit,
+        Tipo: {
+          connect: {
+            id: data.tipoId,
+          },
+        },
         fazenda: {
           connect: {
             id: data.fazenda_id,
