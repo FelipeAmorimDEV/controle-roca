@@ -5,7 +5,9 @@ export interface NotaFiscalRepository {
   create(
     data: Prisma.NotaFiscalUncheckedCreateInput,
     produtos: ProdutosNotaFiscal[],
+    userId: string,
   ): Promise<NotaFiscal>
+  delete(notaFiscalId: string): Promise<NotaFiscal>
   fetchNotasFiscais(
     fazendaId: string,
     page: number,
@@ -19,4 +21,5 @@ export interface NotaFiscalRepository {
     fazendaId: string,
     dataLimite: Date,
   ): Promise<NotaFiscal[]>
+  markPaid(notaFiscalId: string): Promise<NotaFiscal>
 }

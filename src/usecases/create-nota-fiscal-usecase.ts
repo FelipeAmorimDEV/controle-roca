@@ -51,20 +51,11 @@ export class CreateNotaFiscalUseCase {
         codigo_de_barras: codigoDeBarras,
       },
       produtos,
+      user_id,
     )
 
     for (let i = 0; i < produtos.length; i++) {
       const element = produtos[i]
-
-      await this.stockRepository.createInsertStockItemLog(
-        element.quantidade,
-        element.valor,
-        element.productId,
-        new Date().toISOString().split('T')[0],
-        element.valor / element.quantidade,
-        user_id,
-        fazenda_id,
-      )
 
       await this.productRepository.incrementProductQuantity(
         element.quantidade,

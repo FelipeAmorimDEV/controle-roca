@@ -5,6 +5,32 @@ import { NotaFiscalRepository } from '../nota-fiscal-repository'
 import { ProdutosNotaFiscal } from '@/usecases/create-nota-fiscal-usecase'
 
 export class PrismaNotaFiscalRepository implements NotaFiscalRepository {
+  async delete(notaFiscalId: string) {
+    const notaFiscal = await prisma.notaFiscal.delete({
+      where: {
+        id: notaFiscalId,
+      },
+      include: {
+        produtos: true,
+      },
+    })
+
+    return notaFiscal
+  }
+
+  async markPaid(notaFiscalId: string) {
+    const notaFiscal = await prisma.notaFiscal.update({
+      where: {
+        id: notaFiscalId,
+      },
+      data: {
+        statusPagamento: 'pago',
+      },
+    })
+
+    return notaFiscal
+  }
+
   async fetchNotasFiscaisVencendo(fazendaId: string, dataLimite: Date) {
     dataLimite.setUTCHours(23, 59, 59, 999)
     const startOfDay = new Date().setUTCHours(0, 0, 0, 0)
@@ -70,6 +96,7 @@ export class PrismaNotaFiscalRepository implements NotaFiscalRepository {
   async create(
     data: Prisma.NotaFiscalUncheckedCreateInput,
     produtos: ProdutosNotaFiscal[],
+    userId: string,
   ): Promise<NotaFiscal> {
     const dataNota = new Date(data.dataNota)
     dataNota.setUTCHours(4, 10, 10, 10)
@@ -101,6 +128,29 @@ export class PrismaNotaFiscalRepository implements NotaFiscalRepository {
             produto: {
               connect: {
                 id: produtoi.productId,
+              },
+            },
+            entrada: {
+              create: {
+                priceEntrada: produtoi.valor,
+                price: produtoi.valor / produtoi.quantidade,
+                quantity: produtoi.quantidade,
+                createdAt: new Date(),
+                Product: {
+                  connect: {
+                    id: produtoi.productId,
+                  },
+                },
+                fazenda: {
+                  connect: {
+                    id: data.fazenda_id,
+                  },
+                },
+                Users: {
+                  connect: {
+                    id: userId,
+                  },
+                },
               },
             },
           })),

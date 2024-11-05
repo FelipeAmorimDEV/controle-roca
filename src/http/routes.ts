@@ -51,6 +51,8 @@ import { createFazenda } from './controllers/fazenda/create-fazenda'
 import { createNotaFiscal } from './controllers/nota-fiscal/create-nota-fiscal'
 import { fetchNotasFiscais } from './controllers/nota-fiscal/fetch-all-nota-fiscal'
 import { fetchNotasFiscaisVencendo } from './controllers/nota-fiscal/fetch-all-nota-fiscal-vencendo'
+import { markNotaFiscalPaga } from './controllers/nota-fiscal/mark-nota-fiscal-paga'
+import { deleteNotaFiscal } from './controllers/nota-fiscal/delete-nota-fiscal'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -155,6 +157,12 @@ export async function estoqueRoutes(app: FastifyInstance) {
     { onRequest: [verifyJWT] },
     fetchNotasFiscaisVencendo,
   )
+  app.patch(
+    '/notas-fiscais/:id',
+    { onRequest: [verifyJWT] },
+    markNotaFiscalPaga,
+  )
+  app.delete('/notas-fiscais/:id', { onRequest: [verifyJWT] }, deleteNotaFiscal)
 }
 
 // { onRequest: [verifyJWT] }

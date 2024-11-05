@@ -56,10 +56,12 @@ model ProdutoNota {
   id           String     @id @default(uuid())
   quantidade   Float
   valor        Float
-  notaFiscal   NotaFiscal @relation(fields: [notaFiscalId], references: [id])
+  notaFiscal   NotaFiscal @relation(fields: [notaFiscalId], references: [id], onDelete: Cascade)
   notaFiscalId String
   produto      Product    @relation(fields: [productId], references: [id])
   productId    String
+  entrada      Entrada    @relation(fields: [entradaId], references: [id], onDelete: Cascade)
+  entradaId    String
 
   @@map("produtos_notas_fiscais")
 }
@@ -172,17 +174,18 @@ model Saida {
 }
 
 model Entrada {
-  id           String   @id @default(uuid())
+  id           String        @id @default(uuid())
   quantity     Float
-  priceEntrada Float    @default(0)
-  price        Float    @default(0)
+  priceEntrada Float         @default(0)
+  price        Float         @default(0)
   createdAt    DateTime
-  Product      Product  @relation(fields: [productId], references: [id])
+  Product      Product       @relation(fields: [productId], references: [id])
   productId    String
-  Users        Users    @relation(fields: [usersId], references: [id])
+  Users        Users         @relation(fields: [usersId], references: [id])
   usersId      String
-  fazenda      Fazenda  @relation(fields: [fazenda_id], references: [id])
+  fazenda      Fazenda       @relation(fields: [fazenda_id], references: [id])
   fazenda_id   String
+  ProdutoNota  ProdutoNota[]
 
   @@map("entradas")
 }
