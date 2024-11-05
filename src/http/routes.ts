@@ -48,6 +48,8 @@ import { deleteProduct } from './controllers/estoque/delete-product'
 import { deletePallet } from './controllers/pallet/delete-pallet'
 import { getDashboardData } from './controllers/dashboard/get-dashboard-data'
 import { createFazenda } from './controllers/fazenda/create-fazenda'
+import { createNotaFiscal } from './nota-fiscal/create-nota-fiscal'
+import { fetchNotasFiscais } from './nota-fiscal/fetch-all-nota-fiscal'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -144,6 +146,9 @@ export async function estoqueRoutes(app: FastifyInstance) {
   )
 
   app.get('/dashboard', { onRequest: [verifyJWT] }, getDashboardData)
+
+  app.post('/notafiscal', { onRequest: [verifyJWT] }, createNotaFiscal)
+  app.get('/notafiscal', { onRequest: [verifyJWT] }, fetchNotasFiscais)
 }
 
 // { onRequest: [verifyJWT] }

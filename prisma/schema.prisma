@@ -32,8 +32,36 @@ model Fazenda {
   Funcionario Funcionario[]
   Atividade   Atividade[]
   Apontamento Apontamento[]
+  NotaFiscal  NotaFiscal[]
 
   @@map("fazendas")
+}
+
+model NotaFiscal {
+  id               String        @id @default(uuid())
+  dataNota         DateTime
+  produtos         ProdutoNota[]
+  dataPagamento    DateTime?
+  codigo_de_barras String?
+  statusPagamento  String        @default("pendente") // 'pendente' ou 'pago'
+  fornecedor       Fornecedor    @relation(fields: [fornecedor_id], references: [id])
+  fazenda          Fazenda       @relation(fields: [fazenda_id], references: [id])
+  fazenda_id       String
+  fornecedor_id    String
+
+  @@map("notas_fiscais")
+}
+
+model ProdutoNota {
+  id           String     @id @default(uuid())
+  quantidade   Float
+  valor        Float
+  notaFiscal   NotaFiscal @relation(fields: [notaFiscalId], references: [id])
+  notaFiscalId String
+  produto      Product    @relation(fields: [productId], references: [id])
+  productId    String
+
+  @@map("produtos_notas_fiscais")
 }
 
 model Qrcodes {
@@ -108,19 +136,20 @@ model Users {
 }
 
 model Product {
-  id           String      @id @default(uuid())
-  name         String      @unique
+  id           String        @id @default(uuid())
+  name         String        @unique
   unit         String
-  price        Float       @default(0)
-  quantity     Float?      @default(0)
+  price        Float         @default(0)
+  quantity     Float?        @default(0)
   saida        Saida[]
   entrada      Entrada[]
-  Fornecedor   Fornecedor? @relation(fields: [fornecedorId], references: [id])
+  Fornecedor   Fornecedor?   @relation(fields: [fornecedorId], references: [id])
   fornecedorId String
-  Tipo         Tipo?       @relation(fields: [tipoId], references: [id])
+  Tipo         Tipo?         @relation(fields: [tipoId], references: [id])
   tipoId       String
-  fazenda      Fazenda     @relation(fields: [fazenda_id], references: [id])
+  fazenda      Fazenda       @relation(fields: [fazenda_id], references: [id])
   fazenda_id   String
+  ProdutoNota  ProdutoNota[]
 
   @@map("products")
 }
@@ -198,11 +227,12 @@ model Tratorista {
 }
 
 model Fornecedor {
-  id         String    @id @default(uuid())
+  id         String       @id @default(uuid())
   name       String
   Product    Product[]
-  fazenda    Fazenda   @relation(fields: [fazenda_id], references: [id])
+  fazenda    Fazenda      @relation(fields: [fazenda_id], references: [id])
   fazenda_id String
+  NotaFiscal NotaFiscal[]
 
   @@map("fornecedores")
 }
