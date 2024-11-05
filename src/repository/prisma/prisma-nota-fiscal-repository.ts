@@ -69,10 +69,17 @@ export class PrismaNotaFiscalRepository implements NotaFiscalRepository {
     data: Prisma.NotaFiscalUncheckedCreateInput,
     produtos: ProdutosNotaFiscal[],
   ): Promise<NotaFiscal> {
+    const dataNota = new Date(data.dataNota)
+    dataNota.setUTCHours(0, 10, 10, 10)
+    const dataPagamento = data.dataPagamento
+      ? new Date(data.dataPagamento)
+      : null
+    dataPagamento?.setUTCHours(0, 10, 10, 10)
+
     const notaFiscal = await prisma.notaFiscal.create({
       data: {
-        dataNota: new Date(data.dataNota),
-        dataPagamento: data.dataPagamento ? new Date(data.dataPagamento) : null,
+        dataNota: new Date(dataNota),
+        dataPagamento: dataPagamento ? new Date(dataPagamento) : null,
         statusPagamento: data.statusPagamento,
         codigo_de_barras: data.codigo_de_barras,
         fornecedor: {
