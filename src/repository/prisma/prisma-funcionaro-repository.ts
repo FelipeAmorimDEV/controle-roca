@@ -8,32 +8,49 @@ export class PrismaFuncionarioRepository implements FuncionarioRepository {
     endDate: string,
     fazendaId: string,
     q?: string,
-  ): Promise<Funcionario[]> {
+  ) {
     const endDateOfTheDay = new Date(endDate)
     endDateOfTheDay.setUTCHours(23, 59, 59, 999)
 
-    const funcionarios = await prisma.funcionario.findMany({
+    const relatorio = await prisma.funcionario.findMany({
       where: {
         fazenda_id: fazendaId,
         nome: {
           contains: q,
-          mode: 'insensitive',
         },
+        cargo: 'EMBALADOR',
       },
-      include: {
-        Qrcodes: {
-          where: {
-            usado: true,
-            createdAt: {
-              gte: new Date(initialDate),
-              lte: new Date(endDateOfTheDay),
+      select: {
+        nome: true,
+        _count: {
+          select: {
+            Qrcodes: {
+              where: {
+                usado: true, // Considerando "usado" como indicador de QRCode validado
+                createdAt: {
+                  gte: new Date(initialDate),
+                  lte: new Date(endDateOfTheDay),
+                },
+              },
             },
           },
         },
       },
+      orderBy: {
+        Qrcodes: {
+          _count: 'desc',
+        },
+      },
     })
 
-    return funcionarios
+    const relatorioQrcodes = relatorio.map((funcionario) => {
+      return {
+        nome: funcionario.nome,
+        caixasEmbaladas: funcionario._count.Qrcodes,
+      }
+    })
+
+    return relatorioQrcodes
   }
 
   async fetchAllFuncionarios(fazendaId: string): Promise<Funcionario[]> {

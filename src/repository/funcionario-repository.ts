@@ -1,5 +1,10 @@
 import { Funcionario, Prisma } from '@prisma/client'
 
+export interface CaixasEmbaladas {
+  nome: string
+  caixasEmbaladas: number
+}
+
 export interface FuncionarioRepository {
   createFuncionario(
     data: Prisma.FuncionarioUncheckedCreateInput,
@@ -14,5 +19,5 @@ export interface FuncionarioRepository {
     endDate: string,
     fazendaId: string,
     q?: string,
-  ): Promise<Funcionario[]>
+  ): Promise<CaixasEmbaladas[]>
 }
