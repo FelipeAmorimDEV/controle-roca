@@ -104,7 +104,7 @@ export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
         variedadeId,
         fazenda_id: fazendaId,
         caixaId: classificacaoId,
-        finalizado: status === 'true',
+        finalizado: status ? status === 'aberto' : undefined,
         createdAt: {
           gte: new Date(initialDate),
           lte: new Date(endDateOfTheDay),
@@ -137,6 +137,7 @@ export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
         variedadeId,
         fazenda_id: fazendaId,
         caixaId: classificacaoId,
+        finalizado: status ? status === 'aberto' : undefined,
         createdAt: {
           gte: new Date(initialDate),
           lte: new Date(endDateOfTheDay),
