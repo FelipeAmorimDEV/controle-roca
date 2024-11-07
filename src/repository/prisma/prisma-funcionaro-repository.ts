@@ -26,6 +26,7 @@ export class PrismaFuncionarioRepository implements FuncionarioRepository {
           select: {
             Qrcodes: {
               where: {
+                usado: true,
                 createdAt: {
                   gte: new Date(initialDate),
                   lte: new Date(endDateOfTheDay),
