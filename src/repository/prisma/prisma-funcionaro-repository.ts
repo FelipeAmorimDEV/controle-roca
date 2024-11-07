@@ -43,12 +43,12 @@ export class PrismaFuncionarioRepository implements FuncionarioRepository {
       },
     })
 
-    const relatorioQrcodes = relatorio.map((funcionario) => {
-      return {
+    const relatorioQrcodes = relatorio
+      .map((funcionario) => ({
         nome: funcionario.nome,
         caixasEmbaladas: funcionario._count.Qrcodes,
-      }
-    })
+      }))
+      .sort((a, b) => b.caixasEmbaladas - a.caixasEmbaladas)
 
     return relatorioQrcodes
   }
