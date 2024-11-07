@@ -22,5 +22,6 @@ export interface ColheitaRepository {
     perPage: number,
     fazendaId: string,
     setorId?: string,
+    variedadeId?: number,
   ): Promise<ColheitaResult>
 }

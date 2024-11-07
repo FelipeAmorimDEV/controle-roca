@@ -13,9 +13,10 @@ export async function fetchColheitas(
     setorId: z.string().optional(),
     page: z.coerce.number(),
     perPage: z.coerce.number(),
+    variedade: z.string(),
   })
 
-  const { perPage, initialDate, endDate, page, setorId } =
+  const { perPage, initialDate, endDate, page, setorId, variedade } =
     requestQuerySchema.parse(request.query)
 
   const prismaColheitaRepository = new PrismaColheitaRepository()
@@ -31,6 +32,7 @@ export async function fetchColheitas(
       perPage,
       setorId,
       fazenda_id: request.user.fazenda_id,
+      variedade,
     })
 
   return reply.status(200).send({ colheitas, total, totalColhido })

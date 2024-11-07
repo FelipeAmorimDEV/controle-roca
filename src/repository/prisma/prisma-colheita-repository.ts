@@ -77,6 +77,7 @@ export class PrismaColheitaRepository implements ColheitaRepository {
     perPage: number,
     fazendaId: string,
     setorId?: string,
+    variedade?: string,
   ): Promise<ColheitaResult> {
     const endDateOfTheDay = new Date(endDate)
     endDateOfTheDay.setUTCHours(23, 59, 59, 999)
@@ -85,6 +86,7 @@ export class PrismaColheitaRepository implements ColheitaRepository {
       where: {
         fazenda_id: fazendaId,
         setorId,
+        variedade,
         createdAt: {
           gte: new Date(initialDate),
           lte: new Date(endDateOfTheDay),
