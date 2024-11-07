@@ -85,6 +85,13 @@ export class PrismaSetorRepository implements SetorRepository {
       orderBy: {
         setorName: 'asc',
       },
+      include: {
+        variedade: {
+          select: {
+            nome: true,
+          },
+        },
+      },
     })
 
     return setores

@@ -128,6 +128,19 @@ export class PrismaStockRepository implements StockRepository {
       orderBy: {
         createdAt: 'desc',
       },
+      include: {
+        Product: {
+          select: {
+            name: true,
+            unit: true,
+          },
+        },
+        setor: {
+          select: {
+            setorName: true,
+          },
+        },
+      },
       skip: (page - 1) * perPage,
       take: perPage,
     })
@@ -182,6 +195,14 @@ export class PrismaStockRepository implements StockRepository {
         createdAt: {
           lte: new Date(endDateOfTheDay),
           gte: new Date(initialDate),
+        },
+      },
+      include: {
+        Product: {
+          select: {
+            name: true,
+            unit: true,
+          },
         },
       },
       skip: (page - 1) * perPage,
