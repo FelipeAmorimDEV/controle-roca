@@ -18,7 +18,6 @@ export class PrismaProductRepository implements ProductsRepository {
           },
         },
       },
-      take: 5,
     })
 
     return products
