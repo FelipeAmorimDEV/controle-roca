@@ -101,6 +101,7 @@ export class PrismaColheitaRepository implements ColheitaRepository {
       where: {
         fazenda_id: fazendaId,
         setorId,
+        variedade,
         createdAt: {
           gte: new Date(initialDate),
           lte: new Date(endDateOfTheDay),
