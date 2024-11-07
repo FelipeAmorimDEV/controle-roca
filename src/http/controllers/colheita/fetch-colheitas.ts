@@ -13,7 +13,7 @@ export async function fetchColheitas(
     setorId: z.string().optional(),
     page: z.coerce.number(),
     perPage: z.coerce.number(),
-    variedade: z.string(),
+    variedade: z.string().optional(),
   })
 
   const { perPage, initialDate, endDate, page, setorId, variedade } =
