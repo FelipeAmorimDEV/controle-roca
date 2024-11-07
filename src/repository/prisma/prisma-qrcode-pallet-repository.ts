@@ -184,6 +184,7 @@ export class PrismaQrcodePalletRepository implements QrcodePalletRepository {
       },
       data: {
         usado: true,
+        validated_at: new Date(),
       },
     })
 
