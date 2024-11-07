@@ -70,6 +70,7 @@ model Qrcodes {
   id            String       @id @default(uuid())
   usado         Boolean      @default(false)
   createdAt     DateTime     @default(now())
+  validated_at  DateTime?
   Funcionario   Funcionario? @relation(fields: [funcionarioId], references: [id])
   funcionarioId String
 
@@ -82,22 +83,23 @@ model Qrcodes {
 }
 
 model Pallets {
-  id          String     @id @default(uuid())
-  usado       Boolean    @default(false)
-  createdAt   DateTime   @default(now())
-  peso        Int
-  qtdCaixas   Int
-  qtdFeitas   Int        @default(0)
-  finalizado  Boolean    @default(false)
-  Caixa       Caixa?     @relation(fields: [caixaId], references: [id])
-  caixaId     Int
-  Variedade   Variedade? @relation(fields: [variedadeId], references: [id])
-  variedadeId Int
-  setor       Setor      @relation(fields: [setor_id], references: [id])
-  setor_id    String
-  Qrcodes     Qrcodes[]
-  fazenda     Fazenda    @relation(fields: [fazenda_id], references: [id])
-  fazenda_id  String
+  id           String     @id @default(uuid())
+  usado        Boolean    @default(false)
+  createdAt    DateTime   @default(now())
+  peso         Int
+  qtdCaixas    Int
+  qtdFeitas    Int        @default(0)
+  finalizado   Boolean    @default(false)
+  validated_at DateTime?
+  Caixa        Caixa?     @relation(fields: [caixaId], references: [id])
+  caixaId      Int
+  Variedade    Variedade? @relation(fields: [variedadeId], references: [id])
+  variedadeId  Int
+  setor        Setor      @relation(fields: [setor_id], references: [id])
+  setor_id     String
+  Qrcodes      Qrcodes[]
+  fazenda      Fazenda    @relation(fields: [fazenda_id], references: [id])
+  fazenda_id   String
 
   @@map("pallets")
 }

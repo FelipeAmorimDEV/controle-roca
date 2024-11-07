@@ -26,8 +26,7 @@ export class PrismaFuncionarioRepository implements FuncionarioRepository {
           select: {
             Qrcodes: {
               where: {
-                usado: true, // Considerando "usado" como indicador de QRCode validado
-                createdAt: {
+                validated_at: {
                   gte: new Date(initialDate),
                   lte: new Date(endDateOfTheDay),
                 },

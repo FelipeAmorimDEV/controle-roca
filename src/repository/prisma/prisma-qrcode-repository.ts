@@ -37,6 +37,7 @@ export class PrismaQrcodeRepository implements QrcodeRepository {
       },
       data: {
         usado: true,
+        validated_at: new Date(),
       },
     })
 
