@@ -40,10 +40,7 @@ export class CreateAplicacaoUseCase {
   }: CreateAplicacaoUseCaseParams): Promise<CreateAplicacaoUseCaseResponse> {
     for (const product of produtos) {
       const qntProduto = product.total / 1000
-      const produto = await this.productRepository.findProduct(
-        product.produto,
-        fazenda_id,
-      )
+      const produto = await this.productRepository.findProduct(product.produto)
 
       if (produto) {
         const quantidadeEstoque = produto.quantity
@@ -55,17 +52,22 @@ export class CreateAplicacaoUseCase {
       }
     }
 
+    const aplicacao = await this.aplicacaoRepository.createAplicacao({
+      aplicador,
+      volumeCalda,
+      setorId,
+      produtosAplicados: produtos,
+      fazenda_id,
+    })
+
     for (const product of produtos) {
       const qntProduto = product.total / 1000
-      const produto = await this.productRepository.findProduct(
-        product.produto,
-        fazenda_id,
-      )
+      const produto = await this.productRepository.findProduct(product.produto)
 
       if (produto) {
         const createdAt = new Date().toISOString().split('T')[0]
         const priceSaida = (produto.price ?? 0) * qntProduto
-        console.log(priceSaida)
+
         await this.stockRepository.createWithdrawStockItemLog(
           qntProduto,
           produto.id,
@@ -74,23 +76,15 @@ export class CreateAplicacaoUseCase {
           createdAt,
           userId,
           fazenda_id,
+          aplicacao.id,
         )
 
         await this.productRepository.decrementProductQuantity(
           qntProduto,
           produto.id,
-          fazenda_id,
         )
       }
     }
-
-    const aplicacao = await this.aplicacaoRepository.createAplicacao({
-      aplicador,
-      volumeCalda,
-      setorId,
-      produtosAplicados: produtos,
-      fazenda_id,
-    })
 
     return { aplicacao }
   }

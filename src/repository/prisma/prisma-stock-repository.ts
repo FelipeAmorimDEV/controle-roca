@@ -223,6 +223,7 @@ export class PrismaStockRepository implements StockRepository {
     createdIn: string,
     userId: string,
     fazendaId: string,
+    aplicacaoId?: string,
   ): Promise<Saida> {
     console.log(createdIn)
     const dateTime = new Date().toISOString().split('T')[1]
@@ -237,6 +238,7 @@ export class PrismaStockRepository implements StockRepository {
         createdAt: new Date(dataReal),
         usersId: userId,
         fazenda_id: fazendaId,
+        aplicacaoId,
       },
     })
 

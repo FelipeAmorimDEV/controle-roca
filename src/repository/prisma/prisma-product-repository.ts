@@ -151,11 +151,10 @@ export class PrismaProductRepository implements ProductsRepository {
     }
   }
 
-  async findProduct(id: string, fazendaId: string): Promise<Product | null> {
+  async findProduct(id: string): Promise<Product | null> {
     const product = await prisma.product.findFirst({
       where: {
         id,
-        fazenda_id: fazendaId,
       },
     })
 
@@ -183,13 +182,11 @@ export class PrismaProductRepository implements ProductsRepository {
   async incrementProductQuantity(
     quantity: number,
     productId: string,
-    fazendaId: string,
   ): Promise<Product> {
     const entradas = await prisma.entrada.findMany({
       // MELHORAR LOGICA FIX
       where: {
         productId,
-        fazenda_id: fazendaId,
       },
     })
 
@@ -206,7 +203,6 @@ export class PrismaProductRepository implements ProductsRepository {
     const product = await prisma.product.update({
       where: {
         id: productId,
-        fazenda_id: fazendaId,
       },
       data: {
         quantity: {

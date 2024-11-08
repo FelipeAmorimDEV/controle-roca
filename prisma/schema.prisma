@@ -159,18 +159,20 @@ model Product {
 }
 
 model Saida {
-  id         String   @id @default(uuid())
-  quantity   Float
-  createdAt  DateTime @default(now())
-  priceSaida Float
-  Product    Product  @relation(fields: [productId], references: [id])
-  productId  String
-  setor      Setor?   @relation(fields: [setorId], references: [id])
-  setorId    String?
-  Users      Users    @relation(fields: [usersId], references: [id])
-  usersId    String
-  fazenda    Fazenda  @relation(fields: [fazenda_id], references: [id])
-  fazenda_id String
+  id          String     @id @default(uuid())
+  quantity    Float
+  createdAt   DateTime   @default(now())
+  priceSaida  Float
+  Product     Product    @relation(fields: [productId], references: [id])
+  productId   String
+  setor       Setor?     @relation(fields: [setorId], references: [id])
+  setorId     String?
+  Users       Users      @relation(fields: [usersId], references: [id])
+  usersId     String
+  fazenda     Fazenda    @relation(fields: [fazenda_id], references: [id])
+  fazenda_id  String
+  Aplicacao   Aplicacao? @relation(fields: [aplicacaoId], references: [id], onDelete: Cascade)
+  aplicacaoId String?
 
   @@map("saidas")
 }
@@ -220,6 +222,7 @@ model Aplicacao {
   setorId           String?
   fazenda           Fazenda  @relation(fields: [fazenda_id], references: [id])
   fazenda_id        String
+  saidas            Saida[]
 
   @@map("aplicacoes")
 }

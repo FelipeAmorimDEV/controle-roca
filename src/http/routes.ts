@@ -53,6 +53,7 @@ import { fetchNotasFiscais } from './controllers/nota-fiscal/fetch-all-nota-fisc
 import { fetchNotasFiscaisVencendo } from './controllers/nota-fiscal/fetch-all-nota-fiscal-vencendo'
 import { markNotaFiscalPaga } from './controllers/nota-fiscal/mark-nota-fiscal-paga'
 import { deleteNotaFiscal } from './controllers/nota-fiscal/delete-nota-fiscal'
+import { deleteAplicacao } from './controllers/aplicacoes/delete-aplicacao'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -78,6 +79,7 @@ export async function estoqueRoutes(app: FastifyInstance) {
 
   app.post('/aplicacoes', { onRequest: [verifyJWT] }, createAplicacao)
   app.get('/aplicacoes', { onRequest: [verifyJWT] }, fetchAplicacoes)
+  app.delete('/aplicacoes/:id', { onRequest: [verifyJWT] }, deleteAplicacao)
 
   app.post('/tratoristas', { onRequest: [verifyJWT] }, createTratorista)
   app.get('/tratoristas', { onRequest: [verifyJWT] }, fetchTratoristas)
