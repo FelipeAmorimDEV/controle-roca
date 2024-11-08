@@ -15,5 +15,5 @@ export async function fetchAplicacoes(
     fazenda_id: request.user.fazenda_id,
   })
 
-  return reply.status(200).send({ aplicacoes })
+  return reply.status(200).send(aplicacoes)
 }

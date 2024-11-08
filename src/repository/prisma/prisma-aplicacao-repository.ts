@@ -8,6 +8,13 @@ export class PrismaAplicacaoRepository implements AplicacaoRepository {
       where: {
         fazenda_id: fazendaId,
       },
+      include: {
+        setor: {
+          select: {
+            setorName: true,
+          },
+        },
+      },
     })
 
     return aplicacoes
