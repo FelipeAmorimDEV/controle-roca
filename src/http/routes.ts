@@ -61,7 +61,7 @@ export async function estoqueRoutes(app: FastifyInstance) {
   app.get('/products', { onRequest: [verifyJWT] }, fetchProducts)
   app.get('/products/:id', { onRequest: [verifyJWT] }, getProducts)
   app.delete('/products/:productId', { onRequest: [verifyJWT] }, deleteProduct)
-  app.put('/products/:productId', { onRequest: [verifyJWT] }, editProduto)
+  app.put('/products/:id', { onRequest: [verifyJWT] }, editProduto)
   app.post('/products/:id/entrada', { onRequest: [verifyJWT] }, insertProduct)
   app.post('/products/:id/saida', { onRequest: [verifyJWT] }, withdrawProduct)
 
