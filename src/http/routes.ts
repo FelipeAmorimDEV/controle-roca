@@ -54,12 +54,14 @@ import { fetchNotasFiscaisVencendo } from './controllers/nota-fiscal/fetch-all-n
 import { markNotaFiscalPaga } from './controllers/nota-fiscal/mark-nota-fiscal-paga'
 import { deleteNotaFiscal } from './controllers/nota-fiscal/delete-nota-fiscal'
 import { deleteAplicacao } from './controllers/aplicacoes/delete-aplicacao'
+import { editProduto } from './controllers/estoque/edit-product'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
   app.get('/products', { onRequest: [verifyJWT] }, fetchProducts)
   app.get('/products/:id', { onRequest: [verifyJWT] }, getProducts)
   app.delete('/products/:productId', { onRequest: [verifyJWT] }, deleteProduct)
+  app.put('/products/:productId', { onRequest: [verifyJWT] }, editProduto)
   app.post('/products/:id/entrada', { onRequest: [verifyJWT] }, insertProduct)
   app.post('/products/:id/saida', { onRequest: [verifyJWT] }, withdrawProduct)
 

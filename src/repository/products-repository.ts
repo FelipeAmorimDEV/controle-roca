@@ -16,6 +16,12 @@ export interface FetchAllProduct {
 export interface ProductsRepository {
   createProduct(data: Prisma.ProductUncheckedCreateInput): Promise<Product>
   deleteProduct(productId: string, fazendaId: string): Promise<Product>
+  edit(
+    productId: string,
+    unit: string,
+    name: string,
+    tipoId: string,
+  ): Promise<Product>
   getTotalProduct(fazendaId: string): Promise<number>
   getProductLowStock(fazendaId: string): Promise<Product[]>
   getPriceProductInStock(fazendaId: string): Promise<number>
