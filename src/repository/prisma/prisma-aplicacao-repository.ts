@@ -3,6 +3,16 @@ import { prisma } from '@/prisma'
 import { AplicacaoRepository, CreateAplicacao } from '../aplicacao-repository'
 
 export class PrismaAplicacaoRepository implements AplicacaoRepository {
+  async delete(aplicacaoId: string): Promise<Aplicacao> {
+    const aplicacao = await prisma.aplicacao.delete({
+      where: {
+        id: aplicacaoId,
+      },
+    })
+
+    return aplicacao
+  }
+
   async fetchAplicacao(fazendaId: string): Promise<Aplicacao[]> {
     const aplicacoes = await prisma.aplicacao.findMany({
       where: {

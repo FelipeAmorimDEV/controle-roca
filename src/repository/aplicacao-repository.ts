@@ -15,4 +15,5 @@ export interface CreateAplicacao {
 export interface AplicacaoRepository {
   createAplicacao(data: CreateAplicacao): Promise<Aplicacao>
   fetchAplicacao(fazendaId: string): Promise<Aplicacao[]>
+  delete(aplicacaoId: string): Promise<Aplicacao>
 }

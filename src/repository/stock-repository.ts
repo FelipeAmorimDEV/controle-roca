@@ -33,6 +33,7 @@ export interface StockRepository {
     createdIn: string,
     userId: string,
     fazendaId: string,
+    aplicacaoId?: string,
   ): Promise<Saida>
   createInsertStockItemLog(
     priceEntrada: number,

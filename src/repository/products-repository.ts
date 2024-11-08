@@ -26,7 +26,7 @@ export interface ProductsRepository {
     q?: string,
     all?: boolean,
   ): Promise<FetchAllProduct>
-  findProduct(id: string, fazendaId: string): Promise<Product | null>
+  findProduct(id: string): Promise<Product | null>
   decrementProductQuantity(
     quantity: number,
     productId: string,
@@ -34,6 +34,5 @@ export interface ProductsRepository {
   incrementProductQuantity(
     quantity: number,
     productId: string,
-    fazendaId: string,
   ): Promise<Product>
 }
