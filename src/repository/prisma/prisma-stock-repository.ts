@@ -88,11 +88,18 @@ export class PrismaStockRepository implements StockRepository {
     const endDateOfTheDay = new Date(endDate)
     endDateOfTheDay.setUTCHours(23, 59, 59, 999)
 
+    console.log('setor', setorId)
+    console.log('produto', productId)
+
     const totalSaidas = await prisma.saida.findMany({
       where: {
         fazenda_id: fazendaId,
-        productId,
-        setorId,
+        Product: {
+          id: productId,
+        },
+        setor: {
+          id: setorId,
+        },
         createdAt: {
           gte: new Date(initialDate),
           lte: new Date(endDateOfTheDay),
@@ -103,8 +110,12 @@ export class PrismaStockRepository implements StockRepository {
     const totalValue = await prisma.saida.aggregate({
       where: {
         fazenda_id: fazendaId,
-        productId,
-        setorId,
+        Product: {
+          id: productId,
+        },
+        setor: {
+          id: setorId,
+        },
         createdAt: {
           gte: new Date(initialDate),
           lte: new Date(endDateOfTheDay),
@@ -118,8 +129,12 @@ export class PrismaStockRepository implements StockRepository {
     const saidas = await prisma.saida.findMany({
       where: {
         fazenda_id: fazendaId,
-        productId,
-        setorId,
+        Product: {
+          id: productId,
+        },
+        setor: {
+          id: setorId,
+        },
         createdAt: {
           gte: new Date(initialDate),
           lte: new Date(endDateOfTheDay),

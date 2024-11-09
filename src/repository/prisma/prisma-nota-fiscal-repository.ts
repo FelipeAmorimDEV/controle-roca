@@ -84,7 +84,19 @@ export class PrismaNotaFiscalRepository implements NotaFiscalRepository {
             name: true,
           },
         },
-        produtos: true,
+        produtos: {
+          select: {
+            quantidade: true,
+            valor: true,
+          },
+          include: {
+            produto: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
       },
       skip: (page - 1) * perPage,
       take: perPage,
