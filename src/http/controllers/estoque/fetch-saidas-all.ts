@@ -9,7 +9,7 @@ export async function fetchSaidasAll(
 ) {
   const requestQuerySchema = z.object({
     productId: z.string().optional(),
-    setorId: z.string().optional(),
+    setorId: z.string().uuid().optional(),
     initialDate: z.string(),
     endDate: z.string(),
     page: z.coerce.number(),
