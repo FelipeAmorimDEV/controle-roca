@@ -13,10 +13,25 @@ export class PrismaAplicacaoRepository implements AplicacaoRepository {
     return aplicacao
   }
 
-  async fetchAplicacao(fazendaId: string): Promise<Aplicacao[]> {
+  async fetchAplicacao(
+    fazendaId: string,
+    initialDate: string,
+    endDate: string,
+    perPage: number,
+    page: number,
+    setorId?: string,
+  ) {
+    const endDateOfTheDay = new Date(endDate)
+    endDateOfTheDay.setUTCHours(23, 59, 59, 999)
+
     const aplicacoes = await prisma.aplicacao.findMany({
       where: {
         fazenda_id: fazendaId,
+        setorId,
+        createdAt: {
+          gte: new Date(initialDate),
+          lte: new Date(endDateOfTheDay),
+        },
       },
       include: {
         setor: {
@@ -25,9 +40,25 @@ export class PrismaAplicacaoRepository implements AplicacaoRepository {
           },
         },
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      skip: (page - 1) * perPage,
+      take: perPage,
     })
 
-    return aplicacoes
+    const aplicacoesTotal = await prisma.aplicacao.findMany({
+      where: {
+        fazenda_id: fazendaId,
+        setorId,
+        createdAt: {
+          gte: new Date(initialDate),
+          lte: new Date(endDateOfTheDay),
+        },
+      },
+    })
+
+    return { aplicacoes, totalAplicacoes: aplicacoesTotal.length }
   }
 
   async createAplicacao(data: CreateAplicacao): Promise<Aplicacao> {
