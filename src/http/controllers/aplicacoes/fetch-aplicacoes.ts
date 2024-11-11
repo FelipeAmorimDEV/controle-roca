@@ -23,7 +23,7 @@ export async function fetchAplicacoes(
     prismaAplicacoesRepository,
   )
 
-  const { aplicacoes } = await fetchAllAplicacoes.execute({
+  const { aplicacoes, totalAplicacoes } = await fetchAllAplicacoes.execute({
     fazenda_id: request.user.fazenda_id,
     endDate,
     initialDate,
@@ -32,5 +32,5 @@ export async function fetchAplicacoes(
     setorId,
   })
 
-  return reply.status(200).send(aplicacoes)
+  return reply.status(200).send({ aplicacoes, totalAplicacoes })
 }
