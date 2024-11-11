@@ -12,8 +12,20 @@ export interface CreateAplicacao {
   fazenda_id: string
 }
 
+interface FetchAplicacoes {
+  aplicacoes: Aplicacao[]
+  totalAplicacoes: number
+}
+
 export interface AplicacaoRepository {
   createAplicacao(data: CreateAplicacao): Promise<Aplicacao>
-  fetchAplicacao(fazendaId: string): Promise<Aplicacao[]>
+  fetchAplicacao(
+    fazendaId: string,
+    initialDate: string,
+    endDate: string,
+    perPage: number,
+    page: number,
+    setorId?: string,
+  ): Promise<FetchAplicacoes>
   delete(aplicacaoId: string): Promise<Aplicacao>
 }
