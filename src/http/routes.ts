@@ -55,6 +55,7 @@ import { markNotaFiscalPaga } from './controllers/nota-fiscal/mark-nota-fiscal-p
 import { deleteNotaFiscal } from './controllers/nota-fiscal/delete-nota-fiscal'
 import { deleteAplicacao } from './controllers/aplicacoes/delete-aplicacao'
 import { editProduto } from './controllers/estoque/edit-product'
+import { getCentroCusto } from './controllers/setor/get-centro-custo'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -73,6 +74,7 @@ export async function estoqueRoutes(app: FastifyInstance) {
     { onRequest: [verifyJWT] },
     fetchApontamentosSetor,
   )
+  app.get('/setor/centro-custo', { onRequest: [verifyJWT] }, getCentroCusto)
 
   app.get('/entradas', { onRequest: [verifyJWT] }, fetchEntradasAll)
   app.delete('/entradas/:entradaId', { onRequest: [verifyJWT] }, deleteEntrada)
