@@ -3,6 +3,16 @@ import { FetchAllProduct, ProductsRepository } from '../products-repository'
 import { prisma } from '@/prisma'
 
 export class PrismaProductRepository implements ProductsRepository {
+  async fetchAll(fazendaId: string): Promise<Product[]> {
+    const products = await prisma.product.findMany({
+      where: {
+        fazenda_id: fazendaId,
+      },
+    })
+
+    return products
+  }
+
   async edit(
     productId: string,
     unit: string,

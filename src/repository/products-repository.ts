@@ -41,4 +41,5 @@ export interface ProductsRepository {
     quantity: number,
     productId: string,
   ): Promise<Product>
+  fetchAll(fazendaId: string): Promise<Product[]>
 }
