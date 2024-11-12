@@ -289,7 +289,6 @@ model Atividade {
   id          String        @id @default(uuid())
   nome        String
   categoria   String
-  valor_bonus Float?        @default(0)
   Apontamento Apontamento[]
   fazenda     Fazenda       @relation(fields: [fazenda_id], references: [id])
   fazenda_id  String
@@ -305,6 +304,7 @@ model Apontamento {
   meta           Int?
   qtd_tarefa     Int?
   custo_tarefa   Float?
+  valor_bonus    Float       @default(0)
   funcionario    Funcionario @relation(fields: [funcionario_id], references: [id])
   funcionario_id String
   atividade      Atividade   @relation(fields: [atividade_id], references: [id])

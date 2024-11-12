@@ -5,7 +5,6 @@ interface CreateAtividadeUseCaseParams {
   nome: string
   categoria: string
   fazenda_id: string
-  valorBonus: number
 }
 
 interface CreateAtividadeUseCaseResponse {
@@ -19,13 +18,11 @@ export class CreateAtividadeUseCase {
     nome,
     categoria,
     fazenda_id,
-    valorBonus,
   }: CreateAtividadeUseCaseParams): Promise<CreateAtividadeUseCaseResponse> {
     const atividade = await this.atividadeRepository.createAtividade({
       nome,
       categoria,
       fazenda_id,
-      valor_bonus: valorBonus,
     })
 
     return { atividade }

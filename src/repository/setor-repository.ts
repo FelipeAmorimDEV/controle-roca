@@ -1,7 +1,7 @@
 import { Prisma, Setor } from '@prisma/client'
 import { ApontamentosI } from './prisma/prisma-setor-repository'
 
-interface RelatorioCentroCusto {
+export interface RelatorioCentroCusto {
   setor: string
   custoTotalMaterial: number
   custoTotalMaoDeObra: number

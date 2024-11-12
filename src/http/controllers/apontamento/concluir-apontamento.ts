@@ -1,5 +1,4 @@
 import { PrismaApontamentoRepository } from '@/repository/prisma/prisma-apontamento-repository'
-import { PrismaAtividadeRepository } from '@/repository/prisma/prisma-atividade-repository'
 import { PrismaFuncionarioRepository } from '@/repository/prisma/prisma-funcionaro-repository'
 import { ConcluirApontamentoUseCase } from '@/usecases/concluir-apontamento-usecase'
 import { FastifyReply, FastifyRequest } from 'fastify'
@@ -15,19 +14,20 @@ export async function concluirApontamento(
   const requestBodySchema = z.object({
     dataConclusao: z.string(),
     qtdAtividade: z.coerce.number(),
+    valorBonus: z.coerce.number(),
   })
 
   const { apontamentoId } = requestParamsSchema.parse(request.params)
-  const { dataConclusao, qtdAtividade } = requestBodySchema.parse(request.body)
+  const { dataConclusao, qtdAtividade, valorBonus } = requestBodySchema.parse(
+    request.body,
+  )
 
   const apontamentoRepository = new PrismaApontamentoRepository()
   const funcionarioRepository = new PrismaFuncionarioRepository()
-  const atividadeRepository = new PrismaAtividadeRepository()
 
   const concluirApontamento = new ConcluirApontamentoUseCase(
     apontamentoRepository,
     funcionarioRepository,
-    atividadeRepository,
   )
 
   await concluirApontamento.execute({
@@ -35,6 +35,7 @@ export async function concluirApontamento(
     fazenda_id: request.user.fazenda_id,
     dataConclusao,
     qtdAtividade,
+    valorBonus,
   })
 
   return reply.status(200).send()

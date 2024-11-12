@@ -10,10 +10,9 @@ export async function createAtividade(
   const requestBodySchema = z.object({
     nome: z.string(),
     categoria: z.string(),
-    valorBonus: z.coerce.number(),
   })
 
-  const { nome, categoria, valorBonus } = requestBodySchema.parse(request.body)
+  const { nome, categoria } = requestBodySchema.parse(request.body)
 
   const atividadeRepository = new PrismaAtividadeRepository()
   const createAtividade = new CreateAtividadeUseCase(atividadeRepository)
@@ -22,7 +21,6 @@ export async function createAtividade(
     nome: nome.toUpperCase(),
     categoria,
     fazenda_id: request.user.fazenda_id,
-    valorBonus,
   })
 
   return reply.status(201).send(atividade)
