@@ -46,7 +46,8 @@ export class ConcluirApontamentoUseCase {
       throw new ResouceNotFoundError()
     }
 
-    const valorDiaria = funcionario.tipo_contratacao === 'FICHADO' ? 44 : 50
+    const valorDiaria =
+      funcionario.tipo_contratacao.toUpperCase() === 'FICHADO' ? 44 : 50
 
     // Verificar se a quantidade realizada excede a meta
     let custoTarefa = valorDiaria

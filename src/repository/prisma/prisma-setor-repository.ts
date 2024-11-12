@@ -45,6 +45,62 @@ export interface ApontamentosI {
 }
 
 export class PrismaSetorRepository implements SetorRepository {
+  async getCentroCusto(
+    fazendaId: string,
+    initialDate: string,
+    endDate: string,
+  ) {
+    const endDateOfTheDay = new Date(endDate)
+    endDateOfTheDay.setUTCHours(23, 59, 59, 999)
+
+    const setores = await prisma.setor.findMany({
+      where: {
+        fazenda_id: fazendaId,
+      },
+      include: {
+        Apontamento: {
+          where: {
+            data_inicio: {
+              gte: new Date(initialDate),
+              lte: new Date(endDateOfTheDay),
+            },
+          },
+        },
+        Saida: {
+          where: {
+            createdAt: {
+              gte: new Date(initialDate),
+              lte: new Date(endDateOfTheDay),
+            },
+          },
+        },
+      },
+    })
+
+    const relatorio = setores.map((setor) => {
+      // Calcula o custo total de materiais somando os preços em cada saída associada ao setor
+      const custoTotalMaterial = setor.Saida.reduce(
+        (acc, saida) => acc + (saida.priceSaida || 0),
+        0,
+      )
+
+      // Calcula o custo total de mão de obra somando os custos de tarefa em cada apontamento associado ao setor
+      const custoTotalMaoDeObra = setor.Apontamento.reduce(
+        (acc, apontamento) => acc + (apontamento.custo_tarefa || 0),
+        0,
+      )
+
+      return {
+        setor: setor.setorName,
+        custoTotalMaterial,
+        custoTotalMaoDeObra,
+        custoTotal: custoTotalMaterial + custoTotalMaoDeObra,
+      }
+    })
+
+    return relatorio
+  }
+
   async fetchAllApontamentos(fazendaId: string): Promise<ApontamentosI[]> {
     const apontamentos = await prisma.apontamento.findMany({
       where: {
