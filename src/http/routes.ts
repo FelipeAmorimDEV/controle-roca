@@ -76,7 +76,11 @@ export async function estoqueRoutes(app: FastifyInstance) {
     fetchApontamentosSetor,
   )
   app.get('/setor/centro-custo', { onRequest: [verifyJWT] }, getCentroCusto)
-  app.get('/exportar-produtos-excel', exportarProduto)
+  app.get(
+    '/exportar-produtos-excel',
+    { onRequest: [verifyJWT] },
+    exportarProduto,
+  )
   app.get('/entradas', { onRequest: [verifyJWT] }, fetchEntradasAll)
   app.delete('/entradas/:entradaId', { onRequest: [verifyJWT] }, deleteEntrada)
   app.get('/saidas', { onRequest: [verifyJWT] }, fetchSaidasAll)
