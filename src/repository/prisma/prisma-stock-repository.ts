@@ -222,6 +222,7 @@ export class PrismaStockRepository implements StockRepository {
       },
       skip: (page - 1) * perPage,
       take: perPage,
+      orderBy: { createdAt: 'desc' },
     })
     return {
       entradas,
