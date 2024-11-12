@@ -10,9 +10,10 @@ export async function createFuncionario(
   const requestBodySchema = z.object({
     nome: z.string(),
     cargo: z.string(),
+    tipoContratacao: z.string(),
   })
 
-  const { nome, cargo } = requestBodySchema.parse(request.body)
+  const { nome, cargo, tipoContratacao } = requestBodySchema.parse(request.body)
 
   const prismaFuncionarioRepository = new PrismaFuncionarioRepository()
   const createFuncionarioUseCase = new CreateFuncionarioUseCase(
@@ -23,6 +24,7 @@ export async function createFuncionario(
     nome: nome.toUpperCase(),
     cargo,
     fazenda_id: request.user.fazenda_id,
+    tipoContratacao,
   })
   return reply.status(201).send(funcionario)
 }

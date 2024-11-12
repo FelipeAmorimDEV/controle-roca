@@ -142,7 +142,7 @@ export async function estoqueRoutes(app: FastifyInstance) {
     createApontamento,
   )
   app.put(
-    '/apotamento/:apontamentoId',
+    '/apontamentos/:apontamentoId',
     { onRequest: [verifyJWT] },
     concluirApontamento,
   )

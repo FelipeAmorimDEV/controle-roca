@@ -3,6 +3,16 @@ import { AtividadeRepository } from '../atividade-repository'
 import { prisma } from '@/prisma'
 
 export class PrismaAtividadeRepository implements AtividadeRepository {
+  async findById(atividadeId: string): Promise<Atividade | null> {
+    const atividade = await prisma.atividade.findUnique({
+      where: {
+        id: atividadeId,
+      },
+    })
+
+    return atividade
+  }
+
   async fetchAtividade(fazendaId: string): Promise<Atividade[]> {
     const atividades = await prisma.atividade.findMany({
       where: {
