@@ -11,9 +11,10 @@ export async function createApontamento(
     funcionarioId: z.string().uuid(),
     setorId: z.string().uuid(),
     atividadeId: z.string().uuid(),
+    meta: z.coerce.number(),
   })
 
-  const { atividadeId, funcionarioId, setorId } = requestBodySchema.parse(
+  const { atividadeId, funcionarioId, setorId, meta } = requestBodySchema.parse(
     request.body,
   )
 
@@ -25,6 +26,7 @@ export async function createApontamento(
     funcionarioId,
     setorId,
     fazenda_id: request.user.fazenda_id,
+    meta,
   })
 
   return reply.status(201).send(apontamento)

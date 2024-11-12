@@ -5,4 +5,5 @@ export interface AtividadeRepository {
     data: Prisma.AtividadeUncheckedCreateInput,
   ): Promise<Atividade>
   fetchAtividade(fazendaId: string): Promise<Atividade[]>
+  findById(atividadeId: string): Promise<Atividade | null>
 }

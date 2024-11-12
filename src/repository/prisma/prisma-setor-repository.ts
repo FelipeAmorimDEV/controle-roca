@@ -65,6 +65,9 @@ export class PrismaSetorRepository implements SetorRepository {
         data_fim: apontamento.data_fim,
         atividade: apontamento.atividade.nome,
         funcionario: apontamento.funcionario.nome,
+        meta: apontamento.meta,
+        qtd_tarefa: apontamento.qtd_tarefa,
+        custo_tarefa: apontamento.custo_tarefa,
         duracao: apontamento.data_fim
           ? apontamento.data_fim.getTime() - apontamento.data_inicio.getTime()
           : null,

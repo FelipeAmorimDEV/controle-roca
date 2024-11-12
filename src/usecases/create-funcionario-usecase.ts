@@ -5,6 +5,7 @@ interface CreateFuncionarioUseCaseParams {
   nome: string
   cargo: string
   fazenda_id: string
+  tipoContratacao: string
 }
 
 interface CreateFuncionarioUseCaseResponse {
@@ -18,11 +19,13 @@ export class CreateFuncionarioUseCase {
     nome,
     cargo,
     fazenda_id,
+    tipoContratacao,
   }: CreateFuncionarioUseCaseParams): Promise<CreateFuncionarioUseCaseResponse> {
     const funcionario = await this.funcionarioRepository.createFuncionario({
       nome,
       cargo,
       fazenda_id,
+      tipo_contratacao: tipoContratacao,
     })
 
     return { funcionario }

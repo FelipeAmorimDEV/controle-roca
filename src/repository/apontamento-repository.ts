@@ -7,9 +7,13 @@ export interface ApontamentoRepository {
   concluirApontamento(
     apontamentoId: string,
     fazendaId: string,
+    dataConclusao: string,
+    qtdAtividade: number,
+    custoTarefa: number,
   ): Promise<Apontamento>
   deleteApontamento(
     apontamentoId: string,
     fazendaId: string,
   ): Promise<Apontamento>
+  findById(apontamentoId: string): Promise<Apontamento | null>
 }
