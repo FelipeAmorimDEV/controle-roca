@@ -1,5 +1,4 @@
 import { PrismaSetorRepository } from '@/repository/prisma/prisma-setor-repository'
-import { FetchAllApontamentoLoteUseCase } from '@/usecases/fetch-all-apontamentos-lote'
 import { GetCentroCustoUseCase } from '@/usecases/get-centro-custo-usecase'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'

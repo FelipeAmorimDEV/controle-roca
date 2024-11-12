@@ -29,14 +29,6 @@ export class ConcluirApontamentoUseCase {
       throw new ResouceNotFoundError()
     }
 
-    const atividade = await this.atividadeRepository.findById(
-      apontamento.atividade_id,
-    )
-
-    if (!atividade) {
-      throw new ResouceNotFoundError()
-    }
-
     const funcionario = await this.funcionarioRepository.findFuncionarioById(
       apontamento.funcionario_id,
       fazenda_id,
@@ -52,7 +44,7 @@ export class ConcluirApontamentoUseCase {
     // Verificar se a quantidade realizada excede a meta
     let custoTarefa = valorDiaria
     const excedente = qtdAtividade - (apontamento.meta ?? 0)
-    const valorBonus = atividade.valor_bonus || 1 // Bônus por atividade excedente, padrão 1 real por unidade
+    const valorBonus = apontamento.valor_bonus || 1 // Bônus por atividade excedente, padrão 1 real por unidade
 
     if (excedente > 0) {
       custoTarefa += excedente * valorBonus
