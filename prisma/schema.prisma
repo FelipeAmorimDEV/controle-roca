@@ -14,26 +14,27 @@ datasource db {
 }
 
 model Fazenda {
-  id            String          @id @default(uuid())
-  nome          String          @unique
-  Qrcodes       Qrcodes[]
-  Pallets       Pallets[]
-  Variedade     Variedade[]
-  Caixa         Caixa[]
-  Users         Users[]
-  Product       Product[]
-  Saida         Saida[]
-  Entrada       Entrada[]
-  Setor         Setor[]
-  Aplicacao     Aplicacao[]
-  Fornecedor    Fornecedor[]
-  Tipo          Tipo[]
-  Colheita      Colheita[]
-  Funcionario   Funcionario[]
-  Atividade     Atividade[]
-  Apontamento   Apontamento[]
-  NotaFiscal    NotaFiscal[]
-  Fertirrigacao Fertirrigacao[]
+  id             String           @id @default(uuid())
+  nome           String           @unique
+  Qrcodes        Qrcodes[]
+  Pallets        Pallets[]
+  Variedade      Variedade[]
+  Caixa          Caixa[]
+  Users          Users[]
+  Product        Product[]
+  Saida          Saida[]
+  Entrada        Entrada[]
+  Setor          Setor[]
+  Aplicacao      Aplicacao[]
+  Fornecedor     Fornecedor[]
+  Tipo           Tipo[]
+  Colheita       Colheita[]
+  Funcionario    Funcionario[]
+  Atividade      Atividade[]
+  Apontamento    Apontamento[]
+  NotaFiscal     NotaFiscal[]
+  Fertirrigacao  Fertirrigacao[]
+  FolhaPagamento FolhaPagamento[]
 
   @@map("fazendas")
 }
@@ -301,15 +302,16 @@ model Colheita {
 }
 
 model Funcionario {
-  id               String          @id @default(uuid())
-  nome             String          @unique
-  cargo            String          @default("teste")
-  tipo_contratacao String          @default("fichado")
+  id               String           @id @default(uuid())
+  nome             String           @unique
+  cargo            String           @default("teste")
+  tipo_contratacao String           @default("fichado")
   Qrcodes          Qrcodes[]
   Apontamento      Apontamento[]
-  fazenda          Fazenda         @relation(fields: [fazenda_id], references: [id])
+  fazenda          Fazenda          @relation(fields: [fazenda_id], references: [id])
   fazenda_id       String
   Fertirrigacao    Fertirrigacao[]
+  FolhaPagamento   FolhaPagamento[]
 
   @@map("funcionarios")
 }
@@ -344,4 +346,19 @@ model Apontamento {
   fazenda_id     String
 
   @@map("apontamentos")
+}
+
+model FolhaPagamento {
+  id                    String      @id @default(uuid())
+  mesReferencia         DateTime
+  funcionario           Funcionario @relation(fields: [funcionario_id], references: [id])
+  funcionario_id        String
+  totalDiasTrabalhados  Int         @default(0)
+  totalHorasTrabalhadas Float       @default(0)
+  custo_total           Float       @default(0)
+  fazenda               Fazenda     @relation(fields: [fazenda_id], references: [id])
+  fazenda_id            String
+
+  @@unique([funcionario_id, mesReferencia])
+  @@map("folhas_pagamento")
 }

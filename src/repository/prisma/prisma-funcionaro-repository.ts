@@ -1,5 +1,8 @@
 import { Funcionario, Prisma } from '@prisma/client'
-import { FuncionarioRepository } from '../funcionario-repository'
+import {
+  FuncionarioComApontamentos,
+  FuncionarioRepository,
+} from '../funcionario-repository'
 import { prisma } from '@/prisma'
 
 export class PrismaFuncionarioRepository implements FuncionarioRepository {
@@ -52,10 +55,19 @@ export class PrismaFuncionarioRepository implements FuncionarioRepository {
     return relatorioQrcodes
   }
 
-  async fetchAllFuncionarios(fazendaId: string): Promise<Funcionario[]> {
+  async fetchAllFuncionarios(
+    fazendaId: string,
+  ): Promise<FuncionarioComApontamentos[]> {
     const funcionarios = await prisma.funcionario.findMany({
       where: {
         fazenda_id: fazendaId,
+      },
+      include: {
+        Apontamento: {
+          where: {
+            status: 'concluida',
+          },
+        },
       },
     })
 

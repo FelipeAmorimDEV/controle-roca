@@ -60,6 +60,7 @@ import { exportarProduto } from './controllers/estoque/exporta-produto'
 import { createFertirrigacao } from './controllers/fertirrigacao/create-fertirrigacao'
 import { fetchAllFertirrigacoes } from './controllers/fertirrigacao/fetch-all-fertirrigacoes'
 import { fetchApontamentoFiscal } from './controllers/setor/fetch-apontamentos-fiscal'
+import { createFolhaPagamento } from './controllers/folha-pagamento/create-folha-pagamento'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -172,6 +173,12 @@ export async function estoqueRoutes(app: FastifyInstance) {
     '/apotamento/:apontamentoId',
     { onRequest: [verifyJWT] },
     deleteApontamento,
+  )
+
+  app.get(
+    '/folha-pagamento/:mes',
+    { onRequest: [verifyJWT] },
+    createFolhaPagamento,
   )
 
   app.get('/dashboard', { onRequest: [verifyJWT] }, getDashboardData)
