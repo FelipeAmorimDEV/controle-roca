@@ -1,4 +1,4 @@
-import { Fertirrigacao, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 
 import { prisma } from '@/prisma'
 import { FertirrigacaoRepository } from '../fertirrigacao-repository'
