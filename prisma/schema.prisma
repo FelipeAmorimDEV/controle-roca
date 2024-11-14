@@ -14,25 +14,26 @@ datasource db {
 }
 
 model Fazenda {
-  id          String        @id @default(uuid())
-  nome        String        @unique
-  Qrcodes     Qrcodes[]
-  Pallets     Pallets[]
-  Variedade   Variedade[]
-  Caixa       Caixa[]
-  Users       Users[]
-  Product     Product[]
-  Saida       Saida[]
-  Entrada     Entrada[]
-  Setor       Setor[]
-  Aplicacao   Aplicacao[]
-  Fornecedor  Fornecedor[]
-  Tipo        Tipo[]
-  Colheita    Colheita[]
-  Funcionario Funcionario[]
-  Atividade   Atividade[]
-  Apontamento Apontamento[]
-  NotaFiscal  NotaFiscal[]
+  id            String          @id @default(uuid())
+  nome          String          @unique
+  Qrcodes       Qrcodes[]
+  Pallets       Pallets[]
+  Variedade     Variedade[]
+  Caixa         Caixa[]
+  Users         Users[]
+  Product       Product[]
+  Saida         Saida[]
+  Entrada       Entrada[]
+  Setor         Setor[]
+  Aplicacao     Aplicacao[]
+  Fornecedor    Fornecedor[]
+  Tipo          Tipo[]
+  Colheita      Colheita[]
+  Funcionario   Funcionario[]
+  Atividade     Atividade[]
+  Apontamento   Apontamento[]
+  NotaFiscal    NotaFiscal[]
+  Fertirrigacao Fertirrigacao[]
 
   @@map("fazendas")
 }
@@ -140,20 +141,21 @@ model Users {
 }
 
 model Product {
-  id           String        @id @default(uuid())
-  name         String
-  unit         String
-  price        Float         @default(0)
-  quantity     Float?        @default(0)
-  saida        Saida[]
-  entrada      Entrada[]
-  Tipo         Tipo?         @relation(fields: [tipoId], references: [id])
-  tipoId       String
-  fazenda      Fazenda       @relation(fields: [fazenda_id], references: [id])
-  fazenda_id   String
-  ProdutoNota  ProdutoNota[]
-  Fornecedor   Fornecedor?   @relation(fields: [fornecedorId], references: [id])
-  fornecedorId String?
+  id                   String                 @id @default(uuid())
+  name                 String
+  unit                 String
+  price                Float                  @default(0)
+  quantity             Float?                 @default(0)
+  saida                Saida[]
+  entrada              Entrada[]
+  Tipo                 Tipo?                  @relation(fields: [tipoId], references: [id])
+  tipoId               String
+  fazenda              Fazenda                @relation(fields: [fazenda_id], references: [id])
+  fazenda_id           String
+  ProdutoNota          ProdutoNota[]
+  Fornecedor           Fornecedor?            @relation(fields: [fornecedorId], references: [id])
+  fornecedorId         String?
+  ProdutoFertirrigacao ProdutoFertirrigacao[]
 
   @@map("products")
 }
@@ -195,19 +197,20 @@ model Entrada {
 }
 
 model Setor {
-  id           String        @id @default(uuid())
-  setorName    String
-  variedade    Variedade     @relation(fields: [variedade_id], references: [id])
-  filas        String
-  tamanhoArea  Float
-  Saida        Saida[]
-  Aplicacao    Aplicacao[]
-  Colheita     Colheita[]
-  Apontamento  Apontamento[]
-  Pallets      Pallets[]
-  variedade_id Int
-  fazenda      Fazenda       @relation(fields: [fazenda_id], references: [id])
-  fazenda_id   String
+  id            String          @id @default(uuid())
+  setorName     String
+  variedade     Variedade       @relation(fields: [variedade_id], references: [id])
+  filas         String
+  tamanhoArea   Float
+  Saida         Saida[]
+  Aplicacao     Aplicacao[]
+  Colheita      Colheita[]
+  Apontamento   Apontamento[]
+  Pallets       Pallets[]
+  variedade_id  Int
+  fazenda       Fazenda         @relation(fields: [fazenda_id], references: [id])
+  fazenda_id    String
+  Fertirrigacao Fertirrigacao[]
 
   @@map("setores")
 }
@@ -225,6 +228,31 @@ model Aplicacao {
   saidas            Saida[]
 
   @@map("aplicacoes")
+}
+
+model Fertirrigacao {
+  id           String                 @id @default(uuid())
+  created_at   DateTime               @default(now())
+  finalized_at DateTime?
+  semana       String
+  funcionario  Funcionario            @relation(fields: [aplicador_id], references: [id])
+  aplicador_id String
+  produtos     ProdutoFertirrigacao[]
+  setor        Setor                  @relation(fields: [setor_id], references: [id])
+  setor_id     String
+  fazenda      Fazenda                @relation(fields: [fazenda_id], references: [id])
+  fazenda_id   String
+
+  @@map("fertirrigacoes")
+}
+
+model ProdutoFertirrigacao {
+  id              String         @id @default(uuid())
+  produto         Product        @relation(fields: [produto_id], references: [id], onDelete: Cascade)
+  produto_id      String
+  quantidade      Float
+  Fertirrigacao   Fertirrigacao? @relation(fields: [fertirrigacaoId], references: [id])
+  fertirrigacaoId String?
 }
 
 model Tratorista {
@@ -273,14 +301,15 @@ model Colheita {
 }
 
 model Funcionario {
-  id               String        @id @default(uuid())
-  nome             String        @unique
-  cargo            String        @default("teste")
-  tipo_contratacao String        @default("fichado")
+  id               String          @id @default(uuid())
+  nome             String          @unique
+  cargo            String          @default("teste")
+  tipo_contratacao String          @default("fichado")
   Qrcodes          Qrcodes[]
   Apontamento      Apontamento[]
-  fazenda          Fazenda       @relation(fields: [fazenda_id], references: [id])
+  fazenda          Fazenda         @relation(fields: [fazenda_id], references: [id])
   fazenda_id       String
+  Fertirrigacao    Fertirrigacao[]
 
   @@map("funcionarios")
 }

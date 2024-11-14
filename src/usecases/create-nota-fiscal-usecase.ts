@@ -60,7 +60,6 @@ export class CreateNotaFiscalUseCase {
       await this.productRepository.incrementProductQuantity(
         element.quantidade,
         element.productId,
-        fazenda_id,
       )
     }
 
