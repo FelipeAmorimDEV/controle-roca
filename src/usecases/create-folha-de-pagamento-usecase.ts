@@ -28,13 +28,10 @@ export class CreateFolhaPagamentoUseCase {
 
     for (const funcionario of funcionarios) {
       let totalHorasTrabalhadas = 0
-      let totalDiasTrabalhados = 0
+      const diasTrabalhados = new Set<string>()
       let custoTotal = 0
 
       for (const apontamento of funcionario.Apontamento) {
-        console.log(apontamento)
-        console.log(mesReferencia.getMonth())
-        console.log(apontamento.data_inicio.getMonth())
         if (
           apontamento.data_inicio.getMonth() === mesReferencia.getMonth() &&
           apontamento.data_inicio.getFullYear() === mesReferencia.getFullYear()
@@ -44,8 +41,13 @@ export class CreateFolhaPagamentoUseCase {
               new Date(apontamento.data_inicio).getTime()) /
             3600000
           totalHorasTrabalhadas += horasTrabalhadas
-          totalDiasTrabalhados += 1
           custoTotal += apontamento.custo_tarefa ?? 0
+
+          const dataInicioFormatada = apontamento.data_inicio
+            .toISOString()
+            .split('T')[0]
+
+          diasTrabalhados.add(dataInicioFormatada)
         }
       }
 
@@ -53,7 +55,7 @@ export class CreateFolhaPagamentoUseCase {
         funcionario_id: funcionario.id,
         mesReferencia,
         custo_total: custoTotal,
-        totalDiasTrabalhados,
+        totalDiasTrabalhados: diasTrabalhados.size,
         totalHorasTrabalhadas,
         fazenda_id,
       })
