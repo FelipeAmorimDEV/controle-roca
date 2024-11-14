@@ -11,6 +11,7 @@ export interface SetorRepository {
   createSetor(data: Prisma.SetorUncheckedCreateInput): Promise<Setor>
   fetchAllSetor(fazendaId: string): Promise<Setor[]>
   fetchAllApontamentos(fazendaId: string): Promise<ApontamentosI[]>
+  fetchAllApontamentosFiscal(fazendaId: string): Promise<ApontamentosI[]>
   getCentroCusto(
     fazendaId: string,
     initialDate: string,

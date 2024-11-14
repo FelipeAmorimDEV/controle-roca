@@ -1,6 +1,7 @@
 import { Prisma, Setor } from '@prisma/client'
 import { prisma } from '@/prisma'
 import { SetorRepository } from '../setor-repository'
+import dayjs from 'dayjs'
 
 interface Funcionario {
   id: string
@@ -45,6 +46,48 @@ export interface ApontamentosI {
 }
 
 export class PrismaSetorRepository implements SetorRepository {
+  async fetchAllApontamentosFiscal(
+    fazendaId: string,
+  ): Promise<ApontamentosI[]> {
+    const apontamentos = await prisma.apontamento.findMany({
+      where: {
+        fazenda_id: fazendaId,
+        status: 'em andamento',
+        data_inicio: {
+          gte: dayjs().startOf('date').toDate(),
+          lte: dayjs().endOf('date').toDate(),
+        },
+      },
+      include: {
+        atividade: true,
+        funcionario: true,
+        setor: true,
+      },
+    })
+
+    const relatorio = apontamentos.map((apontamento) => {
+      const obj = {
+        id: apontamento.id,
+        status: apontamento.status,
+        data_inicio: apontamento.data_inicio,
+        data_fim: apontamento.data_fim,
+        atividade: apontamento.atividade.nome,
+        funcionario: apontamento.funcionario.nome,
+        meta: apontamento.meta,
+        qtd_tarefa: apontamento.qtd_tarefa,
+        custo_tarefa: apontamento.custo_tarefa,
+        duracao: apontamento.data_fim
+          ? apontamento.data_fim.getTime() - apontamento.data_inicio.getTime()
+          : null,
+        setor: apontamento.setor,
+      }
+
+      return obj
+    })
+
+    return relatorio
+  }
+
   async getCentroCusto(
     fazendaId: string,
     initialDate: string,

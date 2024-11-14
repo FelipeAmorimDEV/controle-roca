@@ -59,6 +59,7 @@ import { getCentroCusto } from './controllers/setor/get-centro-custo'
 import { exportarProduto } from './controllers/estoque/exporta-produto'
 import { createFertirrigacao } from './controllers/fertirrigacao/create-fertirrigacao'
 import { fetchAllFertirrigacoes } from './controllers/fertirrigacao/fetch-all-fertirrigacoes'
+import { fetchApontamentoFiscal } from './controllers/setor/fetch-apontamentos-fiscal'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -76,6 +77,12 @@ export async function estoqueRoutes(app: FastifyInstance) {
     '/setor/apontamentos',
     { onRequest: [verifyJWT] },
     fetchApontamentosSetor,
+  )
+
+  app.get(
+    '/apontamentos-fiscal',
+    { onRequest: [verifyJWT] },
+    fetchApontamentoFiscal,
   )
   app.get('/setor/centro-custo', { onRequest: [verifyJWT] }, getCentroCusto)
   app.get(
