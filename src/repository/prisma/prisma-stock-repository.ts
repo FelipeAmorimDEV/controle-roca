@@ -241,17 +241,13 @@ export class PrismaStockRepository implements StockRepository {
     fazendaId: string,
     aplicacaoId?: string,
   ): Promise<Saida> {
-    console.log(createdIn)
-    const dateTime = new Date().toISOString().split('T')[1]
-    const dataReal = createdIn + 'T' + dateTime
-
     const withdrawOperation = await prisma.saida.create({
       data: {
         quantity,
         productId,
         setorId,
         priceSaida,
-        createdAt: new Date(dataReal),
+        createdAt: new Date(createdIn),
         usersId: userId,
         fazenda_id: fazendaId,
         aplicacaoId,
@@ -270,15 +266,12 @@ export class PrismaStockRepository implements StockRepository {
     userId: string,
     fazendaId: string,
   ): Promise<Entrada> {
-    const dateTime = new Date().toISOString().split('T')[1]
-    const dataReal = createdIn + 'T' + dateTime
-
     const inputOperation = await prisma.entrada.create({
       data: {
         productId,
         quantity,
         priceEntrada,
-        createdAt: new Date(dataReal),
+        createdAt: new Date(createdIn),
         price,
         usersId: userId,
         fazenda_id: fazendaId,

@@ -57,6 +57,8 @@ import { deleteAplicacao } from './controllers/aplicacoes/delete-aplicacao'
 import { editProduto } from './controllers/estoque/edit-product'
 import { getCentroCusto } from './controllers/setor/get-centro-custo'
 import { exportarProduto } from './controllers/estoque/exporta-produto'
+import { createFertirrigacao } from './controllers/fertirrigacao/create-fertirrigacao'
+import { fetchAllFertirrigacoes } from './controllers/fertirrigacao/fetch-all-fertirrigacoes'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -81,6 +83,12 @@ export async function estoqueRoutes(app: FastifyInstance) {
     { onRequest: [verifyJWT] },
     exportarProduto,
   )
+  app.post(
+    '/criar-fertirrigacao',
+    { onRequest: [verifyJWT] },
+    createFertirrigacao,
+  )
+  app.get('/fertirrigacoes', { onRequest: [verifyJWT] }, fetchAllFertirrigacoes)
   app.get('/entradas', { onRequest: [verifyJWT] }, fetchEntradasAll)
   app.delete('/entradas/:entradaId', { onRequest: [verifyJWT] }, deleteEntrada)
   app.get('/saidas', { onRequest: [verifyJWT] }, fetchSaidasAll)
