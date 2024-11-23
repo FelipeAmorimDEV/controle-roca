@@ -1,4 +1,5 @@
 import { ProdutosNotaFiscal } from '@/usecases/create-nota-fiscal-usecase'
+import { FetchAllNotasFiscaisUseCaseResponse } from '@/usecases/fetch-all-notas-fiscais-usecase'
 import { NotaFiscal, Prisma } from '@prisma/client'
 
 export interface NotaFiscalRepository {
@@ -16,7 +17,7 @@ export interface NotaFiscalRepository {
     endDate: string,
     fornecedorId?: string,
     status?: string,
-  ): Promise<NotaFiscal[]>
+  ): Promise<FetchAllNotasFiscaisUseCaseResponse>
   fetchNotasFiscaisVencendo(
     fazendaId: string,
     dataLimite: Date,

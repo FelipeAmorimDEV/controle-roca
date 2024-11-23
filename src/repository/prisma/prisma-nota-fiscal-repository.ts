@@ -68,6 +68,18 @@ export class PrismaNotaFiscalRepository implements NotaFiscalRepository {
     const endDateOfTheDay = new Date(endDate)
     endDateOfTheDay.setUTCHours(23, 59, 59, 999)
 
+    const totalNotasFiscais = await prisma.notaFiscal.findMany({
+      where: {
+        fornecedor_id: fornecedorId,
+        statusPagamento: status,
+        fazenda_id: fazendaId,
+        dataNota: {
+          gte: new Date(initialDate),
+          lte: new Date(endDateOfTheDay),
+        },
+      },
+    })
+
     const notasFiscais = await prisma.notaFiscal.findMany({
       where: {
         fornecedor_id: fornecedorId,
@@ -94,11 +106,14 @@ export class PrismaNotaFiscalRepository implements NotaFiscalRepository {
           },
         },
       },
+      orderBy: {
+        dataNota: 'desc',
+      },
       skip: (page - 1) * perPage,
       take: perPage,
     })
 
-    return notasFiscais
+    return { notasFiscais, total: totalNotasFiscais.length }
   }
 
   async create(

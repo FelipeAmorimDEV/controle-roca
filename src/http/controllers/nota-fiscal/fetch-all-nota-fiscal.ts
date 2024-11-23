@@ -22,7 +22,7 @@ export async function fetchNotasFiscais(
   const notaFiscalRepository = new PrismaNotaFiscalRepository()
   const fetchNotaFiscal = new FetchAllNotasFiscaisUseCase(notaFiscalRepository)
 
-  const { notasFiscais } = await fetchNotaFiscal.execute({
+  const { notasFiscais, total } = await fetchNotaFiscal.execute({
     fazenda_id: request.user.fazenda_id,
     endDate,
     initialDate,
@@ -32,5 +32,5 @@ export async function fetchNotasFiscais(
     status,
   })
 
-  return reply.status(200).send({ notasFiscais })
+  return reply.status(200).send({ notasFiscais, total })
 }

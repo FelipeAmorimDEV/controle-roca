@@ -1,8 +1,9 @@
 import { PrismaNotaFiscalRepository } from '@/repository/prisma/prisma-nota-fiscal-repository'
 import { NotaFiscal } from '@prisma/client'
 
-interface FetchAllNotasFiscaisUseCaseResponse {
+export interface FetchAllNotasFiscaisUseCaseResponse {
   notasFiscais: NotaFiscal[]
+  total: number
 }
 
 interface FetchAllNotasFiscaisUseCaseParams {
@@ -27,16 +28,17 @@ export class FetchAllNotasFiscaisUseCase {
     perPage,
     status,
   }: FetchAllNotasFiscaisUseCaseParams): Promise<FetchAllNotasFiscaisUseCaseResponse> {
-    const notasFiscais = await this.notaFiscalRepository.fetchNotasFiscais(
-      fazenda_id,
-      page,
-      perPage,
-      initialDate,
-      endDate,
-      fornecedorId,
-      status,
-    )
+    const { notasFiscais, total } =
+      await this.notaFiscalRepository.fetchNotasFiscais(
+        fazenda_id,
+        page,
+        perPage,
+        initialDate,
+        endDate,
+        fornecedorId,
+        status,
+      )
 
-    return { notasFiscais }
+    return { notasFiscais, total }
   }
 }
