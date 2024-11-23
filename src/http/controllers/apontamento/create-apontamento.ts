@@ -27,6 +27,7 @@ export async function createApontamento(
     setorId,
     fazenda_id: request.user.fazenda_id,
     meta,
+    data_inicio,
   })
 
   return reply.status(201).send(apontamento)
