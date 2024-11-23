@@ -27,14 +27,15 @@ export class FetchAllFertirrigacoesUseCase {
     page,
     perPage,
   }: FetchAllFertirrigacoesUseCaseParams): Promise<FetchAllFertirrigacoesUseCaseResponse> {
-    const fertirrigacoes = await this.fertirrigacoesRepository.fetchMany(
-      fazenda_id,
-      initialDate,
-      endDate,
-      page,
-      perPage,
-      setorId,
-    )
+    const { fertirrigacoes, total } =
+      await this.fertirrigacoesRepository.fetchMany(
+        fazenda_id,
+        initialDate,
+        endDate,
+        page,
+        perPage,
+        setorId,
+      )
 
     return { fertirrigacoes }
   }
