@@ -3,6 +3,7 @@ import { Fertirrigacao } from '@prisma/client'
 
 interface FetchAllFertirrigacoesUseCaseResponse {
   fertirrigacoes: Fertirrigacao[]
+  total: number
 }
 
 interface FetchAllFertirrigacoesUseCaseParams {
@@ -37,6 +38,6 @@ export class FetchAllFertirrigacoesUseCase {
         setorId,
       )
 
-    return { fertirrigacoes }
+    return { fertirrigacoes, total }
   }
 }
