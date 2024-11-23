@@ -31,7 +31,7 @@ export class CreateApontamentoUseCase {
       setor_id: setorId,
       fazenda_id,
       meta,
-      data_inicio,
+      data_inicio: new Date(data_inicio),
     })
 
     return { apontamento }
