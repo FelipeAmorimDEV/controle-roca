@@ -15,6 +15,18 @@ export class PrismaFertirrigacaoRepository implements FertirrigacaoRepository {
   ) {
     const endDateOfTheDay = new Date(endDate)
     endDateOfTheDay.setUTCHours(23, 59, 59, 999)
+
+    const allFertirrigacoes = await prisma.fertirrigacao.findMany({
+      where: {
+        fazenda_id: fazendaId,
+        setor_id: setorId,
+        created_at: {
+          gte: new Date(initialDate),
+          lte: new Date(endDateOfTheDay),
+        },
+      },
+    })
+
     const fertirrigacoes = await prisma.fertirrigacao.findMany({
       where: {
         fazenda_id: fazendaId,

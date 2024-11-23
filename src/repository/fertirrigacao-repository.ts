@@ -1,6 +1,10 @@
 import { ProdutosNotaFiscalS } from '@/usecases/create-fertirrigacao-usecase'
 import { Fertirrigacao, Prisma } from '@prisma/client'
 
+type FetchManyResponse = {
+  fertirrigacoes: Fertirrigacao[]
+  total: number
+}
 export interface FertirrigacaoRepository {
   create(
     data: Prisma.FertirrigacaoUncheckedCreateInput,
@@ -13,5 +17,5 @@ export interface FertirrigacaoRepository {
     page: number,
     perPage: number,
     setorId?: string,
-  ): Promise<Fertirrigacao[]>
+  ): Promise<FetchManyResponse>
 }

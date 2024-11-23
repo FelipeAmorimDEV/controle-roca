@@ -23,7 +23,7 @@ export async function fetchAllFertirrigacoes(
     fertirrigacoesRepository,
   )
 
-  const { fertirrigacoes } = await fetchAllFertirrigacoes.execute({
+  const { fertirrigacoes, total } = await fetchAllFertirrigacoes.execute({
     fazenda_id: request.user.fazenda_id,
     endDate,
     initialDate,
@@ -32,5 +32,5 @@ export async function fetchAllFertirrigacoes(
     setorId,
   })
 
-  return reply.status(200).send(fertirrigacoes)
+  return reply.status(200).send({ fertirrigacoes, total })
 }
