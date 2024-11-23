@@ -70,7 +70,7 @@ export class PrismaFertirrigacaoRepository implements FertirrigacaoRepository {
       take: perPage,
     })
 
-    return fertirrigacoes
+    return { fertirrigacoes, total: allFertirrigacoes.length }
   }
 
   async create(
