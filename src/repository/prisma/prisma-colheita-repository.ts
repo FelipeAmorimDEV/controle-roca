@@ -125,6 +125,11 @@ export class PrismaColheitaRepository implements ColheitaRepository {
             nome: true,
           },
         },
+        setor: {
+          select: {
+            setorName: true,
+          },
+        },
       },
       skip: (page - 1) * perPage,
       take: perPage,
