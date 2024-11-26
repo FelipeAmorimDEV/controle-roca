@@ -82,6 +82,8 @@ export class PrismaColheitaRepository implements ColheitaRepository {
     const endDateOfTheDay = new Date(endDate)
     endDateOfTheDay.setUTCHours(23, 59, 59, 999)
 
+    console.log(setorId)
+
     const totalColhido = await prisma.colheita.aggregate({
       where: {
         fazenda_id: fazendaId,

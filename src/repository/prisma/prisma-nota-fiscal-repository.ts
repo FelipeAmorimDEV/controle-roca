@@ -107,7 +107,7 @@ export class PrismaNotaFiscalRepository implements NotaFiscalRepository {
         },
       },
       orderBy: {
-        dataNota: 'desc',
+        dataPagamento: 'asc',
       },
       skip: (page - 1) * perPage,
       take: perPage,
