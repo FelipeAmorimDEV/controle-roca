@@ -35,6 +35,7 @@ model Fazenda {
   NotaFiscal     NotaFiscal[]
   Fertirrigacao  Fertirrigacao[]
   FolhaPagamento FolhaPagamento[]
+  PrecoVenda     PrecoVenda[]
 
   @@map("fazendas")
 }
@@ -126,6 +127,19 @@ model Caixa {
   Colheita   Colheita[]
 
   @@map("caixas")
+}
+
+model PrecoVenda {
+  id            String     @id @default(uuid())
+  classificacao String
+  preco         Decimal
+  dataInicio    DateTime
+  dataFim       DateTime
+  colheitas     Colheita[]
+  fazenda       Fazenda    @relation(fields: [fazenda_id], references: [id])
+  fazenda_id    String
+
+  @@map("precos_venda")
 }
 
 model Users {
@@ -285,18 +299,20 @@ model Tipo {
 }
 
 model Colheita {
-  id         String   @id @default(uuid())
-  pesoCaixa  Int
-  pesoTotal  Int
-  qntCaixa   Int
-  tipoCaixa  Caixa    @relation(fields: [caixa_id], references: [id])
-  createdAt  DateTime @default(now())
-  variedade  String
-  setor      Setor?   @relation(fields: [setorId], references: [id])
-  setorId    String?
-  caixa_id   Int      @default(1)
-  fazenda    Fazenda  @relation(fields: [fazenda_id], references: [id])
-  fazenda_id String
+  id             String      @id @default(uuid())
+  pesoCaixa      Int
+  pesoTotal      Int
+  qntCaixa       Int
+  tipoCaixa      Caixa       @relation(fields: [caixa_id], references: [id])
+  createdAt      DateTime    @default(now())
+  variedade      String
+  setor          Setor?      @relation(fields: [setorId], references: [id])
+  setorId        String?
+  caixa_id       Int         @default(1)
+  fazenda        Fazenda     @relation(fields: [fazenda_id], references: [id])
+  fazenda_id     String
+  preco_venda    PrecoVenda? @relation(fields: [preco_venda_id], references: [id])
+  preco_venda_id String?
 
   @@map("colheitas")
 }

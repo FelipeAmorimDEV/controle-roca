@@ -13,6 +13,7 @@ export interface IProducaoMensal {
 
 export interface ColheitaRepository {
   getProducaoMensal(fazendaId: string): Promise<IProducaoMensal[]>
+  atualizarValores(fazendaId: string): Promise<string>
   createColheita(data: Prisma.ColheitaUncheckedCreateInput): Promise<Colheita>
   deleteColheita(colheitaId: string, fazendaId: string): Promise<Colheita>
   fetchAllColheita(
@@ -22,6 +23,6 @@ export interface ColheitaRepository {
     perPage: number,
     fazendaId: string,
     setorId?: string,
-    variedade?: number,
+    variedade?: string,
   ): Promise<ColheitaResult>
 }

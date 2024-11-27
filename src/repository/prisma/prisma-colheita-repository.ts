@@ -1,4 +1,5 @@
 import { Prisma, Colheita } from '@prisma/client'
+
 import {
   ColheitaRepository,
   ColheitaResult,
@@ -8,6 +9,26 @@ import { prisma } from '@/prisma'
 import { endOfMonth, set, startOfMonth } from 'date-fns'
 
 export class PrismaColheitaRepository implements ColheitaRepository {
+  async atualizarValores(fazendaId: string): Promise<string> {
+    const colheitasAtualizadas = await prisma.$executeRaw`
+      UPDATE "colheitas"
+      SET "preco_venda_id" = (
+        SELECT pv."id"
+        FROM "precos_venda" pv
+        JOIN "caixas" c ON "colheitas"."caixa_id" = c."id"
+        WHERE "colheitas"."preco_venda_id" IS NULL
+          AND "colheitas"."fazenda_id" = ${fazendaId}
+          AND c."nome" = pv."classificacao"
+          AND "colheitas"."createdAt" BETWEEN pv."dataInicio" AND pv."dataFim"
+        LIMIT 1
+      )
+      WHERE "colheitas"."fazenda_id" = ${fazendaId}
+      AND "colheitas"."preco_venda_id" IS NULL;
+    `
+
+    return `${colheitasAtualizadas} colheitas atualizadas com sucesso`
+  }
+
   async getProducaoMensal(fazendaId: string): Promise<IProducaoMensal[]> {
     const resultados = []
 
@@ -130,6 +151,11 @@ export class PrismaColheitaRepository implements ColheitaRepository {
         setor: {
           select: {
             setorName: true,
+          },
+        },
+        preco_venda: {
+          select: {
+            preco: true,
           },
         },
       },
