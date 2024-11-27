@@ -39,7 +39,7 @@ export class ConcluirApontamentoUseCase {
     }
 
     const valorDiaria =
-      funcionario.tipo_contratacao.toUpperCase() === 'FICHADO' ? 44 : 50
+      funcionario.tipo_contratacao.toUpperCase() === 'FICHADO' ? 65.95 : 65
 
     // Verificar se a quantidade realizada excede a meta
     let custoTarefa = valorDiaria
