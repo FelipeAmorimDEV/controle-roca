@@ -32,6 +32,9 @@ export class PrismaVariedadeRepository implements VariedadeRepository {
       where: {
         fazenda_id: fazendaId,
       },
+      orderBy: {
+        nome: 'asc',
+      },
     })
 
     return variedades

@@ -18,6 +18,9 @@ export class PrismaAtividadeRepository implements AtividadeRepository {
       where: {
         fazenda_id: fazendaId,
       },
+      orderBy: {
+        nome: 'asc',
+      },
     })
 
     return atividades
