@@ -19,6 +19,9 @@ export class PrismaFornecedorRepository implements FornecedorRepository {
       where: {
         fazenda_id: fazendaId,
       },
+      orderBy: {
+        name: 'asc',
+      },
     })
 
     return fornecedores

@@ -69,6 +69,9 @@ export class PrismaFuncionarioRepository implements FuncionarioRepository {
           },
         },
       },
+      orderBy: {
+        nome: 'asc',
+      },
     })
 
     return funcionarios

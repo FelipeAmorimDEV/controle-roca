@@ -9,6 +9,9 @@ export class PrismaCaixaRepository implements CaixaRepository {
       where: {
         fazenda_id: fazendaId,
       },
+      orderBy: {
+        nome: 'asc',
+      },
     })
 
     return caixas
