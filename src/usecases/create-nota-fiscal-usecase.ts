@@ -14,6 +14,7 @@ interface CreateNotaFiscalUseCaseParams {
   dataPagamento?: string
   statusPagamento?: string
   codigoDeBarras?: string
+  codigoNota?: string
   fornecedorId: string
   fazenda_id: string
   produtos: ProdutosNotaFiscal[]
@@ -40,6 +41,7 @@ export class CreateNotaFiscalUseCase {
     user_id,
     fornecedorId,
     codigoDeBarras,
+    codigoNota,
   }: CreateNotaFiscalUseCaseParams): Promise<CreateNotaFiscalUseCaseResponse> {
     const notaFiscal = await this.notaFiscalRepository.create(
       {
@@ -49,6 +51,7 @@ export class CreateNotaFiscalUseCase {
         statusPagamento,
         fornecedor_id: fornecedorId,
         codigo_de_barras: codigoDeBarras,
+        codigo_da_nota: codigoNota,
       },
       produtos,
       user_id,

@@ -46,6 +46,7 @@ model NotaFiscal {
   produtos         ProdutoNota[]
   dataPagamento    DateTime?
   codigo_de_barras String?
+  codigo_da_nota   String?
   statusPagamento  String        @default("pendente") // 'pendente' ou 'pago'
   fornecedor       Fornecedor    @relation(fields: [fornecedor_id], references: [id])
   fazenda          Fazenda       @relation(fields: [fazenda_id], references: [id])
