@@ -134,6 +134,7 @@ export class PrismaNotaFiscalRepository implements NotaFiscalRepository {
         dataPagamento: dataPagamento ? new Date(dataPagamento) : null,
         statusPagamento: data.statusPagamento,
         codigo_de_barras: data.codigo_de_barras,
+        codigo_da_nota: data.codigo_da_nota,
         fornecedor: {
           connect: {
             id: data.fornecedor_id,
