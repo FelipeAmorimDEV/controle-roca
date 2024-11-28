@@ -144,15 +144,37 @@ export class PrismaSetorRepository implements SetorRepository {
     return relatorio
   }
 
-  async fetchAllApontamentos(fazendaId: string): Promise<ApontamentosI[]> {
+  async fetchAllApontamentos(
+    fazendaId: string,
+    initialDate: string,
+    endDate: string,
+    page: number,
+    perPage: number,
+    setorId?: string,
+    atividadeId?: string,
+  ): Promise<ApontamentosI[]> {
+    const startOfDay = dayjs(initialDate).startOf('date').toDate()
+    const endOfDay = dayjs(endDate).endOf('date').toDate()
+
     const apontamentos = await prisma.apontamento.findMany({
       where: {
         fazenda_id: fazendaId,
+        data_inicio: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+        setor_id: setorId,
+        atividade_id: atividadeId,
       },
       include: {
         atividade: true,
         funcionario: true,
         setor: true,
+      },
+      skip: (page - 1) * perPage,
+      take: perPage,
+      orderBy: {
+        data_inicio: 'desc',
       },
     })
 
