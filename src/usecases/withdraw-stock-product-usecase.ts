@@ -69,7 +69,6 @@ export class WithdrawStockUseCase {
       await this.productsRepository.decrementProductQuantity(
         quantity,
         productId,
-        fazenda_id,
       )
 
     return { withdrawLog, produtoAtualizado }

@@ -18,4 +18,5 @@ export interface FertirrigacaoRepository {
     perPage: number,
     setorId?: string,
   ): Promise<FetchManyResponse>
+  delete(fertirrigacaoId: string): Promise<Fertirrigacao>
 }

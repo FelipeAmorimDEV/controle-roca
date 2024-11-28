@@ -240,6 +240,7 @@ export class PrismaStockRepository implements StockRepository {
     userId: string,
     fazendaId: string,
     aplicacaoId?: string,
+    fertirrigacaoId?: string,
   ): Promise<Saida> {
     const withdrawOperation = await prisma.saida.create({
       data: {
@@ -251,6 +252,7 @@ export class PrismaStockRepository implements StockRepository {
         usersId: userId,
         fazenda_id: fazendaId,
         aplicacaoId,
+        fertirrigacaoId,
       },
     })
 

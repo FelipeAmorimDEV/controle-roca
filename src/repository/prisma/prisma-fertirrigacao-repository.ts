@@ -1,10 +1,23 @@
-import { Prisma } from '@prisma/client'
+import { Fertirrigacao, Prisma } from '@prisma/client'
 
 import { prisma } from '@/prisma'
 import { FertirrigacaoRepository } from '../fertirrigacao-repository'
 import { ProdutosNotaFiscalS } from '@/usecases/create-fertirrigacao-usecase'
 
 export class PrismaFertirrigacaoRepository implements FertirrigacaoRepository {
+  async delete(fertirrigacaoId: string): Promise<Fertirrigacao> {
+    const fertirrigacao = await prisma.fertirrigacao.delete({
+      where: {
+        id: fertirrigacaoId,
+      },
+      include: {
+        produtos: true,
+      },
+    })
+
+    return fertirrigacao
+  }
+
   async fetchMany(
     fazendaId: string,
     initialDate: string,
