@@ -345,22 +345,24 @@ model Atividade {
 }
 
 model Apontamento {
-  id             String      @id @default(uuid())
-  data_inicio    DateTime    @default(now())
-  data_fim       DateTime?
-  status         String      @default("em andamento")
-  meta           Int?
-  qtd_tarefa     Int?
-  custo_tarefa   Float?
-  valor_bonus    Float       @default(0)
-  funcionario    Funcionario @relation(fields: [funcionario_id], references: [id])
-  funcionario_id String
-  atividade      Atividade   @relation(fields: [atividade_id], references: [id])
-  atividade_id   String
-  setor          Setor       @relation(fields: [setor_id], references: [id])
-  setor_id       String
-  fazenda        Fazenda     @relation(fields: [fazenda_id], references: [id])
-  fazenda_id     String
+  id               String      @id @default(uuid())
+  data_inicio      DateTime    @default(now())
+  data_fim         DateTime?
+  status           String      @default("em andamento")
+  meta             Int?
+  qtd_tarefa       Int?
+  custo_tarefa     Float?
+  valor_bonus      Float       @default(0)
+  duracao_horas    Float?
+  tipo_apontamento String      @default("meta")
+  funcionario      Funcionario @relation(fields: [funcionario_id], references: [id])
+  funcionario_id   String
+  atividade        Atividade   @relation(fields: [atividade_id], references: [id])
+  atividade_id     String
+  setor            Setor       @relation(fields: [setor_id], references: [id])
+  setor_id         String
+  fazenda          Fazenda     @relation(fields: [fazenda_id], references: [id])
+  fazenda_id       String
 
   @@map("apontamentos")
 }

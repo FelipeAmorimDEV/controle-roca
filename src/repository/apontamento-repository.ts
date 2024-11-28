@@ -10,10 +10,15 @@ export interface ApontamentoRepository {
     dataConclusao: string,
     qtdAtividade: number,
     custoTarefa: number,
+    duracao: number,
   ): Promise<Apontamento>
   deleteApontamento(
     apontamentoId: string,
     fazendaId: string,
   ): Promise<Apontamento>
   findById(apontamentoId: string): Promise<Apontamento | null>
+  findOnSameDateById(
+    funcionarioId: string,
+    date: Date,
+  ): Promise<Apontamento | null>
 }

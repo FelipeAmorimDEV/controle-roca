@@ -8,6 +8,11 @@ interface FetchAllApontamentoLoteUseCaseResponse {
 
 interface FetchAllApontamentoLoteUseCaseParams {
   setorId?: string
+  atividadeId?: string
+  initialDate: string
+  endDate: string
+  page: number
+  perPage: number
   fazenda_id: string
 }
 
@@ -17,9 +22,21 @@ export class FetchAllApontamentoLoteUseCase {
   async execute({
     setorId,
     fazenda_id,
+    endDate,
+    initialDate,
+    page,
+    perPage,
+    atividadeId,
   }: FetchAllApontamentoLoteUseCaseParams): Promise<FetchAllApontamentoLoteUseCaseResponse> {
-    const apontamentos =
-      await this.setorRepository.fetchAllApontamentos(fazenda_id)
+    const apontamentos = await this.setorRepository.fetchAllApontamentos(
+      fazenda_id,
+      initialDate,
+      endDate,
+      page,
+      perPage,
+      setorId,
+      atividadeId,
+    )
 
     return { apontamentos }
   }

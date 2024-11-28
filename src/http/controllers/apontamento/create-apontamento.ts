@@ -13,10 +13,17 @@ export async function createApontamento(
     atividadeId: z.string().uuid(),
     meta: z.coerce.number(),
     data_inicio: z.string(),
+    tipoApontamento: z.enum(['meta', 'horas']),
   })
 
-  const { atividadeId, funcionarioId, setorId, meta, data_inicio } =
-    requestBodySchema.parse(request.body)
+  const {
+    atividadeId,
+    funcionarioId,
+    setorId,
+    meta,
+    data_inicio,
+    tipoApontamento,
+  } = requestBodySchema.parse(request.body)
 
   const apontamentoRepository = new PrismaApontamentoRepository()
   const createApontamento = new CreateApontamentoUseCase(apontamentoRepository)
@@ -28,6 +35,7 @@ export async function createApontamento(
     fazenda_id: request.user.fazenda_id,
     meta,
     data_inicio,
+    tipoApontamento,
   })
 
   return reply.status(201).send(apontamento)
