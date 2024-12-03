@@ -47,6 +47,7 @@ model NotaFiscal {
   dataPagamento    DateTime?
   codigo_de_barras String?
   codigo_da_nota   String?
+  cultura          String        @default("uva")
   statusPagamento  String        @default("pendente") // 'pendente' ou 'pago'
   fornecedor       Fornecedor    @relation(fields: [fornecedor_id], references: [id])
   fazenda          Fazenda       @relation(fields: [fazenda_id], references: [id])
@@ -64,8 +65,8 @@ model ProdutoNota {
   notaFiscalId String
   produto      Product    @relation(fields: [productId], references: [id])
   productId    String
-  entrada      Entrada    @relation(fields: [entradaId], references: [id], onDelete: Cascade)
-  entradaId    String
+  entrada      Entrada?   @relation(fields: [entradaId], references: [id], onDelete: Cascade)
+  entradaId    String?
 
   @@map("produtos_notas_fiscais")
 }
@@ -177,20 +178,22 @@ model Product {
 }
 
 model Saida {
-  id          String     @id @default(uuid())
-  quantity    Float
-  createdAt   DateTime   @default(now())
-  priceSaida  Float
-  Product     Product    @relation(fields: [productId], references: [id])
-  productId   String
-  setor       Setor?     @relation(fields: [setorId], references: [id])
-  setorId     String?
-  Users       Users      @relation(fields: [usersId], references: [id])
-  usersId     String
-  fazenda     Fazenda    @relation(fields: [fazenda_id], references: [id])
-  fazenda_id  String
-  Aplicacao   Aplicacao? @relation(fields: [aplicacaoId], references: [id], onDelete: Cascade)
-  aplicacaoId String?
+  id              String         @id @default(uuid())
+  quantity        Float
+  createdAt       DateTime       @default(now())
+  priceSaida      Float
+  Product         Product        @relation(fields: [productId], references: [id])
+  productId       String
+  setor           Setor?         @relation(fields: [setorId], references: [id])
+  setorId         String?
+  Users           Users          @relation(fields: [usersId], references: [id])
+  usersId         String
+  fazenda         Fazenda        @relation(fields: [fazenda_id], references: [id])
+  fazenda_id      String
+  Aplicacao       Aplicacao?     @relation(fields: [aplicacaoId], references: [id], onDelete: Cascade)
+  aplicacaoId     String?
+  Fertirrigacao   Fertirrigacao? @relation(fields: [fertirrigacaoId], references: [id], onDelete: Cascade)
+  fertirrigacaoId String?
 
   @@map("saidas")
 }
@@ -258,6 +261,7 @@ model Fertirrigacao {
   setor_id     String
   fazenda      Fazenda                @relation(fields: [fazenda_id], references: [id])
   fazenda_id   String
+  saidas       Saida[]
 
   @@map("fertirrigacoes")
 }
@@ -267,7 +271,7 @@ model ProdutoFertirrigacao {
   produto         Product        @relation(fields: [produto_id], references: [id], onDelete: Cascade)
   produto_id      String
   quantidade      Float
-  Fertirrigacao   Fertirrigacao? @relation(fields: [fertirrigacaoId], references: [id])
+  Fertirrigacao   Fertirrigacao? @relation(fields: [fertirrigacaoId], references: [id], onDelete: Cascade)
   fertirrigacaoId String?
 }
 

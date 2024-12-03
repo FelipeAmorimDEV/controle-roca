@@ -10,6 +10,7 @@ export async function createNotaFiscal(
   reply: FastifyReply,
 ) {
   const requestBodySchema = z.object({
+    cultura: z.enum(['uva', 'manga']).default('uva'),
     dataNota: z.string(),
     dataPagamento: z.string().optional(),
     statusPagamento: z.string().optional(),
@@ -33,6 +34,7 @@ export async function createNotaFiscal(
     codigoDeBarras,
     fornecedorId,
     codigoNota,
+    cultura,
   } = requestBodySchema.parse(request.body)
 
   const notaFiscalRepository = new PrismaNotaFiscalRepository()
@@ -54,6 +56,7 @@ export async function createNotaFiscal(
     fornecedorId,
     codigoDeBarras,
     codigoNota,
+    cultura,
   })
 
   return reply.status(201).send(notaFiscal)

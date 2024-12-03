@@ -69,6 +69,7 @@ export class CreateFertirrigacaoUseCase {
       const productPrice = product?.price ?? 0
 
       const valorSaida = productPrice * element.quantidade
+
       await this.stockRepository.createWithdrawStockItemLog(
         element.quantidade,
         element.produtoId,
@@ -77,6 +78,8 @@ export class CreateFertirrigacaoUseCase {
         new Date().toISOString().split('T')[0],
         user_id,
         fazenda_id,
+        null,
+        fertirrigacao.id,
       )
 
       await this.productRepository.decrementProductQuantity(

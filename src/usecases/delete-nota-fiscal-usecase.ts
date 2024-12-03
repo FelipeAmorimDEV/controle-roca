@@ -20,8 +20,13 @@ export class DeleteNotaFiscalUseCase {
     const notaFiscal = await this.notaFiscalRepository.delete(notaFiscalId)
 
     const produtos = notaFiscal.produtos
+
     for (let i = 0; i < produtos.length; i++) {
       const element = produtos[i]
+
+      if (!element.entradaId) {
+        return null
+      }
 
       await this.stockRepository.deleteEntrada(element.entradaId)
       await this.productRepository.decrementProductQuantity(

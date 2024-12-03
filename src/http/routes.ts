@@ -63,6 +63,7 @@ import { fetchApontamentoFiscal } from './controllers/setor/fetch-apontamentos-f
 import { createFolhaPagamento } from './controllers/folha-pagamento/create-folha-pagamento'
 import { createPrecoVenda } from './controllers/colheita/create-preco-venda'
 import { atualizaPrecoColheita } from './controllers/colheita/atualiza-preco-colheita'
+import { deleteFertirrigacao } from './controllers/fertirrigacao/delete-fertirrigacao'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -107,6 +108,11 @@ export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/aplicacoes', { onRequest: [verifyJWT] }, createAplicacao)
   app.get('/aplicacoes', { onRequest: [verifyJWT] }, fetchAplicacoes)
   app.delete('/aplicacoes/:id', { onRequest: [verifyJWT] }, deleteAplicacao)
+  app.delete(
+    '/fertirrigacoes/:id',
+    { onRequest: [verifyJWT] },
+    deleteFertirrigacao,
+  )
 
   app.post('/tratoristas', { onRequest: [verifyJWT] }, createTratorista)
   app.get('/tratoristas', { onRequest: [verifyJWT] }, fetchTratoristas)

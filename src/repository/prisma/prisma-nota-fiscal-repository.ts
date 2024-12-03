@@ -5,6 +5,16 @@ import { NotaFiscalRepository } from '../nota-fiscal-repository'
 import { ProdutosNotaFiscal } from '@/usecases/create-nota-fiscal-usecase'
 
 export class PrismaNotaFiscalRepository implements NotaFiscalRepository {
+  async findById(notaFiscalId: string) {
+    const notaFiscal = await prisma.notaFiscal.findFirst({
+      where: {
+        id: notaFiscalId,
+      },
+    })
+
+    return notaFiscal
+  }
+
   async delete(notaFiscalId: string) {
     const notaFiscal = await prisma.notaFiscal.delete({
       where: {
@@ -18,13 +28,13 @@ export class PrismaNotaFiscalRepository implements NotaFiscalRepository {
     return notaFiscal
   }
 
-  async markPaid(notaFiscalId: string) {
+  async changeStatus(notaFiscalId: string, status: string) {
     const notaFiscal = await prisma.notaFiscal.update({
       where: {
         id: notaFiscalId,
       },
       data: {
-        statusPagamento: 'pago',
+        statusPagamento: status,
       },
     })
 
@@ -120,6 +130,7 @@ export class PrismaNotaFiscalRepository implements NotaFiscalRepository {
     data: Prisma.NotaFiscalUncheckedCreateInput,
     produtos: ProdutosNotaFiscal[],
     userId: string,
+    cultura: string,
   ): Promise<NotaFiscal> {
     const dataNota = new Date(data.dataNota)
     dataNota.setUTCHours(4, 10, 10, 10)
@@ -128,6 +139,43 @@ export class PrismaNotaFiscalRepository implements NotaFiscalRepository {
       : null
     dataPagamento?.setUTCHours(4, 10, 10, 10)
 
+    if (cultura === 'manga') {
+      const notaFiscal = await prisma.notaFiscal.create({
+        data: {
+          dataNota: new Date(dataNota),
+          dataPagamento: dataPagamento ? new Date(dataPagamento) : null,
+          statusPagamento: data.statusPagamento,
+          codigo_de_barras: data.codigo_de_barras,
+          codigo_da_nota: data.codigo_da_nota,
+          cultura,
+          fornecedor: {
+            connect: {
+              id: data.fornecedor_id,
+            },
+          },
+          fazenda: {
+            connect: {
+              id: data.fazenda_id,
+            },
+          },
+          produtos: {
+            create: produtos.map((produtoi) => ({
+              quantidade: produtoi.quantidade,
+              valor: produtoi.valor,
+              produto: {
+                connect: { id: produtoi.productId },
+              },
+            })),
+          },
+        },
+        include: {
+          produtos: true,
+        },
+      })
+
+      return notaFiscal
+    }
+
     const notaFiscal = await prisma.notaFiscal.create({
       data: {
         dataNota: new Date(dataNota),
@@ -135,6 +183,7 @@ export class PrismaNotaFiscalRepository implements NotaFiscalRepository {
         statusPagamento: data.statusPagamento,
         codigo_de_barras: data.codigo_de_barras,
         codigo_da_nota: data.codigo_da_nota,
+        cultura,
         fornecedor: {
           connect: {
             id: data.fornecedor_id,
