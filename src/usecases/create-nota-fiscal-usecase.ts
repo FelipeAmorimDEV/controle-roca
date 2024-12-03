@@ -19,6 +19,7 @@ interface CreateNotaFiscalUseCaseParams {
   fazenda_id: string
   produtos: ProdutosNotaFiscal[]
   user_id: string
+  cultura: string
 }
 
 interface CreateNotaFiscalUseCaseResponse {
@@ -42,6 +43,7 @@ export class CreateNotaFiscalUseCase {
     fornecedorId,
     codigoDeBarras,
     codigoNota,
+    cultura,
   }: CreateNotaFiscalUseCaseParams): Promise<CreateNotaFiscalUseCaseResponse> {
     const notaFiscal = await this.notaFiscalRepository.create(
       {
@@ -55,15 +57,18 @@ export class CreateNotaFiscalUseCase {
       },
       produtos,
       user_id,
+      cultura,
     )
 
-    for (let i = 0; i < produtos.length; i++) {
-      const element = produtos[i]
+    if (cultura === 'uva') {
+      for (let i = 0; i < produtos.length; i++) {
+        const element = produtos[i]
 
-      await this.productRepository.incrementProductQuantity(
-        element.quantidade,
-        element.productId,
-      )
+        await this.productRepository.incrementProductQuantity(
+          element.quantidade,
+          element.productId,
+        )
+      }
     }
 
     return { notaFiscal }

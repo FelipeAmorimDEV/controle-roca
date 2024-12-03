@@ -47,6 +47,7 @@ model NotaFiscal {
   dataPagamento    DateTime?
   codigo_de_barras String?
   codigo_da_nota   String?
+  cultura          String        @default("uva")
   statusPagamento  String        @default("pendente") // 'pendente' ou 'pago'
   fornecedor       Fornecedor    @relation(fields: [fornecedor_id], references: [id])
   fazenda          Fazenda       @relation(fields: [fazenda_id], references: [id])
@@ -64,8 +65,8 @@ model ProdutoNota {
   notaFiscalId String
   produto      Product    @relation(fields: [productId], references: [id])
   productId    String
-  entrada      Entrada    @relation(fields: [entradaId], references: [id], onDelete: Cascade)
-  entradaId    String
+  entrada      Entrada?   @relation(fields: [entradaId], references: [id], onDelete: Cascade)
+  entradaId    String?
 
   @@map("produtos_notas_fiscais")
 }
