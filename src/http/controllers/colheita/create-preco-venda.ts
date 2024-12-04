@@ -9,14 +9,14 @@ export async function createPrecoVenda(
 ) {
   const requestBodySchema = z.object({
     classificacao: z.string(),
+    variedade: z.string(),
     preco: z.coerce.number(),
     dataInicio: z.string(),
     dataFim: z.string(),
   })
 
-  const { classificacao, dataFim, dataInicio, preco } = requestBodySchema.parse(
-    request.body,
-  )
+  const { classificacao, dataFim, dataInicio, preco, variedade } =
+    requestBodySchema.parse(request.body)
 
   const precoVendaRepository = new PrismaPrecoVendaRepository()
   const createPrecoVenda = new CreatePrecoVendaUseCase(precoVendaRepository)
