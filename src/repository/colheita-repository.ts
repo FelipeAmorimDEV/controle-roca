@@ -4,6 +4,7 @@ export interface ColheitaResult {
   colheita: Colheita[]
   total: number
   totalColhido: number | null
+  lucroTotal: number
 }
 
 export interface IProducaoMensal {

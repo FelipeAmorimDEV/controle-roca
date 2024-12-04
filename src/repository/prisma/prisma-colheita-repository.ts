@@ -130,7 +130,16 @@ export class PrismaColheitaRepository implements ColheitaRepository {
           lte: new Date(endDateOfTheDay),
         },
       },
+      include: {
+        preco_venda: true,
+      },
     })
+
+    const lucroTotal = totalColheita.reduce(
+      (acc, prev) =>
+        acc + (Number(prev.preco_venda?.preco) ?? 0) * prev.qntCaixa,
+      0,
+    )
 
     const colheita = await prisma.colheita.findMany({
       where: {
@@ -170,6 +179,7 @@ export class PrismaColheitaRepository implements ColheitaRepository {
       colheita,
       total: totalColheita.length,
       totalColhido: totalColhido._sum.pesoTotal,
+      lucroTotal,
     }
   }
 
