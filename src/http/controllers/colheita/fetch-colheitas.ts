@@ -24,7 +24,7 @@ export async function fetchColheitas(
     prismaColheitaRepository,
   )
 
-  const { colheitas, total, totalColhido } =
+  const { colheitas, total, totalColhido, lucroTotal } =
     await fetchAllColheitasUseCase.execute({
       endDate,
       initialDate,
@@ -35,5 +35,5 @@ export async function fetchColheitas(
       variedade,
     })
 
-  return reply.status(200).send({ colheitas, total, totalColhido })
+  return reply.status(200).send({ colheitas, total, totalColhido, lucroTotal })
 }

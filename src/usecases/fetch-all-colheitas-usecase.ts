@@ -6,6 +6,7 @@ interface FetchAllColheitasUseCaseResponse {
   colheitas: Colheita[]
   total: number
   totalColhido: number | null
+  lucroTotal: number
 }
 
 interface FetchAllColheitasUseCaseParams {
@@ -30,7 +31,7 @@ export class FetchAllColheitasUseCase {
     fazenda_id,
     variedade,
   }: FetchAllColheitasUseCaseParams): Promise<FetchAllColheitasUseCaseResponse> {
-    const { colheita, total, totalColhido } =
+    const { colheita, total, totalColhido, lucroTotal } =
       await this.colheitaRepository.fetchAllColheita(
         initialDate,
         endDate,
@@ -41,6 +42,6 @@ export class FetchAllColheitasUseCase {
         variedade,
       )
 
-    return { colheitas: colheita, total, totalColhido }
+    return { colheitas: colheita, total, totalColhido, lucroTotal }
   }
 }
