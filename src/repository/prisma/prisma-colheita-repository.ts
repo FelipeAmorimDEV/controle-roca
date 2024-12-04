@@ -10,23 +10,17 @@ import { endOfMonth, set, startOfMonth } from 'date-fns'
 
 export class PrismaColheitaRepository implements ColheitaRepository {
   async atualizarValores(fazendaId: string): Promise<string> {
-    const colheitasAtualizadas = await prisma.$executeRaw`
-      UPDATE "colheitas"
-      SET "preco_venda_id" = (
-        SELECT pv."id"
-        FROM "precos_venda" pv
-        JOIN "caixas" c ON "colheitas"."caixa_id" = c."id"
-        WHERE "colheitas"."preco_venda_id" IS NULL
-          AND "colheitas"."fazenda_id" = ${fazendaId}
-          AND c."nome" = pv."classificacao"
-          AND "colheitas"."createdAt" BETWEEN pv."dataInicio" AND pv."dataFim"
-        LIMIT 1
-      )
-      WHERE "colheitas"."fazenda_id" = ${fazendaId}
-      AND "colheitas"."preco_venda_id" IS NULL;
+    const colheitas: Colheita[] = await prisma.$queryRaw`
+      SELECT c.* 
+      FROM "colheitas" c
+      JOIN "caixas" ca ON c."caixa_id" = ca."id"
+      LEFT JOIN "precos_venda" pv ON c."preco_venda_id" = pv."id"
+      WHERE c."fazenda_id" = ${fazendaId}
+        AND c."preco_venda_id" IS NULL
+        AND pv."variedade" = c."variedade"  -- Filtro da variedade associada ao preço de venda
+        AND c."createdAt" BETWEEN pv."dataInicio" AND pv."dataFim"
     `
-
-    return `${colheitasAtualizadas} colheitas atualizadas com sucesso`
+    return `Serão afetadas ${colheitas.length} colheitas.`
   }
 
   async getProducaoMensal(fazendaId: string): Promise<IProducaoMensal[]> {

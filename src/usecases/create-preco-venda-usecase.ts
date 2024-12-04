@@ -7,6 +7,7 @@ interface CreatePrecoVendaUseCaseParams {
   dataInicio: string
   dataFim: string
   fazenda_id: string
+  variedade: string
 }
 
 interface CreatePrecoVendaUseCaseResponse {
@@ -22,6 +23,7 @@ export class CreatePrecoVendaUseCase {
     dataInicio,
     preco,
     fazenda_id,
+    variedade,
   }: CreatePrecoVendaUseCaseParams): Promise<CreatePrecoVendaUseCaseResponse> {
     const precoVenda = await this.precoVendaRepository.create({
       classificacao,
@@ -29,6 +31,7 @@ export class CreatePrecoVendaUseCase {
       dataInicio,
       preco,
       fazenda_id,
+      variedade,
     })
 
     return { precoVenda }

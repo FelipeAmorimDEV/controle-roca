@@ -134,6 +134,7 @@ model Caixa {
 model PrecoVenda {
   id            String     @id @default(uuid())
   classificacao String
+  variedade     String     @default("vitoria")
   preco         Decimal
   dataInicio    DateTime
   dataFim       DateTime
