@@ -136,11 +136,13 @@ export class PrismaColheitaRepository implements ColheitaRepository {
       },
     })
 
-    const lucroTotal = totalColheita.reduce(
-      (acc, prev) =>
-        acc + (Number(prev.preco_venda?.preco) ?? 0) * prev.qntCaixa,
-      0,
-    )
+    const lucroTotal = totalColheita.reduce((acc, prev) => {
+      if (!prev.preco_venda_id) {
+        return acc
+      }
+
+      return acc + (Number(prev.preco_venda?.preco) ?? 0) * prev.qntCaixa
+    }, 0)
 
     console.log('Lucro total SQL', lucroTotal)
 
