@@ -35,5 +35,7 @@ export async function fetchColheitas(
       variedade,
     })
 
+  console.log('Lucro total CONTROLLER', lucroTotal)
+
   return reply.status(200).send({ colheitas, total, totalColhido, lucroTotal })
 }

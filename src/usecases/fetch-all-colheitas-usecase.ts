@@ -42,6 +42,8 @@ export class FetchAllColheitasUseCase {
         variedade,
       )
 
+    console.log('Lucro total USECASE', lucroTotal)
+
     return { colheitas: colheita, total, totalColhido, lucroTotal }
   }
 }

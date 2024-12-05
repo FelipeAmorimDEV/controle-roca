@@ -142,6 +142,8 @@ export class PrismaColheitaRepository implements ColheitaRepository {
       0,
     )
 
+    console.log('Lucro total SQL', lucroTotal)
+
     const colheita = await prisma.colheita.findMany({
       where: {
         fazenda_id: fazendaId,
