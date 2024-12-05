@@ -23,6 +23,7 @@ export async function createPrecoVenda(
 
   const { precoVenda } = await createPrecoVenda.execute({
     classificacao,
+    variedade,
     dataFim,
     dataInicio,
     preco,
