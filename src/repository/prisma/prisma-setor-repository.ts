@@ -120,24 +120,57 @@ export class PrismaSetorRepository implements SetorRepository {
       },
     })
 
-    const relatorio = setores.map((setor) => {
-      // Calcula o custo total de materiais somando os preços em cada saída associada ao setor
+    // Filtrar setores com tamanhoArea > 0 e identificar o setor GERAL
+    const setoresValidos = setores.filter((setor) => setor.tamanhoArea > 0)
+    const setorGeral = setores.find((setor) => setor.setorName === 'GERAL')
+
+    if (!setorGeral) {
+      throw new Error('Setor GERAL não encontrado!')
+    }
+
+    // Calcular o custo total do setor GERAL
+    const custoTotalGeralMaterial = setorGeral.Saida.reduce(
+      (acc, saida) => acc + (saida.priceSaida || 0),
+      0,
+    )
+    const custoTotalGeralMaoDeObra = setorGeral.Apontamento.reduce(
+      (acc, apontamento) => acc + (apontamento.custo_tarefa || 0),
+      0,
+    )
+    const custoTotalGeral = custoTotalGeralMaterial + custoTotalGeralMaoDeObra
+
+    // Soma do tamanho das áreas de setores válidos
+    const totalTamanhoArea = setoresValidos.reduce(
+      (acc, setor) => acc + setor.tamanhoArea,
+      0,
+    )
+
+    console.log('Tamanho total:', totalTamanhoArea)
+
+    // Criar o relatório
+    const relatorio = setoresValidos.map((setor) => {
+      // Cálculo de custo do setor
       const custoTotalMaterial = setor.Saida.reduce(
         (acc, saida) => acc + (saida.priceSaida || 0),
         0,
       )
-
-      // Calcula o custo total de mão de obra somando os custos de tarefa em cada apontamento associado ao setor
       const custoTotalMaoDeObra = setor.Apontamento.reduce(
         (acc, apontamento) => acc + (apontamento.custo_tarefa || 0),
         0,
       )
+      const custoTotal = custoTotalMaterial + custoTotalMaoDeObra
 
+      // Cálculo da proporção do custo GERAL para este setor
+      const proporcaoGeral = setor.tamanhoArea / totalTamanhoArea
+      const custoGeralProporcional = custoTotalGeral * proporcaoGeral
+
+      // Cálculo final do custo total
       return {
         setor: setor.setorName,
         custoTotalMaterial,
         custoTotalMaoDeObra,
-        custoTotal: custoTotalMaterial + custoTotalMaoDeObra,
+        custoGeralProporcional,
+        custoTotal: custoTotal + custoGeralProporcional,
       }
     })
 
