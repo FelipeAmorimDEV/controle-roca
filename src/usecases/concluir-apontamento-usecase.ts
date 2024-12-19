@@ -65,14 +65,22 @@ export class ConcluirApontamentoUseCase {
 
     if (tipoApontamento === 'horas') {
       // Se o apontamento for por horas, calcula proporcionalmente
-      custoTarefa = (duracaoHoras / jornadaTrabalho) * valorDiaria
+      let duracaoTrabalho = duracaoHoras
+      if (duracaoHoras > 5) {
+        duracaoTrabalho -= 1
+      }
+      custoTarefa = (duracaoTrabalho / jornadaTrabalho) * valorDiaria
     } else if (tipoApontamento === 'meta') {
       // Se for por meta
       if (hasApontamentoOnSameDate) {
         // Segunda atividade no mesmo dia: calcular proporcional ao restante das horas
-        const duracaoAcumulada = hasApontamentoOnSameDate.duracao_horas ?? 0
-        const horasRestantes = Math.max(jornadaTrabalho - duracaoAcumulada, 0)
-        custoTarefa = (horasRestantes / jornadaTrabalho) * valorDiaria
+        if (hasApontamentoOnSameDate.tipo_apontamento === 'horas') {
+          const duracaoAcumulada = hasApontamentoOnSameDate.duracao_horas ?? 0
+          const horasRestantes = Math.max(jornadaTrabalho - duracaoAcumulada, 0)
+          custoTarefa = (horasRestantes / jornadaTrabalho) * valorDiaria
+        } else {
+          custoTarefa = 0
+        }
       } else {
         // Primeira atividade no dia: ganha a diária completa
         custoTarefa = valorDiaria
