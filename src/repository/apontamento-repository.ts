@@ -11,6 +11,7 @@ export interface ApontamentoRepository {
     qtdAtividade: number,
     custoTarefa: number,
     duracao: number,
+    valorBonus: number,
   ): Promise<Apontamento>
   deleteApontamento(
     apontamentoId: string,

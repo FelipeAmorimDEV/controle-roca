@@ -76,6 +76,7 @@ export class PrismaSetorRepository implements SetorRepository {
         meta: apontamento.meta,
         qtd_tarefa: apontamento.qtd_tarefa,
         custo_tarefa: apontamento.custo_tarefa,
+        valor_extra: apontamento.valor_bonus,
         duracao: apontamento.data_fim
           ? apontamento.data_fim.getTime() - apontamento.data_inicio.getTime()
           : null,
@@ -222,6 +223,7 @@ export class PrismaSetorRepository implements SetorRepository {
         meta: apontamento.meta,
         qtd_tarefa: apontamento.qtd_tarefa,
         custo_tarefa: apontamento.custo_tarefa,
+        valor_extra: apontamento.valor_bonus,
         duracao: apontamento.data_fim
           ? apontamento.data_fim.getTime() - apontamento.data_inicio.getTime()
           : null,
