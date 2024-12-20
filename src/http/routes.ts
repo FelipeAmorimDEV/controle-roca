@@ -64,6 +64,7 @@ import { createFolhaPagamento } from './controllers/folha-pagamento/create-folha
 import { createPrecoVenda } from './controllers/colheita/create-preco-venda'
 import { atualizaPrecoColheita } from './controllers/colheita/atualiza-preco-colheita'
 import { deleteFertirrigacao } from './controllers/fertirrigacao/delete-fertirrigacao'
+import { fetchValorBonus } from './controllers/funcionarios/fetch-valor-bonus-by-colaborador'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -143,6 +144,7 @@ export async function estoqueRoutes(app: FastifyInstance) {
     createFuncionario,
   )
   app.get('/funcionarios', { onRequest: [verifyJWT] }, fetchAllFuncionarios)
+  app.get('/funcionarios/bonus', { onRequest: [verifyJWT] }, fetchValorBonus)
   app.get(
     '/funcionarios/qrcodes',
     { onRequest: [verifyJWT] },

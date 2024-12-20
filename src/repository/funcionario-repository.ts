@@ -1,3 +1,4 @@
+import { ListaBonus } from '@/usecases/fetch-valor-bonus-colaborador'
 import { Apontamento, Funcionario, Prisma } from '@prisma/client'
 
 export interface CaixasEmbaladas {
@@ -17,6 +18,11 @@ export interface FuncionarioRepository {
     fazendaId: string,
   ): Promise<Funcionario | null>
   fetchAllFuncionarios(fazendaId: string): Promise<FuncionarioComApontamentos[]>
+  fetchAllValorBonusByFuncionario(
+    fazendaId: string,
+    startDate: string,
+    endDate: string,
+  ): Promise<ListaBonus[]>
   fetchAllFuncionariosWithQrcodes(
     initialDate: string,
     endDate: string,
