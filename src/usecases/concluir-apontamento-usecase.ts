@@ -63,22 +63,30 @@ export class ConcluirApontamentoUseCase {
         inicioAtividade,
       )
 
+    console.log(hasApontamentoOnSameDate)
     if (tipoApontamento === 'horas') {
-      // Se o apontamento for por horas, calcula proporcionalmente
+      console.log('tipo apontamento horas')
       let duracaoTrabalho = duracaoHoras
       if (duracaoHoras > 5) {
         duracaoTrabalho -= 1
       }
       custoTarefa = (duracaoTrabalho / jornadaTrabalho) * valorDiaria
     } else if (tipoApontamento === 'meta') {
-      // Se for por meta
-      if (hasApontamentoOnSameDate) {
+      console.log('tipo apontamento meta')
+
+      if (hasApontamentoOnSameDate?.data_fim) {
+        console.log('tem apontamento')
+
         // Segunda atividade no mesmo dia: calcular proporcional ao restante das horas
         if (hasApontamentoOnSameDate.tipo_apontamento === 'horas') {
+          console.log('tem apontamento - horas')
+
           const duracaoAcumulada = hasApontamentoOnSameDate.duracao_horas ?? 0
           const horasRestantes = Math.max(jornadaTrabalho - duracaoAcumulada, 0)
           custoTarefa = (horasRestantes / jornadaTrabalho) * valorDiaria
         } else {
+          console.log('tem apontamento - meta')
+
           custoTarefa = 0
         }
       } else {
