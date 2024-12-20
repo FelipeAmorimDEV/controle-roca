@@ -4,8 +4,48 @@ import {
   FuncionarioRepository,
 } from '../funcionario-repository'
 import { prisma } from '@/prisma'
+import dayjs from 'dayjs'
 
 export class PrismaFuncionarioRepository implements FuncionarioRepository {
+  async fetchAllValorBonusByFuncionario(
+    fazendaId: string,
+    startDate: string,
+    endDate: string,
+  ) {
+    const startOfDay = dayjs(startDate).startOf('date').toDate()
+    const endOfDay = dayjs(endDate).endOf('date').toDate()
+
+    const funcionarios = await prisma.funcionario.findMany({
+      where: {
+        fazenda_id: fazendaId,
+      },
+      include: {
+        Apontamento: {
+          where: {
+            data_inicio: {
+              gte: startOfDay,
+              lte: endOfDay,
+            },
+          },
+          select: {
+            valor_bonus: true,
+          },
+        },
+      },
+    })
+
+    const listaBonus = funcionarios.map((funcionario) => {
+      const valorExtra = funcionario.Apontamento.reduce(
+        (acc, apontamento) => (acc += apontamento.valor_bonus),
+        0,
+      )
+
+      return { name: funcionario.nome, valor_extra: valorExtra }
+    })
+
+    return listaBonus
+  }
+
   async fetchAllFuncionariosWithQrcodes(
     initialDate: string,
     endDate: string,
