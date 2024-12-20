@@ -39,11 +39,14 @@ export class PrismaFuncionarioRepository implements FuncionarioRepository {
         (acc, apontamento) => (acc += apontamento.valor_bonus),
         0,
       )
-
       return { name: funcionario.nome, valor_extra: valorExtra }
     })
 
-    return listaBonus
+    const listaBonusFiltrada = listaBonus.filter(
+      (lista) => lista.valor_extra > 0,
+    )
+
+    return listaBonusFiltrada
   }
 
   async fetchAllFuncionariosWithQrcodes(
