@@ -52,6 +52,7 @@ export class PrismaApontamentoRepository implements ApontamentoRepository {
     qtdAtividade: number,
     custoTarefa: number,
     duracao: number,
+    valorBonus: number,
   ): Promise<Apontamento> {
     const apontamento = await prisma.apontamento.update({
       where: {
@@ -64,6 +65,7 @@ export class PrismaApontamentoRepository implements ApontamentoRepository {
         qtd_tarefa: qtdAtividade,
         custo_tarefa: custoTarefa,
         duracao_horas: duracao,
+        valor_bonus: valorBonus,
       },
     })
 

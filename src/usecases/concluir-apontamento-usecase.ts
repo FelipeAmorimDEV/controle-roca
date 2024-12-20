@@ -101,6 +101,8 @@ export class ConcluirApontamentoUseCase {
       custoTarefa += excedente * valorBonus
     }
 
+    const custoExtra = excedente > 0 ? excedente : 0
+
     await this.apontamentoRepository.concluirApontamento(
       apontamentoId,
       fazenda_id,
@@ -108,6 +110,7 @@ export class ConcluirApontamentoUseCase {
       qtdAtividade,
       custoTarefa,
       duracaoHoras,
+      custoExtra,
     )
   }
 }
