@@ -12,7 +12,7 @@ export async function fetchValorBonus(
     endDate: z.string().date(),
   })
 
-  const { startDate, endDate } = requestBodySchema.parse(request.body)
+  const { startDate, endDate } = requestBodySchema.parse(request.query)
 
   const prismaFuncionarioRepository = new PrismaFuncionarioRepository()
   const fetchAllFuncionariosUseCase = new FetchValorBonusColaborador(
