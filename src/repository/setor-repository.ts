@@ -1,5 +1,8 @@
 import { Prisma, Setor } from '@prisma/client'
-import { ApontamentosI } from './prisma/prisma-setor-repository'
+import {
+  ApontamentosI,
+  FetchApontamentos,
+} from './prisma/prisma-setor-repository'
 
 export interface RelatorioCentroCusto {
   setor: string
@@ -18,7 +21,7 @@ export interface SetorRepository {
     perPage: number,
     setorId?: string,
     atividadeId?: string,
-  ): Promise<ApontamentosI[]>
+  ): Promise<FetchApontamentos>
   fetchAllApontamentosFiscal(fazendaId: string): Promise<ApontamentosI[]>
   getCentroCusto(
     fazendaId: string,

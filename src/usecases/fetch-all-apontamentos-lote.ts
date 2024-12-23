@@ -4,6 +4,7 @@ import { SetorRepository } from '@/repository/setor-repository'
 
 interface FetchAllApontamentoLoteUseCaseResponse {
   apontamentos: ApontamentosI[]
+  total: number
 }
 
 interface FetchAllApontamentoLoteUseCaseParams {
@@ -28,17 +29,18 @@ export class FetchAllApontamentoLoteUseCase {
     perPage,
     atividadeId,
   }: FetchAllApontamentoLoteUseCaseParams): Promise<FetchAllApontamentoLoteUseCaseResponse> {
-    const apontamentos = await this.setorRepository.fetchAllApontamentos(
-      fazenda_id,
-      initialDate,
-      endDate,
-      page,
-      perPage,
-      setorId,
-      atividadeId,
-    )
+    const { apontamentos, total } =
+      await this.setorRepository.fetchAllApontamentos(
+        fazenda_id,
+        initialDate,
+        endDate,
+        page,
+        perPage,
+        setorId,
+        atividadeId,
+      )
 
-    return { apontamentos }
+    return { apontamentos, total }
   }
 }
 
