@@ -24,7 +24,7 @@ export async function fetchApontamentosSetor(
     prismaSetorRepository,
   )
 
-  const { apontamentos } = await fetchApontamentos.execute({
+  const { apontamentos, total } = await fetchApontamentos.execute({
     fazenda_id: request.user.fazenda_id,
     endDate,
     initialDate,
@@ -34,5 +34,5 @@ export async function fetchApontamentosSetor(
     setorId,
   })
 
-  return reply.status(200).send(apontamentos)
+  return reply.status(200).send({ apontamentos, total })
 }
