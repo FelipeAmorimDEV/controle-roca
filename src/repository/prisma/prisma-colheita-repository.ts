@@ -24,7 +24,6 @@ export class PrismaColheitaRepository implements ColheitaRepository {
         LIMIT 1
       )
       WHERE "colheitas"."fazenda_id" = ${fazendaId}
-        AND "colheitas"."preco_venda_id" IS NULL;
     `
 
     return `${colheitasAtualizadas} colheitas atualizadas com sucesso.`

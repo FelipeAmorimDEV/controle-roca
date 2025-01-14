@@ -65,6 +65,8 @@ import { createPrecoVenda } from './controllers/colheita/create-preco-venda'
 import { atualizaPrecoColheita } from './controllers/colheita/atualiza-preco-colheita'
 import { deleteFertirrigacao } from './controllers/fertirrigacao/delete-fertirrigacao'
 import { fetchValorBonus } from './controllers/funcionarios/fetch-valor-bonus-by-colaborador'
+import { fetchPrecoVenda } from './controllers/colheita/fetch-preco-venda'
+import { deletePrecoVenda } from './controllers/colheita/delete-preco-venda'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -191,7 +193,10 @@ export async function estoqueRoutes(app: FastifyInstance) {
     createFolhaPagamento,
   )
 
+
   app.post('/precos-venda', { onRequest: [verifyJWT] }, createPrecoVenda)
+  app.get('/precos-venda', { onRequest: [verifyJWT] }, fetchPrecoVenda)
+  app.delete('/precos-venda/:precoVendaId', { onRequest: [verifyJWT] }, deletePrecoVenda)
   app.put(
     '/atualizar-colheitas',
     { onRequest: [verifyJWT] },
