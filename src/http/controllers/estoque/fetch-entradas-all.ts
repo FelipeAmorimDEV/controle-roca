@@ -10,7 +10,7 @@ export async function fetchEntradasAll(
   const requestQuerySchema = z.object({
     initialDate: z.string(),
     endDate: z.string(),
-    productName: z.string(),
+    productName: z.string().optional(),
     page: z.coerce.number(),
     perPage: z.coerce.number(),
   })
