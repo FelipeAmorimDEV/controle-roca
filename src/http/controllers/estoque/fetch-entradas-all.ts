@@ -10,12 +10,12 @@ export async function fetchEntradasAll(
   const requestQuerySchema = z.object({
     initialDate: z.string(),
     endDate: z.string(),
-    productId: z.string().optional(),
+    productName: z.string(),
     page: z.coerce.number(),
     perPage: z.coerce.number(),
   })
 
-  const { productId, initialDate, endDate, page, perPage } =
+  const { productName, initialDate, endDate, page, perPage } =
     requestQuerySchema.parse(request.query)
 
   const prismaStockRepository = new PrismaStockRepository()
@@ -24,7 +24,7 @@ export async function fetchEntradasAll(
   const { entradas, total, entradasTotal } = await fetchAllEntradas.execute({
     initialDate,
     endDate,
-    productId,
+    productName,
     page,
     perPage,
     fazenda_id: request.user.fazenda_id,
