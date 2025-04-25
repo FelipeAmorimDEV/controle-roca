@@ -9,7 +9,7 @@ interface FetchTodasEntradasUseCaseResponse {
 }
 
 interface FetchTodasEntradasUseCaseParams {
-  productId?: string
+  productName?: string
   initialDate: string
   endDate: string
   page: number
@@ -21,7 +21,7 @@ export class FetchTodasEntradasUseCase {
   constructor(private stockRepository: StockRepository) {}
 
   async execute({
-    productId,
+    productName,
     initialDate,
     endDate,
     page,
@@ -35,7 +35,7 @@ export class FetchTodasEntradasUseCase {
         page,
         perPage,
         fazenda_id,
-        productId,
+        productName,
       )
 
     return { entradas, total, entradasTotal }
