@@ -173,7 +173,7 @@ export class PrismaStockRepository implements StockRepository {
     page: number,
     perPage: number,
     fazendaId: string,
-    productId?: string,
+    productName: string,
   ): Promise<EntradasResult> {
     const endDateOfTheDay = new Date(endDate)
     endDateOfTheDay.setUTCHours(23, 59, 59, 999)
@@ -187,7 +187,7 @@ export class PrismaStockRepository implements StockRepository {
         },
         Product: {
           name: {
-            contains: productId,
+            contains: productName,
           },
         },
       },
@@ -196,7 +196,11 @@ export class PrismaStockRepository implements StockRepository {
     const totalValue = await prisma.entrada.aggregate({
       where: {
         fazenda_id: fazendaId,
-        productId,
+        Product: {
+          name: {
+            contains: productName,
+          },
+        },
         createdAt: {
           gte: new Date(initialDate),
           lte: new Date(endDateOfTheDay),
@@ -210,7 +214,11 @@ export class PrismaStockRepository implements StockRepository {
     const entradas = await prisma.entrada.findMany({
       where: {
         fazenda_id: fazendaId,
-        productId,
+        Product: {
+          name: {
+            contains: productName,
+          },
+        },
         createdAt: {
           lte: new Date(endDateOfTheDay),
           gte: new Date(initialDate),
