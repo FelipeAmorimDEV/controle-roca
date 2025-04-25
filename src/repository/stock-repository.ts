@@ -51,7 +51,7 @@ export interface StockRepository {
     page: number,
     perPage: number,
     fazendaId: string,
-    productName: string,
+    productName?: string,
   ): Promise<EntradasResult>
   fetchSaidas(
     initialDate: string,

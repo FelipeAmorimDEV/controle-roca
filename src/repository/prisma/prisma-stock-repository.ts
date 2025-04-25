@@ -173,7 +173,7 @@ export class PrismaStockRepository implements StockRepository {
     page: number,
     perPage: number,
     fazendaId: string,
-    productName: string,
+    productName?: string,
   ): Promise<EntradasResult> {
     const endDateOfTheDay = new Date(endDate)
     endDateOfTheDay.setUTCHours(23, 59, 59, 999)
