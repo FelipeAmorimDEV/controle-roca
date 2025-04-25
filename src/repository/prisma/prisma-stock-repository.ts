@@ -187,7 +187,7 @@ export class PrismaStockRepository implements StockRepository {
         },
         Product: {
           name: {
-            contains: productName,
+            contains: productName?.toUpperCase(),
           },
         },
       },
@@ -198,7 +198,7 @@ export class PrismaStockRepository implements StockRepository {
         fazenda_id: fazendaId,
         Product: {
           name: {
-            contains: productName,
+            contains: productName?.toUpperCase(),
           },
         },
         createdAt: {
@@ -216,7 +216,7 @@ export class PrismaStockRepository implements StockRepository {
         fazenda_id: fazendaId,
         Product: {
           name: {
-            contains: productName,
+            contains: productName?.toUpperCase(),
           },
         },
         createdAt: {
