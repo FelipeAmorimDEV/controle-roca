@@ -181,10 +181,14 @@ export class PrismaStockRepository implements StockRepository {
     const totalEntradas = await prisma.entrada.findMany({
       where: {
         fazenda_id: fazendaId,
-        productId,
         createdAt: {
           lte: new Date(endDateOfTheDay),
           gte: new Date(initialDate),
+        },
+        Product: {
+          name: {
+            contains: productId,
+          },
         },
       },
     })
