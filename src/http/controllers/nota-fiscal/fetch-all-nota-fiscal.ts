@@ -12,7 +12,7 @@ export async function fetchNotasFiscais(
     perPage: z.coerce.number(),
     initialDate: z.string(),
     endDate: z.string(),
-    status: z.enum(['pago', 'pendente']).optional(),
+    status: z.enum(['pago', 'pendente', 'vencidas']).optional(),
     fornecedorId: z.string().uuid().optional(),
   })
 

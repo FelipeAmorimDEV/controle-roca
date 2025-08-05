@@ -77,12 +77,127 @@ export class PrismaNotaFiscalRepository implements NotaFiscalRepository {
   ) {
     const endDateOfTheDay = new Date(endDate)
     endDateOfTheDay.setUTCHours(23, 59, 59, 999)
+    let totalNotasFiscais
+    let notasFiscais
 
-    const totalNotasFiscais = await prisma.notaFiscal.findMany({
+    if (status === 'vencidas') {
+      totalNotasFiscais = await prisma.notaFiscal.findMany({
+        where: {
+          fornecedor_id: fornecedorId,
+          fazenda_id: fazendaId,
+          statusPagamento: 'pendente',
+          dataPagamento: {
+            lt: new Date()
+          },
+          dataNota: {
+            gte: new Date(initialDate),
+            lte: new Date(endDateOfTheDay),
+          },
+        },
+      })
+
+      notasFiscais = await prisma.notaFiscal.findMany({
+        where: {
+          fornecedor_id: fornecedorId,
+          statusPagamento: 'pendente',
+          fazenda_id: fazendaId,
+          dataPagamento: {
+            lt: new Date()
+          },
+          dataNota: {
+            gte: new Date(initialDate),
+            lte: new Date(endDateOfTheDay),
+          },
+        },
+        include: {
+          fornecedor: {
+            select: {
+              name: true,
+            },
+          },
+          produtos: {
+            include: {
+              produto: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+        orderBy: {
+          dataPagamento: 'asc',
+        },
+        skip: (page - 1) * perPage,
+        take: perPage,
+      })
+      // Mapeia para adicionar um status calculado
+      const notasComStatus = notasFiscais.map(nota => {
+        const vencida = nota.statusPagamento === 'pendente' && nota.dataPagamento! < new Date()
+        return { ...nota, vencida }
+      })
+
+      return { notasFiscais: notasComStatus, total: totalNotasFiscais.length }
+    }
+
+    if (status === 'pago') {
+      totalNotasFiscais = await prisma.notaFiscal.findMany({
+        where: {
+          fornecedor_id: fornecedorId,
+          fazenda_id: fazendaId,
+          statusPagamento: 'pago',
+          dataNota: {
+            gte: new Date(initialDate),
+            lte: new Date(endDateOfTheDay),
+          },
+        },
+      })
+
+      notasFiscais = await prisma.notaFiscal.findMany({
+        where: {
+          fornecedor_id: fornecedorId,
+          statusPagamento: 'pago',
+          fazenda_id: fazendaId,
+          dataNota: {
+            gte: new Date(initialDate),
+            lte: new Date(endDateOfTheDay),
+          },
+        },
+        include: {
+          fornecedor: {
+            select: {
+              name: true,
+            },
+          },
+          produtos: {
+            include: {
+              produto: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+        orderBy: {
+          dataPagamento: 'asc',
+        },
+        skip: (page - 1) * perPage,
+        take: perPage,
+      })
+  
+
+      return { notasFiscais , total: totalNotasFiscais.length }
+    }
+
+    totalNotasFiscais = await prisma.notaFiscal.findMany({
       where: {
         fornecedor_id: fornecedorId,
         statusPagamento: status,
         fazenda_id: fazendaId,
+        dataPagamento: {
+          gte: new Date()
+        },
         dataNota: {
           gte: new Date(initialDate),
           lte: new Date(endDateOfTheDay),
@@ -90,11 +205,14 @@ export class PrismaNotaFiscalRepository implements NotaFiscalRepository {
       },
     })
 
-    const notasFiscais = await prisma.notaFiscal.findMany({
+    notasFiscais = await prisma.notaFiscal.findMany({
       where: {
         fornecedor_id: fornecedorId,
         statusPagamento: status,
         fazenda_id: fazendaId,
+        dataPagamento: {
+          gte: new Date()
+        },
         dataNota: {
           gte: new Date(initialDate),
           lte: new Date(endDateOfTheDay),
