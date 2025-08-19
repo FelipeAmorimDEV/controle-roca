@@ -24,6 +24,7 @@ export async function getDashboardData(
     totalSaida,
     colheitaMes,
     estoqueBaixo,
+    tipoCaixa
   } = await getDashBoardData.execute({
     fazenda_id: request.user.fazenda_id,
   })
@@ -35,5 +36,6 @@ export async function getDashboardData(
     totalSaida,
     colheitaMes,
     estoqueBaixo,
+    tipoCaixa
   })
 }

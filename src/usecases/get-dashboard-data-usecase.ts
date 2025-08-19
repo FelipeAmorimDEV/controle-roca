@@ -2,6 +2,7 @@ import {
   ColheitaRepository,
   IProducaoMensal,
 } from '@/repository/colheita-repository'
+import { ITipoCaixaData } from '@/repository/prisma/prisma-colheita-repository'
 import { ProductsRepository } from '@/repository/products-repository'
 import { StockRepository } from '@/repository/stock-repository'
 import { Product } from '@prisma/client'
@@ -13,6 +14,7 @@ interface GetDashboardDataUseCaseResponse {
   totalEmStock: number
   colheitaMes: IProducaoMensal[]
   estoqueBaixo: Product[]
+  tipoCaixa: ITipoCaixaData[]
 }
 
 interface GetDashboardDataUseCaseParams {
@@ -24,7 +26,7 @@ export class GetDashboardDataUseCase {
     private productRepository: ProductsRepository,
     private stockRepository: StockRepository,
     private colheitaRepository: ColheitaRepository,
-  ) {}
+  ) { }
 
   async execute({
     fazenda_id,
@@ -40,6 +42,8 @@ export class GetDashboardDataUseCase {
     const estoqueBaixo =
       await this.productRepository.getProductLowStock(fazenda_id)
 
+    const tipoCaixa = await this.colheitaRepository.getTiposCaixaHistorico(fazenda_id)
+
     return {
       totalProduto,
       totalEntrada,
@@ -47,6 +51,7 @@ export class GetDashboardDataUseCase {
       totalEmStock,
       colheitaMes,
       estoqueBaixo,
+      tipoCaixa
     }
   }
 }

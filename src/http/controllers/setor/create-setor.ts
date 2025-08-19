@@ -10,7 +10,7 @@ export async function createSetor(
   const requestBodySchema = z.object({
     setorName: z.string(),
     variedade: z.coerce.number(),
-    tamanhoArea: z.number(),
+    tamanhoArea: z.coerce.number(),
     filas: z.string(),
   })
 

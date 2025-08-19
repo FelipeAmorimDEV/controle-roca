@@ -8,6 +8,14 @@ import {
 import { prisma } from '@/prisma'
 import { endOfMonth, set, startOfMonth } from 'date-fns'
 
+export interface ITipoCaixaData {
+  nome: string;
+  peso: number;
+  percentual: number;
+  cor?: string;
+}
+
+
 export class PrismaColheitaRepository implements ColheitaRepository {
   async atualizarValores(fazendaId: string): Promise<string> {
     const colheitasAtualizadas = await prisma.$executeRaw`
@@ -76,7 +84,68 @@ export class PrismaColheitaRepository implements ColheitaRepository {
 
     return resultados
   }
+// Interface para o retorno dos dados
 
+
+async getTiposCaixaHistorico(fazendaId: string): Promise<ITipoCaixaData[]> {
+  try {
+    // Buscar todos os dados agrupados por tipo de caixa
+    const resultados = await prisma.colheita.groupBy({
+      by: ['caixa_id'],
+      where: {
+        fazenda_id: fazendaId,
+      },
+      _sum: {
+        pesoTotal: true,
+      },
+    });
+
+    // Buscar os nomes das caixas
+    const caixasInfo = await prisma.caixa.findMany({
+      where: {
+        fazenda_id: fazendaId,
+        id: {
+          in: resultados.map(r => r.caixa_id)
+        }
+      },
+      select: {
+        id: true,
+        nome: true,
+      }
+    });
+
+    // Criar mapa para facilitar a busca
+    const caixasMap = new Map();
+    caixasInfo.forEach(caixa => {
+      caixasMap.set(caixa.id, caixa.nome);
+    });
+
+    // Calcular total geral para percentuais
+    const totalGeral = resultados.reduce(
+      (acc, curr) => acc + (curr._sum.pesoTotal || 0), 
+      0
+    );
+
+    // Montar array final com percentuais
+    const dadosFormatados: ITipoCaixaData[] = resultados.map(resultado => {
+      const peso = resultado._sum.pesoTotal || 0;
+      const percentual = totalGeral > 0 ? (peso / totalGeral) * 100 : 0;
+      
+      return {
+        nome: caixasMap.get(resultado.caixa_id) || `Caixa ${resultado.caixa_id}`,
+        peso: peso,
+        percentual: Math.round(percentual * 100) / 100, // 2 casas decimais
+      };
+    });
+
+    // Ordenar por peso (maior para menor)
+    return dadosFormatados.sort((a, b) => b.peso - a.peso);
+
+  } catch (error) {
+    console.error('Erro ao buscar dados dos tipos de caixa:', error);
+    throw new Error('Falha ao carregar dados dos tipos de caixa');
+  }
+}
   async deleteColheita(
     colheitaId: string,
     fazendaId: string,

@@ -1,0 +1,26 @@
+@baseUrl = http://localhost:3333
+
+
+
+###
+
+# @name CreateAccount
+POST {{baseUrl}}/users/register
+Content-Type: application/json
+
+{
+    "user": "fazendanicole@teste",
+    "password": "123123",
+    "fazendaId": "cae88466-e32c-4e87-8c66-9add80347921"
+}
+
+
+###
+
+# @name CreateFarm
+POST {{baseUrl}}/fazenda/register
+Content-Type: application/json
+
+{
+    "nome": "Fazenda Nicole"
+}
