@@ -14,9 +14,38 @@ export class PrismaFazendaRepository implements FazendaRepository {
   }
 
   async createFazenda(data: Prisma.FazendaCreateInput): Promise<Fazenda> {
-    const fazenda = await prisma.fazenda.create({
-      data,
-    })
+   const fazenda = prisma.fazenda.create({
+    data: {
+      nome: data.nome,
+      Tipo: {
+        createMany: {
+          data: [
+            { name: "Sementes" },
+            { name: "Mudas" },
+            { name: "Fertilizantes Granulados" },
+            { name: "Fertilizantes Líquidos" },
+            { name: "Adubos Orgânicos" },
+            { name: "Adubos Foliares" },
+            { name: "Corretivos de Solo" },
+            { name: "Herbicidas" },
+            { name: "Fungicidas" },
+            { name: "Inseticidas" },
+            { name: "Acaricidas" },
+            { name: "Nematicidas" },
+            { name: "Inoculantes" },
+            { name: "Biofertilizantes" },
+            { name: "Adjuvantes" },
+            { name: "Substratos" },
+            { name: "Condicionadores de Solo" },
+            { name: "Irrigação/Hidroponia" },
+            { name: "Produtos Veterinários" },
+            { name: "Outros Insumos Agrícolas" },
+          ],
+        },
+      },
+    },
+    include: { Tipo: true }, // opcional, retorna junto os tipos criados
+  });
 
     return fazenda
   }

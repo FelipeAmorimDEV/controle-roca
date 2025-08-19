@@ -127,6 +127,9 @@ export class PrismaProductRepository implements ProductsRepository {
         where: {
           fazenda_id: fazendaId,
         },
+        include: {
+          Tipo: true
+        },
         orderBy: {
           name: 'asc',
         },
