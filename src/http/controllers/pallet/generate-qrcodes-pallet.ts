@@ -8,6 +8,14 @@ export async function generateQrcodesPallet(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
+  const requestBodySchema = z.object({
+    quantidade: z.coerce.number(),
+    variedadeId: z.coerce.number(),
+    peso: z.coerce.number(),
+    caixaId: z.coerce.number(),
+    qtdCaixas: z.coerce.number(),
+    setorId: z.string().uuid(),
+  })
 
   const { quantidade, caixaId, peso, variedadeId, qtdCaixas, setorId } =
     requestBodySchema.parse(request.body)
