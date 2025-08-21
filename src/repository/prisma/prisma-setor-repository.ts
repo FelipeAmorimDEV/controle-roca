@@ -53,6 +53,17 @@ export interface FetchApontamentos {
 }
 
 export class PrismaSetorRepository implements SetorRepository {
+  async registrarNovaPoda(setorId: string, dataPoda: Date = new Date()): Promise<void> {
+    await prisma.setor.update({
+      where: {
+        id: setorId
+      },
+      data: {
+        dataPoda
+      }
+    })
+  }
+
   async fetchAllApontamentosFiscal(fazendaId: string) {
     const apontamentos = await prisma.apontamento.findMany({
       where: {

@@ -67,6 +67,7 @@ import { deleteFertirrigacao } from './controllers/fertirrigacao/delete-fertirri
 import { fetchValorBonus } from './controllers/funcionarios/fetch-valor-bonus-by-colaborador'
 import { fetchPrecoVenda } from './controllers/colheita/fetch-preco-venda'
 import { deletePrecoVenda } from './controllers/colheita/delete-preco-venda'
+import { atualizarDataPoda } from './controllers/setor/atualizar-data-poda'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -79,6 +80,7 @@ export async function estoqueRoutes(app: FastifyInstance) {
 
   // Setor
   app.post('/setor', { onRequest: [verifyJWT] }, createSetor)
+  app.put('/setor/atualizar-data-poda', {onRequest:[verifyJWT]}, atualizarDataPoda)
   app.get('/setor', { onRequest: [verifyJWT] }, fetchSetores)
   app.get(
     '/setor/apontamentos',

@@ -11,6 +11,7 @@ export interface RelatorioCentroCusto {
   custoTotal: number
 }
 export interface SetorRepository {
+  registrarNovaPoda(setorId: string, dataPoda: Date ): Promise<void>
   createSetor(data: Prisma.SetorUncheckedCreateInput): Promise<Setor>
   fetchAllSetor(fazendaId: string): Promise<Setor[]>
   fetchAllApontamentos(
