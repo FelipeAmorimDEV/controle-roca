@@ -329,6 +329,7 @@ model Funcionario {
   nome             String           @unique
   cargo            String           @default("teste")
   tipo_contratacao String           @default("fichado")
+  ativo            Boolean          @default(true)
   Qrcodes          Qrcodes[]
   Apontamento      Apontamento[]
   fazenda          Fazenda          @relation(fields: [fazenda_id], references: [id])

@@ -68,6 +68,8 @@ import { fetchValorBonus } from './controllers/funcionarios/fetch-valor-bonus-by
 import { fetchPrecoVenda } from './controllers/colheita/fetch-preco-venda'
 import { deletePrecoVenda } from './controllers/colheita/delete-preco-venda'
 import { atualizarDataPoda } from './controllers/setor/atualizar-data-poda'
+import { updateFuncionario } from './controllers/funcionarios/update-funcionario'
+import { desativarFuncionario } from './controllers/funcionarios/desativar-funcionario'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -148,6 +150,8 @@ export async function estoqueRoutes(app: FastifyInstance) {
     createFuncionario,
   )
   app.get('/funcionarios', { onRequest: [verifyJWT] }, fetchAllFuncionarios)
+  app.put('/funcionarios', {onRequest: [verifyJWT]}, updateFuncionario)
+  app.patch('/funcionarios', {onRequest: [verifyJWT]}, desativarFuncionario)
   app.get('/funcionarios/bonus', { onRequest: [verifyJWT] }, fetchValorBonus)
   app.get(
     '/funcionarios/qrcodes',

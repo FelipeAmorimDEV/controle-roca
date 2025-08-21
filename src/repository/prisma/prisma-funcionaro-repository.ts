@@ -7,6 +7,30 @@ import { prisma } from '@/prisma'
 import dayjs from 'dayjs'
 
 export class PrismaFuncionarioRepository implements FuncionarioRepository {
+  
+  async desativarFuncionario(funcionarioId: string): Promise<void> {
+    await prisma.funcionario.update({
+      where: {
+        id: funcionarioId
+      },
+      data: {
+        ativo: false
+      }
+    })
+  }
+
+  async updateFuncionario(funcionarioId: string, cargo: string, tipoContratacao: string): Promise<void> {
+    await prisma.funcionario.update({
+      where: {
+        id: funcionarioId
+      },
+      data: {
+        cargo,
+        tipo_contratacao: tipoContratacao
+      }
+    })
+  }
+  
   async fetchAllValorBonusByFuncionario(
     fazendaId: string,
     startDate: string,
@@ -104,6 +128,7 @@ export class PrismaFuncionarioRepository implements FuncionarioRepository {
     const funcionarios = await prisma.funcionario.findMany({
       where: {
         fazenda_id: fazendaId,
+        ativo: true
       },
       include: {
         Apontamento: {

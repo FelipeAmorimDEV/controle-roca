@@ -10,6 +10,8 @@ export interface FuncionarioComApontamentos extends Funcionario {
 }
 
 export interface FuncionarioRepository {
+  desativarFuncionario(funcionarioId: string): Promise<void>
+  updateFuncionario(funcionarioId: string, cargo: string, tipoContratacao: string): Promise<void>
   createFuncionario(
     data: Prisma.FuncionarioUncheckedCreateInput,
   ): Promise<Funcionario>
