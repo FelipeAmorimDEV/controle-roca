@@ -222,6 +222,7 @@ model Setor {
   variedade     Variedade       @relation(fields: [variedade_id], references: [id])
   filas         String
   tamanhoArea   Float
+  dataPoda      DateTime?
   Saida         Saida[]
   Aplicacao     Aplicacao[]
   Colheita      Colheita[]

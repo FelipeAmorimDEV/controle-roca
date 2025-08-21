@@ -2,6 +2,8 @@ import { Prisma, Setor } from '@prisma/client'
 import { prisma } from '@/prisma'
 import { SetorRepository } from '../setor-repository'
 import dayjs from 'dayjs'
+import { calcularDiasAposPoda, obterFaseAtual } from '@/utils/faseCalculator'
+import { FasePlanta } from '@/@types/phases'
 
 interface Funcionario {
   id: string
@@ -252,7 +254,7 @@ export class PrismaSetorRepository implements SetorRepository {
   }
 
   async fetchAllSetor(fazendaId: string): Promise<Setor[]> {
-    const setores = prisma.setor.findMany({
+    const setores = await prisma.setor.findMany({
       where: {
         fazenda_id: fazendaId,
       },
@@ -268,7 +270,25 @@ export class PrismaSetorRepository implements SetorRepository {
       },
     })
 
-    return setores
+    const setoresComFase = setores.map(setor => {
+      let faseAtual: FasePlanta | null = null;
+      let diasAposPoda = 0;
+
+      if (setor.dataPoda) {
+        diasAposPoda = calcularDiasAposPoda(setor.dataPoda);
+        faseAtual = obterFaseAtual(diasAposPoda);
+      }
+
+      return {
+        ...setor,
+        faseAtual,
+        diasAposPoda
+      };
+    });
+
+    return setoresComFase
+
+
   }
 
   async createSetor(data: Prisma.SetorUncheckedCreateInput) {
