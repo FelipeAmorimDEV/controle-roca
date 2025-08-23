@@ -24,6 +24,7 @@ export interface SetorRepository {
     atividadeId?: string,
   ): Promise<FetchApontamentos>
   fetchAllApontamentosFiscal(fazendaId: string): Promise<ApontamentosI[]>
+  fetchAllApontamentosHome(fazendaId: string): Promise<ApontamentosI[]>
   getCentroCusto(
     fazendaId: string,
     initialDate: string,

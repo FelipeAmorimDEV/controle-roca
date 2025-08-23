@@ -53,6 +53,46 @@ export interface FetchApontamentos {
 }
 
 export class PrismaSetorRepository implements SetorRepository {
+  async fetchAllApontamentosHome(fazendaId: string): Promise<ApontamentosI[]> {
+    const apontamentos = await prisma.apontamento.findMany({
+      where: {
+        fazenda_id: fazendaId,
+        data_inicio: {
+          gte: dayjs().startOf('date').toDate(),
+          lte: dayjs().endOf('date').toDate(),
+        },
+      },
+      include: {
+        atividade: true,
+        funcionario: true,
+        setor: true,
+      },
+    })
+
+    const relatorio = apontamentos.map((apontamento) => {
+      const obj = {
+        id: apontamento.id,
+        status: apontamento.status,
+        data_inicio: apontamento.data_inicio,
+        data_fim: apontamento.data_fim,
+        atividade: apontamento.atividade.nome,
+        funcionario: apontamento.funcionario.nome,
+        meta: apontamento.meta,
+        qtd_tarefa: apontamento.qtd_tarefa,
+        custo_tarefa: apontamento.custo_tarefa,
+        valor_extra: apontamento.valor_bonus,
+        duracao: apontamento.data_fim
+          ? apontamento.data_fim.getTime() - apontamento.data_inicio.getTime()
+          : null,
+        setor: apontamento.setor,
+      }
+
+      return obj
+    })
+
+    return relatorio
+  }
+  
   async registrarNovaPoda(setorId: string, dataPoda: Date = new Date()): Promise<void> {
     await prisma.setor.update({
       where: {

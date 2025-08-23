@@ -70,6 +70,7 @@ import { deletePrecoVenda } from './controllers/colheita/delete-preco-venda'
 import { atualizarDataPoda } from './controllers/setor/atualizar-data-poda'
 import { updateFuncionario } from './controllers/funcionarios/update-funcionario'
 import { desativarFuncionario } from './controllers/funcionarios/desativar-funcionario'
+import { fetchApontamentoTotal } from './controllers/setor/fetch-apontamento-total'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -95,6 +96,14 @@ export async function estoqueRoutes(app: FastifyInstance) {
     { onRequest: [verifyJWT] },
     fetchApontamentoFiscal,
   )
+
+   app.get(
+    '/apontamentos-total',
+    { onRequest: [verifyJWT] },
+    fetchApontamentoTotal,
+  )
+
+
   app.get('/setor/centro-custo', { onRequest: [verifyJWT] }, getCentroCusto)
   app.get(
     '/exportar-produtos-excel',
