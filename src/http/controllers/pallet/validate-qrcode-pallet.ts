@@ -5,7 +5,7 @@ import { ValidateQrcodePalletUseCase } from '@/usecases/validate-qrcode-pallet-u
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-export async function validateQrcodePallet(
+export async function     validateQrcodePallet(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {

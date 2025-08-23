@@ -31,7 +31,7 @@ export async function validateQrcode(
   const variedadeRepository = new PrismaVariedadeRepository()
   const validateQrcodeUsecase = new ValidateQrcodeUseCase(
     prismaQrcodeRepository,
-    prismaQrcodePalletRepository,
+    prismaQrcodePalletRepository,   
     colheitaRepository,
     variedadeRepository,
   )
