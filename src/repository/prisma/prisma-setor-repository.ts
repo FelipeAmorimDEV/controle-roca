@@ -4,6 +4,11 @@ import { SetorRepository } from '../setor-repository'
 import dayjs from 'dayjs'
 import { calcularDiasAposPoda, obterFaseAtual } from '@/utils/faseCalculator'
 import { FasePlanta } from '@/@types/phases'
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface Funcionario {
   id: string
@@ -58,8 +63,8 @@ export class PrismaSetorRepository implements SetorRepository {
       where: {
         fazenda_id: fazendaId,
         data_inicio: {
-          gte: dayjs().startOf('date').toDate(),
-          lte: dayjs().endOf('date').toDate(),
+          gte: dayjs().tz('America/Sao_Paulo').startOf('day').toDate(), 
+          lte: dayjs().tz('America/Sao_Paulo').endOf('day').toDate()
         },
       },
       include: {
