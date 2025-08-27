@@ -257,7 +257,7 @@ async getFuncionariosMetasExcedidas(
             lte: dataFim,
           },
           tipo_apontamento: 'meta',
-          status: 'finalizado',
+          status: 'concluida',
         },
         include: {
           atividade: true,
