@@ -17,6 +17,8 @@ export class GetFuncionariosMetasExcedidasUseCase {
       dataFim
     )
 
-    return funcionarios
+    const cards = await this.apontamentoRepository.getStatsMetasExcedidas(fazenda_id, dataInicio, dataFim)
+
+    return { funcionarios, cards }
   }
 }

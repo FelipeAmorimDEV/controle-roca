@@ -18,13 +18,13 @@ export async function getFuncionariosMetasExcedidas(
     const apontamentoRepository = new PrismaApontamentoRepository()
     const getFuncionariosMetasExcedidasUseCase = new GetFuncionariosMetasExcedidasUseCase(apontamentoRepository)
 
-    const funcionarios = await getFuncionariosMetasExcedidasUseCase.execute({
+    const {cards, funcionarios} = await getFuncionariosMetasExcedidasUseCase.execute({
       fazenda_id: request.user.fazenda_id,
       dataInicio,
       dataFim,
     })
 
-    return reply.status(200).send({ funcionarios })
+    return reply.status(200).send({ funcionarios, cards })
   } catch (error) {
     return reply.status(400).send({ 
       error: 'Erro ao buscar funcionários com metas excedidas',
