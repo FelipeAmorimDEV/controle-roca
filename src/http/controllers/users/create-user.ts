@@ -7,17 +7,19 @@ import { z } from 'zod'
 export async function createUser(request: FastifyRequest, reply: FastifyReply) {
   const requestBodySchema = z.object({
     user: z.string(),
+    nome: z.string(),
+    fazendaNome: z.string(),
     password: z.string(),
     fazendaId: z.string(),
   })
 
-  const { user, password, fazendaId } = requestBodySchema.parse(request.body)
+  const { user, password, fazendaId, fazendaNome, nome } = requestBodySchema.parse(request.body)
 
   const prismaUserRepository = new PrismaUserRepository()
   const createUserUseCase = new CreateUserUseCase(prismaUserRepository)
 
   try {
-    await createUserUseCase.execute({ user, password, fazendaId })
+    await createUserUseCase.execute({ user, password, fazendaId, fazendaNome, nome })
     return reply.status(201).send()
   } catch (error) {
     if (error instanceof UserAlreadyExists) {

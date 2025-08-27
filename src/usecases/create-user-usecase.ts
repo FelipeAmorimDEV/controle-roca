@@ -7,6 +7,8 @@ interface CreateUserUseCaseParams {
   user: string
   password: string
   fazendaId: string
+  nome: string
+  fazendaNome: string
 }
 
 interface CreateUserUseCaseResponse {
@@ -20,6 +22,8 @@ export class CreateUserUseCase {
     user,
     password,
     fazendaId,
+    fazendaNome, 
+    nome
   }: CreateUserUseCaseParams): Promise<CreateUserUseCaseResponse> {
     const userAlreadyExist = await this.userRepository.findUserByUsername(user)
 
@@ -33,6 +37,8 @@ export class CreateUserUseCase {
       user,
       password: password_hash,
       fazenda_id: fazendaId,
+      fazenda_nome: fazendaNome,
+      nome
     })
 
     return { users }

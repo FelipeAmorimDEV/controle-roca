@@ -37,6 +37,18 @@ Content-Type: application/json
     "password": "102827asdf"
 }
 
+###
+
+# @name CreateUser
+POST {{baseUrl}}/users/authenticate
+Content-Type: application/json
+
+{
+    "user": "fazendanicole@felipe",
+    "password": "102827asdf"
+}
+
+
 
 ### 
 # @name GetApontamentos
@@ -53,6 +65,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiO
 
 ### 
 # @name GetApontamentosMetasExcedidasFiltros
-GET {{baseUrl}}/apontamentos/filtros?dataInicio=2024-01-01&dataFim=2025-10-11&funcionarioNome="felipe"
+GET {{baseUrl}}/apontamentos/filtros?dataInicio=2024-01-01&dataFim=2025-10-11&atividadeNome=condução
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1NjI3MDMwOH0.lcPq7fLvOK8guqbUqSZ3bkRbEK2X2uTQgPGFJmbKjSY
