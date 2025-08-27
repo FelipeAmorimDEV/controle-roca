@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:3333
+@baseUrl = https://qrcode-caixa-api.onrender.com
 
 
 
@@ -24,3 +24,22 @@ Content-Type: application/json
 {
     "nome": "Fazenda Teste"
 }
+
+
+###
+
+# @name Login
+POST {{baseUrl}}/users/authenticate
+Content-Type: application/json
+
+{
+    "user": "fazendanicole@felipe",
+    "password": "102827asdf"
+}
+
+
+### 
+# @name GetApontamentos
+GET {{baseUrl}}/apontamentos/recentes
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1NjI1OTgyOH0.zHizUV1jnZZr0fihp2n0-fTSNOU2I4j4u-Cepjswspg

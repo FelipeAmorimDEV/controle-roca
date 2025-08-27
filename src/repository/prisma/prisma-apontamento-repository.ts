@@ -1,6 +1,6 @@
 import { Apontamento, Prisma } from '@prisma/client'
 import { prisma } from '@/prisma'
-import { ApontamentoRepository } from '../apontamento-repository'
+import { ApontamentoRepository, AtividadeExtraDTO, FiltrosMetasExcedidasDTO, FuncionarioMetasExcedidasDTO, PeriodoDTO, StatsMetasExcedidasDTO } from '../apontamento-repository'
 import dayjs from 'dayjs'
 
 export interface CardsSuperioresResponseDTO {
@@ -81,6 +81,300 @@ export interface AtividadeAcumulador {
 }
 
 export class PrismaApontamentoRepository implements ApontamentoRepository {
+
+  private calcularExtras(apontamento: any): number {
+    if (apontamento.tipo_apontamento === 'meta' && 
+        apontamento.meta && 
+        apontamento.qtd_tarefa) {
+      const extras = apontamento.qtd_tarefa - apontamento.meta
+      return extras > 0 ? extras : 0
+    }
+    return 0
+  }
+
+  private generateAvatar(nome: string): string {
+    return nome.split(' ')
+      .map(part => part.charAt(0).toUpperCase())
+      .slice(0, 2)
+      .join('')
+  }
+
+  // =============================================
+  // FUNÇÃO AUXILIAR PARA PERÍODOS (ESTÁTICA)
+  // =============================================
+
+  static getPeriodoDates(periodo: 'semana' | 'mes' | 'quinzena'): PeriodoDTO {
+    const agora = new Date()
+    const inicio = new Date()
+    const fim = new Date()
+
+    switch (periodo) {
+      case 'semana':
+        const diaSemana = agora.getDay()
+        inicio.setDate(agora.getDate() - diaSemana)
+        fim.setDate(agora.getDate() + (6 - diaSemana))
+        break
+      case 'quinzena':
+        inicio.setDate(agora.getDate() - 15)
+        break
+      case 'mes':
+        inicio.setDate(1)
+        fim.setMonth(agora.getMonth() + 1, 0)
+        break
+    }
+
+    inicio.setHours(0, 0, 0, 0)
+    fim.setHours(23, 59, 59, 999)
+
+    return { inicio, fim }
+  }
+
+
+  async getFuncionariosMetasExcedidas(
+    fazendaId: string,
+    dataInicio: Date,
+    dataFim: Date
+  ): Promise<FuncionarioMetasExcedidasDTO[]> {
+    try {
+      const funcionarios = await prisma.funcionario.findMany({
+        where: {
+          fazenda_id: fazendaId,
+          ativo: true,
+          Apontamento: {
+            some: {
+              data_inicio: {
+                gte: dataInicio,
+                lte: dataFim,
+              },
+              tipo_apontamento: 'meta',
+              status: 'finalizado',
+            },
+          },
+        },
+        include: {
+          Apontamento: {
+            where: {
+              data_inicio: {
+                gte: dataInicio,
+                lte: dataFim,
+              },
+              tipo_apontamento: 'meta',
+              status: 'finalizado',
+            },
+            include: {
+              atividade: true,
+              setor: true,
+            },
+            orderBy: {
+              data_inicio: 'desc',
+            },
+          },
+        },
+      })
+
+      return funcionarios.map((funcionario): FuncionarioMetasExcedidasDTO => {
+        const activities: AtividadeExtraDTO[] = funcionario.Apontamento
+          .filter(apontamento => this.calcularExtras(apontamento) > 0)
+          .map((apontamento): AtividadeExtraDTO => {
+            const extras = this.calcularExtras(apontamento)
+            const valorUnitario = apontamento.valor_bonus || 0
+
+            return {
+              id: apontamento.id,
+              name: apontamento.atividade.nome,
+              date: apontamento.data_inicio.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+              }),
+              meta: apontamento.meta || 0,
+              realizado: apontamento.qtd_tarefa || 0,
+              extras,
+              valorUnitario,
+              setor: apontamento.setor.setorName,
+              status: apontamento.status,
+            }
+          })
+
+        const totalExtras = activities.reduce((sum, activity) => sum + activity.extras, 0)
+        const totalValue = activities.reduce(
+          (sum, activity) => sum + (activity.extras * activity.valorUnitario), 
+          0
+        )
+
+        return {
+          id: funcionario.id,
+          name: funcionario.nome,
+          role: funcionario.cargo,
+          avatar: this.generateAvatar(funcionario.nome),
+          totalExtras,
+          totalValue,
+          activities,
+        }
+      }).filter(funcionario => funcionario.totalExtras > 0)
+    } catch (error) {
+      throw new Error(`Erro ao buscar funcionários com metas excedidas: ${error}`)
+    }
+  }
+
+  async getStatsMetasExcedidas(
+    fazendaId: string,
+    dataInicio: Date,
+    dataFim: Date
+  ): Promise<StatsMetasExcedidasDTO> {
+    try {
+      const apontamentos = await prisma.apontamento.findMany({
+        where: {
+          fazenda_id: fazendaId,
+          data_inicio: {
+            gte: dataInicio,
+            lte: dataFim,
+          },
+          tipo_apontamento: 'meta',
+          status: 'finalizado',
+        },
+        include: {
+          atividade: true,
+          funcionario: true,
+        },
+      })
+
+      const apontamentosComExtras = apontamentos.filter(ap => this.calcularExtras(ap) > 0)
+      
+      const totalExtras = apontamentosComExtras.reduce(
+        (sum, ap) => sum + this.calcularExtras(ap), 
+        0
+      )
+
+      const valorTotalExtra = apontamentosComExtras.reduce(
+        (sum, ap) => sum + (this.calcularExtras(ap) * (ap.valor_bonus || 0)), 
+        0
+      )
+
+      const funcionariosUnicos = new Set(
+        apontamentosComExtras.map(ap => ap.funcionario_id)
+      )
+
+      const atividadesUnicas = new Set(
+        apontamentosComExtras.map(ap => ap.atividade.nome)
+      )
+
+      return {
+        totalExtras,
+        funcionariosAtivos: funcionariosUnicos.size,
+        valorTotalExtra,
+        atividadesDiferentes: atividadesUnicas.size,
+        atividadesNomes: Array.from(atividadesUnicas),
+      }
+    } catch (error) {
+      throw new Error(`Erro ao buscar estatísticas de metas excedidas: ${error}`)
+    }
+  }
+
+  async getFuncionariosMetasExcedidasFiltrado(
+    fazendaId: string,
+    dataInicio: Date,
+    dataFim: Date,
+    filtros: FiltrosMetasExcedidasDTO
+  ): Promise<FuncionarioMetasExcedidasDTO[]> {
+    try {
+      const whereCondition: any = {
+        fazenda_id: fazendaId,
+        ativo: true,
+      }
+
+      if (filtros.funcionarioNome) {
+        whereCondition.nome = {
+          contains: filtros.funcionarioNome,
+          mode: 'insensitive',
+        }
+      }
+
+      const apontamentoWhere: any = {
+        data_inicio: {
+          gte: dataInicio,
+          lte: dataFim,
+        },
+        tipo_apontamento: 'meta',
+        status: 'finalizado',
+      }
+
+      if (filtros.atividadeNome) {
+        apontamentoWhere.atividade = {
+          nome: {
+            contains: filtros.atividadeNome,
+            mode: 'insensitive',
+          },
+        }
+      }
+
+      if (filtros.setorId) {
+        apontamentoWhere.setor_id = filtros.setorId
+      }
+
+      whereCondition.Apontamento = {
+        some: apontamentoWhere,
+      }
+
+      const funcionarios = await prisma.funcionario.findMany({
+        where: whereCondition,
+        include: {
+          Apontamento: {
+            where: apontamentoWhere,
+            include: {
+              atividade: true,
+              setor: true,
+            },
+            orderBy: {
+              data_inicio: 'desc',
+            },
+          },
+        },
+      })
+
+      return funcionarios.map((funcionario): FuncionarioMetasExcedidasDTO => {
+        const activities: AtividadeExtraDTO[] = funcionario.Apontamento
+          .filter(apontamento => this.calcularExtras(apontamento) > 0)
+          .map((apontamento): AtividadeExtraDTO => {
+            const extras = this.calcularExtras(apontamento)
+            const valorUnitario = apontamento.valor_bonus || 0
+
+            return {
+              id: apontamento.id,
+              name: apontamento.atividade.nome,
+              date: apontamento.data_inicio.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+              }),
+              meta: apontamento.meta || 0,
+              realizado: apontamento.qtd_tarefa || 0,
+              extras,
+              valorUnitario,
+              setor: apontamento.setor.setorName,
+              status: apontamento.status,
+            }
+          })
+
+        const totalExtras = activities.reduce((sum, activity) => sum + activity.extras, 0)
+        const totalValue = activities.reduce(
+          (sum, activity) => sum + (activity.extras * activity.valorUnitario), 
+          0
+        )
+
+        return {
+          id: funcionario.id,
+          name: funcionario.nome,
+          role: funcionario.cargo,
+          avatar: this.generateAvatar(funcionario.nome),
+          totalExtras,
+          totalValue,
+          activities,
+        }
+      }).filter(funcionario => funcionario.totalExtras > 0)
+    } catch (error) {
+      throw new Error(`Erro ao buscar funcionários filtrados: ${error}`)
+    }
+  }
+
   async getAtividadesRecentes(fazenda_id: string): Promise<AtividadesRecentesResult> {
      const seteDiasAtras = new Date();
   seteDiasAtras.setDate(seteDiasAtras.getDate() - 7);
