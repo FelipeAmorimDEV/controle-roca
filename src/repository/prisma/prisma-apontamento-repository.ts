@@ -132,37 +132,56 @@ export class PrismaApontamentoRepository implements ApontamentoRepository {
 
 
 
-  async getFuncionariosMetasExcedidas(
+async getFuncionariosMetasExcedidas(
   fazendaId: string,
   dataInicio: Date,
   dataFim: Date
 ): Promise<FuncionarioMetasExcedidasDTO[]> {
   try {
-    // Primeiro, buscar todos os apontamentos que atendem aos critérios
+    // Primeiro, busca todos os apontamentos no período
     const apontamentos = await prisma.apontamento.findMany({
       where: {
-        data_inicio: { gte: dataInicio, lte: dataFim },
-        tipo_apontamento: 'meta',
-        status: 'finalizado',
-        funcionario: {
-          fazenda_id: fazendaId,
-          ativo: true,
+        fazenda_id: fazendaId,
+        data_inicio: {
+          gte: dataInicio,
+          lte: dataFim,
         },
+        tipo_apontamento: 'meta',
+        status: 'concluida',
+        // Garantir que tem meta e qtd_tarefa válidas
+        meta: {
+          not: null,
+          gt: 0
+        },
+        qtd_tarefa: {
+          not: null,
+          gt: 0
+        }
       },
       include: {
         funcionario: true,
         atividade: true,
         setor: true,
       },
-      orderBy: { data_inicio: 'desc' },
+      orderBy: {
+        data_inicio: 'desc',
+      },
     });
 
-    console.log(`Apontamentos encontrados: ${apontamentos.length}`);
+    // Filtra apenas apontamentos onde qtd_tarefa > meta
+    const apontamentosComExtras = apontamentos.filter(apontamento => {
+      const meta = apontamento.meta || 0;
+      const realizado = apontamento.qtd_tarefa || 0;
+      return realizado > meta && apontamento.funcionario.ativo;
+    });
 
-    // Agrupar por funcionário
-    const funcionariosMap = new Map<string, any>();
+    // Agrupa por funcionário
+    const funcionariosMap = new Map<string, {
+      funcionario: any,
+      apontamentos: any[]
+    }>();
 
-    apontamentos.forEach(apontamento => {
+    apontamentosComExtras.forEach(apontamento => {
       const funcionarioId = apontamento.funcionario.id;
       
       if (!funcionariosMap.has(funcionarioId)) {
@@ -172,54 +191,55 @@ export class PrismaApontamentoRepository implements ApontamentoRepository {
         });
       }
       
-      funcionariosMap.get(funcionarioId).apontamentos.push(apontamento);
+      funcionariosMap.get(funcionarioId)!.apontamentos.push(apontamento);
     });
 
-    // Processar os dados
-    const resultado = Array.from(funcionariosMap.values()).map(({ funcionario, apontamentos }) => {
-      const activities: AtividadeExtraDTO[] = apontamentos
-        .filter(apontamento => this.calcularExtras(apontamento) > 0)
-          .map((apontamento): AtividadeExtraDTO => {
-            const extras = this.calcularExtras(apontamento)
-            const valorUnitario = apontamento.valor_bonus || 0
-
-            return {
-              id: apontamento.id,
-              name: apontamento.atividade.nome,
-              date: apontamento.data_inicio.toLocaleDateString('pt-BR', {
-                day: '2-digit',
-                month: '2-digit',
-              }),
-              meta: apontamento.meta || 0,
-              realizado: apontamento.qtd_tarefa || 0,
-              extras,
-              valorUnitario,
-              setor: apontamento.setor.setorName,
-              status: apontamento.status,
-            }
-          })
-
-        const totalExtras = activities.reduce((sum, activity) => sum + activity.extras, 0)
-        const totalValue = activities.reduce(
-          (sum, activity) => sum + (activity.extras * activity.valorUnitario), 
-          0
-        )
+    // Transforma em DTO
+    const resultado: FuncionarioMetasExcedidasDTO[] = Array.from(funcionariosMap.values()).map(({ funcionario, apontamentos }) => {
+      const activities: AtividadeExtraDTO[] = apontamentos.map((apontamento): AtividadeExtraDTO => {
+        const meta = apontamento.meta || 0;
+        const realizado = apontamento.qtd_tarefa || 0;
+        const extras = Math.max(0, realizado - meta);
+        const valorUnitario = apontamento.valor_bonus || 0;
 
         return {
-          id: funcionario.id,
-          name: funcionario.nome,
-          role: funcionario.cargo,
-          avatar: this.generateAvatar(funcionario.nome),
-          totalExtras,
-          totalValue,
-          activities,
-        }
-      })
+          id: apontamento.id,
+          name: apontamento.atividade.nome,
+          date: apontamento.data_inicio.toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+          }),
+          meta,
+          realizado,
+          extras,
+          valorUnitario,
+          setor: apontamento.setor.setorName,
+          status: apontamento.status,
+        };
+      });
 
+      const totalExtras = activities.reduce((sum, activity) => sum + activity.extras, 0);
+      const totalValue = activities.reduce(
+        (sum, activity) => sum + (activity.extras * activity.valorUnitario), 
+        0
+      );
+
+      return {
+        id: funcionario.id,
+        name: funcionario.nome,
+        role: funcionario.cargo,
+        avatar: this.generateAvatar(funcionario.nome),
+        totalExtras,
+        totalValue,
+        activities,
+      };
+    });
 
     return resultado;
+    
   } catch (error) {
-    throw new Error(`Erro ao buscar funcionários com metas excedidas: ${error}`)
+    console.error('Erro detalhado:', error);
+    throw new Error(`Erro ao buscar funcionários com metas excedidas: ${error}`);
   }
 }
 
