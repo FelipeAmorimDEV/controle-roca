@@ -11,8 +11,8 @@ export async function getFuncionariosMetaFiltro(
   const getFuncionariosMetasExcedidasQuerySchema = z.object({
     dataInicio: z.string().transform((val) => new Date(val)),
     dataFim: z.string().transform((val) => new Date(val)),
-    atividadeNome: z.string(),
-    funcionarioNome: z.string()
+    atividadeNome: z.string().optional(),
+    funcionarioNome: z.string().optional()
   })
 
   try {

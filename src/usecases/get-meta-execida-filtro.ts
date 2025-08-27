@@ -5,8 +5,8 @@ interface GetFuncionariosMetaExcedidaFiltrossRequest {
   fazenda_id: string
   dataInicio: Date
   dataFim: Date
-  atividadeNome: string
-  funcionarioNome: string
+  atividadeNome?: string
+  funcionarioNome?: string
 }
 
 export class GetFuncionariosMetaExcedidaFiltrossUseCase {
