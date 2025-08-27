@@ -267,13 +267,10 @@ async getFuncionariosMetasExcedidas(
 
       const apontamentosComExtras = apontamentos.filter(ap => this.calcularExtras(ap) > 0)
       
-      const totalExtras = apontamentosComExtras.reduce(
-        (sum, ap) => sum + this.calcularExtras(ap), 
-        0
-      )
+      const totalExtras = apontamentosComExtras.length
 
       const valorTotalExtra = apontamentosComExtras.reduce(
-        (sum, ap) => sum + (this.calcularExtras(ap) * (ap.valor_bonus || 0)), 
+        (sum, ap) => sum + ap.valor_bonus, 
         0
       )
 
