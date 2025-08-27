@@ -319,7 +319,7 @@ async getFuncionariosMetasExcedidas(
           lte: dataFim,
         },
         tipo_apontamento: 'meta',
-        status: 'finalizado',
+        status: 'concluida',
       }
 
       if (filtros.atividadeNome) {
