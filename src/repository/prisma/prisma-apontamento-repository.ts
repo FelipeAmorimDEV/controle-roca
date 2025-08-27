@@ -210,7 +210,7 @@ export class PrismaApontamentoRepository implements ApontamentoRepository {
           totalValue,
           activities,
         }
-      }).filter(funcionario => funcionario.totalExtras > 0)
+      })
     } catch (error) {
       throw new Error(`Erro ao buscar funcionários com metas excedidas: ${error}`)
     }
