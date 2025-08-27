@@ -130,51 +130,55 @@ export class PrismaApontamentoRepository implements ApontamentoRepository {
   }
 
 
+
+
   async getFuncionariosMetasExcedidas(
-    fazendaId: string,
-    dataInicio: Date,
-    dataFim: Date
-  ): Promise<FuncionarioMetasExcedidasDTO[]> {
-    try {
-      const funcionarios = await prisma.funcionario.findMany({
-        where: {
+  fazendaId: string,
+  dataInicio: Date,
+  dataFim: Date
+): Promise<FuncionarioMetasExcedidasDTO[]> {
+  try {
+    // Primeiro, buscar todos os apontamentos que atendem aos critérios
+    const apontamentos = await prisma.apontamento.findMany({
+      where: {
+        data_inicio: { gte: dataInicio, lte: dataFim },
+        tipo_apontamento: 'meta',
+        status: 'finalizado',
+        funcionario: {
           fazenda_id: fazendaId,
           ativo: true,
-          Apontamento: {
-            some: {
-              data_inicio: {
-                gte: dataInicio,
-                lte: dataFim,
-              },
-              tipo_apontamento: 'meta',
-              status: 'finalizado',
-            },
-          },
         },
-        include: {
-          Apontamento: {
-            where: {
-              data_inicio: {
-                gte: dataInicio,
-                lte: dataFim,
-              },
-              tipo_apontamento: 'meta',
-              status: 'finalizado',
-            },
-            include: {
-              atividade: true,
-              setor: true,
-            },
-            orderBy: {
-              data_inicio: 'desc',
-            },
-          },
-        },
-      })
+      },
+      include: {
+        funcionario: true,
+        atividade: true,
+        setor: true,
+      },
+      orderBy: { data_inicio: 'desc' },
+    });
 
-      return funcionarios.map((funcionario): FuncionarioMetasExcedidasDTO => {
-        const activities: AtividadeExtraDTO[] = funcionario.Apontamento
-          .filter(apontamento => this.calcularExtras(apontamento) > 0)
+    console.log(`Apontamentos encontrados: ${apontamentos.length}`);
+
+    // Agrupar por funcionário
+    const funcionariosMap = new Map<string, any>();
+
+    apontamentos.forEach(apontamento => {
+      const funcionarioId = apontamento.funcionario.id;
+      
+      if (!funcionariosMap.has(funcionarioId)) {
+        funcionariosMap.set(funcionarioId, {
+          funcionario: apontamento.funcionario,
+          apontamentos: []
+        });
+      }
+      
+      funcionariosMap.get(funcionarioId).apontamentos.push(apontamento);
+    });
+
+    // Processar os dados
+    const resultado = Array.from(funcionariosMap.values()).map(({ funcionario, apontamentos }) => {
+      const activities: AtividadeExtraDTO[] = apontamentos
+        .filter(apontamento => this.calcularExtras(apontamento) > 0)
           .map((apontamento): AtividadeExtraDTO => {
             const extras = this.calcularExtras(apontamento)
             const valorUnitario = apontamento.valor_bonus || 0
@@ -211,10 +215,13 @@ export class PrismaApontamentoRepository implements ApontamentoRepository {
           activities,
         }
       })
-    } catch (error) {
-      throw new Error(`Erro ao buscar funcionários com metas excedidas: ${error}`)
-    }
+
+
+    return resultado;
+  } catch (error) {
+    throw new Error(`Erro ao buscar funcionários com metas excedidas: ${error}`)
   }
+}
 
   async getStatsMetasExcedidas(
     fazendaId: string,
