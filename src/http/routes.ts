@@ -73,6 +73,7 @@ import { desativarFuncionario } from './controllers/funcionarios/desativar-funci
 import { fetchApontamentoTotal } from './controllers/setor/fetch-apontamento-total'
 import { getApontamentoDashboard } from './controllers/apontamento/get-dashboard'
 import { getFuncionariosMetasExcedidas } from './controllers/apontamento/get-meta-execida copy'
+import { getFuncionariosMetaFiltro } from './controllers/apontamento/fetch-funcionarios-meta-filtros'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -110,6 +111,7 @@ export async function estoqueRoutes(app: FastifyInstance) {
     { onRequest: [verifyJWT] },
     getFuncionariosMetasExcedidas,
   )
+  app.get('/apontamentos/filtros', { onRequest: [verifyJWT]}, getFuncionariosMetaFiltro)
 
 
   
