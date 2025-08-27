@@ -220,7 +220,7 @@ async getFuncionariosMetasExcedidas(
 
       const totalExtras = activities.reduce((sum, activity) => sum + activity.extras, 0);
       const totalValue = activities.reduce(
-        (sum, activity) => sum + (activity.extras * activity.valorUnitario), 
+        (sum, activity) => sum + activity.valorUnitario, 
         0
       );
 
