@@ -71,6 +71,7 @@ import { atualizarDataPoda } from './controllers/setor/atualizar-data-poda'
 import { updateFuncionario } from './controllers/funcionarios/update-funcionario'
 import { desativarFuncionario } from './controllers/funcionarios/desativar-funcionario'
 import { fetchApontamentoTotal } from './controllers/setor/fetch-apontamento-total'
+import { getApontamentoDashboard } from './controllers/apontamento/get-dashboard'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -102,6 +103,8 @@ export async function estoqueRoutes(app: FastifyInstance) {
     { onRequest: [verifyJWT] },
     fetchApontamentoTotal,
   )
+  
+  app.get('/apontamentos/recentes', {onRequest: [verifyJWT]}, getApontamentoDashboard)
 
 
   app.get('/setor/centro-custo', { onRequest: [verifyJWT] }, getCentroCusto)
