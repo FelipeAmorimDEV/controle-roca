@@ -16,6 +16,7 @@ export interface FuncionarioAtividade {
   meta: number;           // apontamento.meta || 0
   qtdTarefa: number;      // apontamento.qtd_tarefa || 0  
   custoTarefa: number;    // apontamento.custo_tarefa || 0
+  valorExtra: number
 }
 
 // Tipagem para uma atividade agrupada (item do array de retorno)
@@ -133,10 +134,11 @@ export class PrismaApontamentoRepository implements ApontamentoRepository {
       nome: apontamento.funcionario.nome,
       meta: apontamento.meta || 0,
       qtdTarefa: apontamento.qtd_tarefa || 0,
-      custoTarefa: apontamento.custo_tarefa || 0
+      custoTarefa: apontamento.custo_tarefa || 0,  // já inclui tudo
+      valorExtra: apontamento.valor_bonus || 0     // só para mostrar o extra
     });
 
-    acc[chave].custoTotal += apontamento.custo_tarefa || 0;
+    acc[chave].custoTotal += apontamento.custo_tarefa || 0;  // só soma custo_tarefa
 
     return acc;
   }, {});
