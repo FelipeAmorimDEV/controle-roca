@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "swagger:check": "tsx src/swagger/check-documentation.ts",
+    "swagger:test": "tsx src/swagger/test-swagger.ts",
+    "swagger:dev": "npm run dev & sleep 5 && npm run swagger:check",
+    "swagger:build": "tsx src/swagger/index.ts",
+    "docs:serve": "npm run dev",
+    "docs:open": "open http://localhost:3333/docs"
+  }
+}

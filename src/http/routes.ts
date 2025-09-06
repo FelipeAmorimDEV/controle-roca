@@ -74,6 +74,12 @@ import { fetchApontamentoTotal } from './controllers/setor/fetch-apontamento-tot
 import { getApontamentoDashboard } from './controllers/apontamento/get-dashboard'
 import { getFuncionariosMetasExcedidas } from './controllers/apontamento/get-meta-execida copy'
 import { getFuncionariosMetaFiltro } from './controllers/apontamento/fetch-funcionarios-meta-filtros'
+import { createTrator } from './controllers/trator/create-trator'
+import { fetchTratores } from './controllers/trator/fetch-tratores'
+import { updateHorasTrator } from './controllers/trator/update-horas-trator'
+import { registerManutencao } from './controllers/trator/register-manutencao'
+import { getRelatorioCustos } from './controllers/trator/get-relatorio-custos'
+import { getRelatorioRentabilidade } from './controllers/relatorios/get-relatorio-rentabilidade'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -166,6 +172,14 @@ export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/users/authenticate', authenticateUser)
   app.post('/fazenda/register', createFazenda)
 
+   app.post('/tratores', { onRequest: [verifyJWT] },createTrator)
+  app.get('/tratores', { onRequest: [verifyJWT] },fetchTratores)
+  app.put('/tratores/:tratarId/horas', { onRequest: [verifyJWT] },updateHorasTrator)
+  
+  // Rotas de manutenção
+  app.post('/tratores/:tratarId/manutencao', { onRequest: [verifyJWT] },registerManutencao)
+  app.get('/tratores/:tratarId/relatorio-custos', { onRequest: [verifyJWT] },getRelatorioCustos)
+
   // Qrcode
 
   app.post(
@@ -248,6 +262,13 @@ export async function estoqueRoutes(app: FastifyInstance) {
     markNotaFiscalPaga,
   )
   app.delete('/notas-fiscais/:id', { onRequest: [verifyJWT] }, deleteNotaFiscal)
+
+  // Relatórios
+  app.get(
+    '/relatorios/rentabilidade',
+    { onRequest: [verifyJWT] },
+    getRelatorioRentabilidade,
+  )
 }
 
 // { onRequest: [verifyJWT] }

@@ -13,6 +13,105 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Trator {
+  id          String       @id @default(cuid())
+  nome        String
+  marca       String
+  modelo      String
+  ano         Int
+  numeroSerie String       @unique
+  horasAtuais Float        @default(0)
+  dataCompra  DateTime
+  status      StatusTrator @default(ATIVO)
+  fazenda_id  String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  // Relacionamentos
+  registrosHoras    RegistroHoras[]
+  manutencoes       Manutencao[]
+  alertasManutencao AlertaManutencao[]
+
+  @@map("tratores")
+}
+
+model RegistroHoras {
+  id              String   @id @default(cuid())
+  tratorId        String
+  horasAnteriores Float
+  horasNovas      Float
+  descricao       String?
+  operador        String
+  dataTrabalho    DateTime @default(now())
+  fazenda_id      String
+  createdAt       DateTime @default(now())
+
+  // Relacionamentos
+  trator Trator @relation(fields: [tratorId], references: [id], onDelete: Cascade)
+
+  @@map("registros_horas")
+}
+
+model AlertaManutencao {
+  id                     String         @id @default(cuid())
+  tratorId               String
+  tipo                   TipoManutencao
+  intervaloHoras         Float
+  proximaManutencaoHoras Float
+  descricao              String?
+  ativo                  Boolean        @default(true)
+  fazenda_id             String
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+
+  // Relacionamentos
+  trator Trator @relation(fields: [tratorId], references: [id], onDelete: Cascade)
+
+  @@map("alertas_manutencao")
+}
+
+model Manutencao {
+  id              String           @id @default(cuid())
+  tratorId        String
+  tipo            TipoManutencao
+  descricao       String
+  horasRealizacao Float
+  dataManutencao  DateTime         @default(now())
+  custo           Float            @default(0)
+  mecanico        String
+  status          StatusManutencao @default(CONCLUIDA)
+  observacoes     String?
+  fazenda_id      String
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  // Relacionamentos
+  trator Trator @relation(fields: [tratorId], references: [id], onDelete: Cascade)
+
+  @@map("manutencoes")
+}
+
+enum StatusTrator {
+  ATIVO
+  MANUTENCAO
+  INATIVO
+}
+
+enum TipoManutencao {
+  TROCA_OLEO
+  FILTROS
+  PREVENTIVA
+  CORRETIVA
+  OUTROS
+}
+
+enum StatusManutencao {
+  AGENDADA
+  EM_ANDAMENTO
+  CONCLUIDA
+  CANCELADA
+}
+
 model Fazenda {
   id             String           @id @default(uuid())
   nome           String           @unique

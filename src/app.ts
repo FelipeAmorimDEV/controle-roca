@@ -4,6 +4,7 @@ import { fastifyCors } from '@fastify/cors'
 import { ZodError } from 'zod'
 import { env } from './env'
 import fastifyJwt from '@fastify/jwt'
+import { setupSwagger } from './swagger'
 
 export const app = fastify()
 
@@ -12,6 +13,9 @@ app.register(fastifyJwt, {
 })
 
 app.register(fastifyCors)
+
+// Configurar Swagger
+setupSwagger(app)
 
 app.register(estoqueRoutes)
 
