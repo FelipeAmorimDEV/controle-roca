@@ -19,7 +19,14 @@ export class PrismaManutencaoRepository implements ManutencaoRepository {
       // Criar manutenção
       const manutencao = await tx.manutencao.create({
         data: {
-          ...data,
+          tratorId: data.tratarId,
+          tipo: data.tipo,
+          descricao: data.descricao,
+          custo: data.custo,
+          mecanico: data.mecanico,
+          status: data.status || 'CONCLUIDA',
+          observacoes: data.observacoes,
+          fazenda_id: data.fazenda_id,
           horasRealizacao: trator.horasAtuais
         }
       })
@@ -59,7 +66,7 @@ export class PrismaManutencaoRepository implements ManutencaoRepository {
     dataFinal?: string
   ): Promise<FetchManutencoes> {
     const whereClause: any = {
-      tratarId,
+      tratorId: tratarId,
       fazenda_id
     }
 
@@ -88,7 +95,7 @@ export class PrismaManutencaoRepository implements ManutencaoRepository {
     dataFinal?: string
   ): Promise<RelatorioCustomos> {
     const whereClause: any = {
-      tratarId,
+      tratorId: tratarId,
       fazenda_id,
       status: 'CONCLUIDA'
     }

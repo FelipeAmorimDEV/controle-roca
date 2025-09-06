@@ -175,6 +175,7 @@ export async function estoqueRoutes(app: FastifyInstance) {
    app.post('/tratores', { onRequest: [verifyJWT] },createTrator)
   app.get('/tratores', { onRequest: [verifyJWT] },fetchTratores)
   app.put('/tratores/:tratarId/horas', { onRequest: [verifyJWT] },updateHorasTrator)
+  app.post('/tratores/:tratarId/horas', { onRequest: [verifyJWT] },updateHorasTrator)
   
   // Rotas de manutenção
   app.post('/tratores/:tratarId/manutencao', { onRequest: [verifyJWT] },registerManutencao)
