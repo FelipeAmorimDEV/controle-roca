@@ -7,7 +7,7 @@
     "dev": "tsx watch src/server.ts",
     "lint": "eslint src --ext src .ts",
     "test": "vitest run",
-    "build": "tsup src --out-dir build"
+    "build": "tsup src --out-dir build --external:*.md"
   },
   "keywords": [],
   "author": "",

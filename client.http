@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:3333
+@baseUrl = https://qrcode-caixa-api.onrender.com
 
 
 
@@ -117,6 +117,12 @@ Content-Type: application/json
   "status": "CONCLUIDA",
   "observacoes": "Tudo ok"
 }
+
+### 
+# @name GetRentabilidade
+GET {{baseUrl}}/relatorios/rentabilidade?initialDate=2024-01-01&endDate=2025-12-31
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiZTNhNTgyMTItZGUxMS00MTQyLTk0NWMtZTBkODM4NGVmYTNlIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6ImM3ZWNlMDRmLTBlYzItNDFkNS04ZTdiLTcxN2Y4N2I4YTQ3NCIsImlhdCI6MTc1NzEwNjY3OH0.haonTXGmCMSDAOnG2-2a8-P_9LByHGVmHVfqCRRDmqI
+
 
 
 
