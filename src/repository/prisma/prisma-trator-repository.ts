@@ -110,7 +110,7 @@ export class PrismaTratorRepository implements TratorRepository {
       // Criar registro de horas
       await tx.registroHoras.create({
         data: {
-          tratarId: data.tratarId,
+          tratorId: data.tratarId,
           horasAnteriores: trator.horasAtuais,
           horasNovas: data.horasNovas,
           descricao: data.descricao,
