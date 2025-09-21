@@ -80,6 +80,9 @@ import { updateHorasTrator } from './controllers/trator/update-horas-trator'
 import { registerManutencao } from './controllers/trator/register-manutencao'
 import { getRelatorioCustos } from './controllers/trator/get-relatorio-custos'
 import { getRelatorioRentabilidade } from './controllers/relatorios/get-relatorio-rentabilidade'
+import { getSugestoesIA } from './controllers/ai-suggestions/get-sugestoes-ia'
+import { getPadroesAplicacao } from './controllers/ai-suggestions/get-padroes-aplicacao'
+import { aplicarSugestaoIA } from './controllers/ai-suggestions/aplicar-sugestao-ia'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -269,6 +272,23 @@ export async function estoqueRoutes(app: FastifyInstance) {
     '/relatorios/rentabilidade',
     { onRequest: [verifyJWT] },
     getRelatorioRentabilidade,
+  )
+
+  // IA - Sugestões de Aplicação
+  app.get(
+    '/ai/sugestoes',
+    { onRequest: [verifyJWT] },
+    getSugestoesIA,
+  )
+  app.get(
+    '/ai/padroes-aplicacao',
+    { onRequest: [verifyJWT] },
+    getPadroesAplicacao,
+  )
+  app.post(
+    '/ai/sugestoes/:setorId/aplicar',
+    { onRequest: [verifyJWT] },
+    aplicarSugestaoIA,
   )
 }
 
