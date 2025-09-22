@@ -283,4 +283,228 @@ export class GerarSugestoesIAUsecase {
     
     return fase.nome;
   }
+
+  /**
+   * Gera sugestões baseadas em padrões globais da fazenda
+   * Analisa todas as aplicações de todos os setores por fase fenológica
+   */
+  async executeGlobal(request: GerarSugestoesIARequest): Promise<GerarSugestoesIAResponse> {
+    const { setorId, fazendaId, dataInicio, dataFim } = request;
+
+    if (!fazendaId) {
+      throw new Error('FazendaId é obrigatório para análise global');
+    }
+
+    // Define período padrão se não fornecido
+    const dataInicioFinal = dataInicio || new Date(Date.now() - 365 * 24 * 60 * 60 * 1000); // 1 ano atrás
+    const dataFimFinal = dataFim || new Date();
+
+    console.log('Iniciando análise global de padrões da fazenda');
+    console.log(`Fazenda: ${fazendaId}, Período: ${dataInicioFinal.toISOString()} - ${dataFimFinal.toISOString()}`);
+
+    // Busca todos os setores da fazenda
+    const dadosSetores = await this.aiSuggestionRepository.buscarHistoricoCompletoFazenda(
+      fazendaId,
+      dataInicioFinal,
+      dataFimFinal
+    );
+
+    console.log(`Setores encontrados: ${dadosSetores.length}`);
+
+    // Se setorId específico foi fornecido, filtra apenas esse setor
+    const setoresParaAnalisar = setorId 
+      ? dadosSetores.filter(s => s.id === setorId)
+      : dadosSetores;
+
+    if (setoresParaAnalisar.length === 0) {
+      throw new Error('Nenhum setor encontrado para análise');
+    }
+
+    const sugestoes = [];
+    const fasesAnalisadas = new Set<string>();
+
+    // Analisa cada setor
+    for (const dadosSetor of setoresParaAnalisar) {
+      console.log(`\n=== Analisando setor: ${dadosSetor.nome} ===`);
+
+      // Calcula fase atual do setor
+      const faseCalculada = calcularFaseSetor(dadosSetor.dataPoda);
+      const faseAtual = faseCalculada?.faseAtual || null;
+      const diasAposPoda = faseCalculada?.diasAposPoda || 0;
+
+      if (!faseAtual) {
+        console.log(`Setor ${dadosSetor.nome} sem data de poda - pulando`);
+        continue;
+      }
+
+      console.log(`Fase atual: ${faseAtual} (${diasAposPoda} dias após poda)`);
+
+      // Busca padrões globais para esta fase fenológica
+      const historicoGlobal = await this.aiSuggestionRepository.buscarPadroesGlobaisPorFase(
+        fazendaId,
+        faseAtual,
+        dataInicioFinal,
+        dataFimFinal
+      );
+
+      console.log(`Aplicações globais encontradas para fase ${faseAtual}: ${historicoGlobal.length}`);
+
+      if (historicoGlobal.length < 5) {
+        console.log(`Poucos dados globais para fase ${faseAtual} - usando padrões individuais`);
+        
+        // Fallback para análise individual
+        const historicoComFases = await this.calcularFasesRetroativas(dadosSetor);
+        const padroes = await this.aiSuggestionService.analisarPadroesAplicacoes(historicoComFases);
+        const resultado = await this.aiSuggestionService.gerarSugestoes(dadosSetor, padroes);
+        
+        sugestoes.push({
+          setorId: dadosSetor.id,
+          setorNome: dadosSetor.nome,
+          faseAtual,
+          diasAposPoda,
+          sugestaoFertirrigacao: resultado.sugestaoFertirrigacao,
+          sugestaoPulverizacao: resultado.sugestaoPulverizacao,
+          confiabilidadeGeral: this.calcularConfiabilidadeGeral(resultado.sugestaoFertirrigacao, resultado.sugestaoPulverizacao)
+        });
+      } else {
+        // Usa padrões globais
+        const padroesGlobais = await this.aiSuggestionService.analisarPadroesGlobais(historicoGlobal, faseAtual);
+        
+        // Gera sugestões baseadas nos padrões globais
+        const resultado = await this.gerarSugestoesComPadroesGlobais(dadosSetor, padroesGlobais, faseAtual);
+        
+        sugestoes.push({
+          setorId: dadosSetor.id,
+          setorNome: dadosSetor.nome,
+          faseAtual,
+          diasAposPoda,
+          sugestaoFertirrigacao: resultado.sugestaoFertirrigacao,
+          sugestaoPulverizacao: resultado.sugestaoPulverizacao,
+          confiabilidadeGeral: resultado.confiabilidadeGeral
+        });
+
+        fasesAnalisadas.add(faseAtual);
+      }
+    }
+
+    // Calcula estatísticas
+    const estatisticas = this.calcularEstatisticas(sugestoes);
+
+    console.log(`\n=== Análise Global Concluída ===`);
+    console.log(`Total de setores: ${setoresParaAnalisar.length}`);
+    console.log(`Setores com sugestões: ${sugestoes.length}`);
+    console.log(`Fases analisadas: ${Array.from(fasesAnalisadas).join(', ')}`);
+
+    return {
+      sugestoes,
+      estatisticas
+    };
+  }
+
+  /**
+   * Gera sugestões usando padrões globais
+   */
+  private async gerarSugestoesComPadroesGlobais(
+    dadosSetor: DadosSetor,
+    padroesGlobais: Map<string, any>,
+    faseAtual: string
+  ): Promise<{
+    sugestaoFertirrigacao: any;
+    sugestaoPulverizacao: any;
+    confiabilidadeGeral: number;
+  }> {
+    console.log(`Gerando sugestões com padrões globais para fase: ${faseAtual}`);
+
+    const sugestaoFertirrigacao = this.gerarSugestaoFertirrigacaoGlobal(dadosSetor, padroesGlobais, faseAtual);
+    const sugestaoPulverizacao = this.gerarSugestaoPulverizacaoGlobal(dadosSetor, padroesGlobais, faseAtual);
+
+    const confiabilidadeGeral = this.calcularConfiabilidadeGeral(sugestaoFertirrigacao, sugestaoPulverizacao);
+
+    return {
+      sugestaoFertirrigacao,
+      sugestaoPulverizacao,
+      confiabilidadeGeral
+    };
+  }
+
+  /**
+   * Gera sugestão de fertirrigação baseada em padrões globais
+   */
+  private gerarSugestaoFertirrigacaoGlobal(
+    dadosSetor: DadosSetor,
+    padroesGlobais: Map<string, any>,
+    faseAtual: string
+  ): any {
+    const padraoFertirrigacao = padroesGlobais.get(`${faseAtual}-fertirrigacao`);
+    
+    if (!padraoFertirrigacao) {
+      console.log(`Nenhum padrão global de fertirrigação para fase ${faseAtual}`);
+      return null;
+    }
+
+    console.log(`Usando padrão global de fertirrigação: ${padraoFertirrigacao.produtos.length} produtos`);
+    console.log(`Confiabilidade: ${padraoFertirrigacao.confiabilidade}`);
+    console.log(`Setores analisados: ${padraoFertirrigacao.setoresAnalisados}`);
+
+    // Ajusta quantidades baseadas na área do setor
+    const produtosAjustados = padraoFertirrigacao.produtos.map((produto: any) => ({
+      ...produto,
+      quantidade: this.aplicarVariacao(produto.quantidadeMedia, produto.variacao),
+      observacoes: `Baseado em ${padraoFertirrigacao.totalAplicacoes} aplicações de ${padraoFertirrigacao.setoresAnalisados} setores`
+    }));
+
+    return {
+      id: `fert-global-${Date.now()}`,
+      setorId: dadosSetor.id,
+      faseFenologica: faseAtual,
+      produtos: produtosAjustados,
+      confiabilidade: padraoFertirrigacao.confiabilidade,
+      observacoes: `Sugestão baseada em padrões globais da fazenda (${padraoFertirrigacao.totalAplicacoes} aplicações de ${padraoFertirrigacao.setoresAnalisados} setores)`
+    };
+  }
+
+  /**
+   * Gera sugestão de pulverização baseada em padrões globais
+   */
+  private gerarSugestaoPulverizacaoGlobal(
+    dadosSetor: DadosSetor,
+    padroesGlobais: Map<string, any>,
+    faseAtual: string
+  ): any {
+    const padraoPulverizacao = padroesGlobais.get(`${faseAtual}-pulverizacao`);
+    
+    if (!padraoPulverizacao) {
+      console.log(`Nenhum padrão global de pulverização para fase ${faseAtual}`);
+      return null;
+    }
+
+    console.log(`Usando padrão global de pulverização: ${padraoPulverizacao.produtos.length} produtos`);
+    console.log(`Confiabilidade: ${padraoPulverizacao.confiabilidade}`);
+    console.log(`Setores analisados: ${padraoPulverizacao.setoresAnalisados}`);
+
+    // Ajusta quantidades baseadas na área do setor
+    const produtosAjustados = padraoPulverizacao.produtos.map((produto: any) => ({
+      ...produto,
+      quantidade: this.aplicarVariacao(produto.quantidadeMedia, produto.variacao),
+      observacoes: `Baseado em ${padraoPulverizacao.totalAplicacoes} aplicações de ${padraoPulverizacao.setoresAnalisados} setores`
+    }));
+
+    return {
+      id: `pulv-global-${Date.now()}`,
+      setorId: dadosSetor.id,
+      faseFenologica: faseAtual,
+      produtos: produtosAjustados,
+      volumeCalda: padraoPulverizacao.volumeCalda,
+      confiabilidade: padraoPulverizacao.confiabilidade,
+      observacoes: `Sugestão baseada em padrões globais da fazenda (${padraoPulverizacao.totalAplicacoes} aplicações de ${padraoPulverizacao.setoresAnalisados} setores)`
+    };
+  }
+
+  /**
+   * Aplica variação a uma quantidade baseada na variabilidade do produto
+   */
+  private aplicarVariacao(quantidadeMedia: number, variacao: number): number {
+    const variacaoAplicada = (Math.random() - 0.5) * 2 * variacao * quantidadeMedia;
+    return Math.max(0, quantidadeMedia + variacaoAplicada);
+  }
 }

@@ -81,6 +81,7 @@ import { registerManutencao } from './controllers/trator/register-manutencao'
 import { getRelatorioCustos } from './controllers/trator/get-relatorio-custos'
 import { getRelatorioRentabilidade } from './controllers/relatorios/get-relatorio-rentabilidade'
 import { getSugestoesIA } from './controllers/ai-suggestions/get-sugestoes-ia'
+import { getSugestoesGlobaisIA } from './controllers/ai-suggestions/get-sugestoes-globais-ia'
 import { getPadroesAplicacao } from './controllers/ai-suggestions/get-padroes-aplicacao'
 import { aplicarSugestaoIA } from './controllers/ai-suggestions/aplicar-sugestao-ia'
 import { testAIDebug } from './controllers/ai-suggestions/test-ai-debug'
@@ -287,6 +288,16 @@ export async function estoqueRoutes(app: FastifyInstance) {
     '/ai/sugestoes/:setorId',
     { onRequest: [verifyJWT] },
     getSugestoesIA,
+  )
+  app.get(
+    '/ai/sugestoes-globais',
+    { onRequest: [verifyJWT] },
+    getSugestoesGlobaisIA,
+  )
+  app.get(
+    '/ai/sugestoes-globais/:setorId',
+    { onRequest: [verifyJWT] },
+    getSugestoesGlobaisIA,
   )
   app.get(
     '/ai/padroes-aplicacao',

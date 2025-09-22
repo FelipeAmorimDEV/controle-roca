@@ -144,7 +144,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiO
 
 ### 
 # @name GetSugestoesIAFazenda
-  GET {{baseUrl}}/ai/sugestoes?fazendaId=92b119ab-60b6-4319-b9f2-bcce90c33a9a&setorId=setor-123
+  GET {{baseUrl}}/ai/sugestoes
   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
 
 ### 
@@ -155,6 +155,30 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiO
 ### 
 # @name GetSugestoesIASemParametros
 GET {{baseUrl}}/ai/sugestoes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### ========================================
+### ANÁLISE GLOBAL - PADRÕES DA FAZENDA
+### ========================================
+
+### 
+# @name GetSugestoesGlobaisFazenda
+GET {{baseUrl}}/ai/sugestoes-globais
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name GetSugestoesGlobaisSetorC8
+GET {{baseUrl}}/ai/sugestoes-globais/e4aceef2-47b6-4279-aa1b-1df9eaa8490a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name GetSugestoesGlobaisSetorA4
+GET {{baseUrl}}/ai/sugestoes-globais/0b4c67b3-64fe-4964-bcf7-814972ca4aa4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name GetSugestoesGlobaisComPeriodo
+GET {{baseUrl}}/ai/sugestoes-globais?fazendaId=92b119ab-60b6-4319-b9f2-bcce90c33a9a&dataInicio=2024-01-01&dataFim=2024-12-31
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
 
 ### 

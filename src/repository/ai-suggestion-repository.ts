@@ -15,6 +15,13 @@ export interface AISuggestionRepository {
     dataInicio: Date, 
     dataFim: Date
   ): Promise<DadosSetor[]>;
+  
+  buscarPadroesGlobaisPorFase(
+    fazendaId: string,
+    faseFenologica: string,
+    dataInicio: Date,
+    dataFim: Date
+  ): Promise<HistoricoAplicacao[]>;
 }
 
 export class PrismaAISuggestionRepository implements AISuggestionRepository {
@@ -213,5 +220,135 @@ export class PrismaAISuggestionRepository implements AISuggestionRepository {
     }
 
     return dadosSetores;
+  }
+
+  async buscarPadroesGlobaisPorFase(
+    fazendaId: string,
+    faseFenologica: string,
+    dataInicio: Date,
+    dataFim: Date
+  ): Promise<HistoricoAplicacao[]> {
+    console.log(`Buscando padrões globais para fase: ${faseFenologica} na fazenda: ${fazendaId}`);
+    
+    const historico: HistoricoAplicacao[] = [];
+
+    // Busca aplicações de pulverização de todos os setores da fazenda
+    const aplicacoes = await this.prismaClient.aplicacao.findMany({
+      where: {
+        setor: {
+          fazendaId
+        },
+        createdAt: {
+          gte: dataInicio,
+          lte: dataFim
+        }
+      },
+      include: {
+        setor: true,
+        saidas: {
+          include: {
+            Product: true
+          }
+        }
+      }
+    });
+
+    console.log(`Aplicações de pulverização encontradas: ${aplicacoes.length}`);
+
+    for (const aplicacao of aplicacoes) {
+      let produtosAplicados: any[] = [];
+      
+      try {
+        if (typeof aplicacao.produtosAplicados === 'string') {
+          produtosAplicados = JSON.parse(aplicacao.produtosAplicados);
+        } else if (Array.isArray(aplicacao.produtosAplicados)) {
+          produtosAplicados = aplicacao.produtosAplicados;
+        } else if (aplicacao.produtosAplicados && typeof aplicacao.produtosAplicados === 'object') {
+          produtosAplicados = [aplicacao.produtosAplicados];
+        }
+      } catch (error) {
+        console.warn('Erro ao fazer parse de produtosAplicados:', error);
+        produtosAplicados = [];
+      }
+
+      // Busca nomes dos produtos no banco
+      const produtosComNomes = await Promise.all(
+        produtosAplicados.map(async (produto: { produto: string; dosagem: number }) => {
+          try {
+            const produtoInfo = await this.prismaClient.product.findUnique({
+              where: { id: produto.produto },
+              select: { name: true, unit: true }
+            });
+            
+            return {
+              produtoId: produto.produto,
+              nome: produtoInfo?.name || produto.produto,
+              quantidade: produto.dosagem,
+              unidade: produtoInfo?.unit || 'L'
+            };
+          } catch (error) {
+            console.warn(`Erro ao buscar produto ${produto.produto}:`, error);
+            return {
+              produtoId: produto.produto,
+              nome: produto.produto,
+              quantidade: produto.dosagem,
+              unidade: 'L'
+            };
+          }
+        })
+      );
+
+      historico.push({
+        id: aplicacao.id,
+        setorId: aplicacao.setorId!,
+        dataAplicacao: aplicacao.createdAt,
+        faseFenologica: faseFenologica, // Usa a fase fornecida
+        tipo: 'pulverizacao',
+        produtos: produtosComNomes,
+        volumeCalda: aplicacao.volumeCalda
+      });
+    }
+
+    // Busca fertirrigações de todos os setores da fazenda
+    const fertirrigacoes = await this.prismaClient.fertirrigacao.findMany({
+      where: {
+        setor: {
+          fazendaId
+        },
+        createdAt: {
+          gte: dataInicio,
+          lte: dataFim
+        }
+      },
+      include: {
+        setor: true,
+        produtos: {
+          include: {
+            produto: true
+          }
+        }
+      }
+    });
+
+    console.log(`Fertirrigações encontradas: ${fertirrigacoes.length}`);
+
+    for (const fertirrigacao of fertirrigacoes) {
+      historico.push({
+        id: fertirrigacao.id,
+        setorId: fertirrigacao.setorId!,
+        dataAplicacao: fertirrigacao.createdAt,
+        faseFenologica: faseFenologica, // Usa a fase fornecida
+        tipo: 'fertirrigacao',
+        produtos: fertirrigacao.produtos.map((produto: { produto_id: string; quantidade: number; produto: { name: string; unit: string } }) => ({
+          produtoId: produto.produto_id,
+          nome: produto.produto.name,
+          quantidade: produto.quantidade,
+          unidade: produto.produto.unit
+        }))
+      });
+    }
+
+    console.log(`Total de aplicações globais para fase ${faseFenologica}: ${historico.length}`);
+    return historico;
   }
 }

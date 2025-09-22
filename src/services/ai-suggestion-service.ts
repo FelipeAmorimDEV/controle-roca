@@ -11,6 +11,7 @@ import { FasePlanta } from '../@types/phases';
 export class AISuggestionService {
   private readonly CICLO_CULTIVO_DAYS = 120; // Média de tempo de cultivo
   private readonly MIN_HISTORICO_APLICACOES = 3; // Mínimo de aplicações para análise confiável
+  private readonly MIN_PADROES_GLOBAIS = 5; // Mínimo de aplicações globais para padrão confiável
 
   /**
    * Calcula a fase fenológica retroativa baseada na data de poda e ciclo de cultivo
@@ -297,5 +298,153 @@ export class AISuggestionService {
       sugestaoPulverizacao,
       padroes
     };
+  }
+
+  /**
+   * Analisa padrões globais de uma fase fenológica específica
+   * Busca aplicações de todos os setores da fazenda na mesma fase
+   */
+  async analisarPadroesGlobais(
+    historicoGlobal: HistoricoAplicacao[],
+    faseFenologica: string
+  ): Promise<Map<string, PadraoAplicacao>> {
+    console.log(`Analisando padrões globais para fase: ${faseFenologica}`);
+    console.log(`Total de aplicações globais: ${historicoGlobal.length}`);
+
+    const padroes = new Map<string, PadraoAplicacao>();
+    
+    // Agrupa aplicações por tipo (pulverização/fertirrigação)
+    const aplicacoesPorTipo = new Map<string, HistoricoAplicacao[]>();
+    
+    historicoGlobal.forEach(aplicacao => {
+      if (!aplicacoesPorTipo.has(aplicacao.tipo)) {
+        aplicacoesPorTipo.set(aplicacao.tipo, []);
+      }
+      aplicacoesPorTipo.get(aplicacao.tipo)!.push(aplicacao);
+    });
+
+    // Analisa padrões para cada tipo
+    for (const [tipo, aplicacoes] of aplicacoesPorTipo) {
+      if (aplicacoes.length < this.MIN_PADROES_GLOBAIS) {
+        console.log(`Poucos padrões globais para ${tipo}: ${aplicacoes.length} (mínimo: ${this.MIN_PADROES_GLOBAIS})`);
+        continue;
+      }
+
+      const chave = `${faseFenologica}-${tipo}`;
+      const padrao = this.calcularPadraoGlobal(aplicacoes, faseFenologica, tipo);
+      padroes.set(chave, padrao);
+    }
+
+    console.log(`Padrões globais encontrados: ${padroes.size}`);
+    return padroes;
+  }
+
+  /**
+   * Calcula padrão global baseado em aplicações de todos os setores
+   */
+  private calcularPadraoGlobal(
+    aplicacoes: HistoricoAplicacao[],
+    faseFenologica: string,
+    tipo: string
+  ): PadraoAplicacao {
+    console.log(`Calculando padrão global para ${faseFenologica}-${tipo} com ${aplicacoes.length} aplicações`);
+
+    // Agrupa produtos por ID
+    const produtosMap = new Map<string, {
+      quantidades: number[],
+      unidades: string[],
+      setores: Set<string>
+    }>();
+
+    aplicacoes.forEach(aplicacao => {
+      aplicacao.produtos.forEach(produto => {
+        if (!produtosMap.has(produto.produtoId)) {
+          produtosMap.set(produto.produtoId, {
+            quantidades: [],
+            unidades: [],
+            setores: new Set()
+          });
+        }
+        
+        const dados = produtosMap.get(produto.produtoId)!;
+        dados.quantidades.push(produto.quantidade);
+        dados.unidades.push(produto.unidade);
+        dados.setores.add(aplicacao.setorId);
+      });
+    });
+
+    // Calcula estatísticas dos produtos
+    const produtos = Array.from(produtosMap.entries()).map(([produtoId, dados]) => {
+      const quantidadeMedia = dados.quantidades.reduce((a, b) => a + b, 0) / dados.quantidades.length;
+      const variacao = this.calcularVariacao(dados.quantidades);
+      
+      return {
+        produtoId,
+        nome: aplicacoes[0].produtos.find(p => p.produtoId === produtoId)?.nome || '',
+        quantidadeMedia,
+        unidade: dados.unidades[0],
+        variacao,
+        frequencia: dados.quantidades.length / aplicacoes.length, // Frequência de uso
+        setoresUsados: dados.setores.size // Quantos setores usam este produto
+      };
+    });
+
+    // Calcula volume médio de calda (se aplicável)
+    const volumesCalda = aplicacoes
+      .filter(a => a.volumeCalda)
+      .map(a => a.volumeCalda!);
+    const volumeCalda = volumesCalda.length > 0 
+      ? volumesCalda.reduce((a, b) => a + b, 0) / volumesCalda.length 
+      : undefined;
+
+    // Calcula variação média dos produtos para confiabilidade
+    const variacoesProdutos = produtos.map(p => p.variacao);
+    const variacaoMedia = variacoesProdutos.length > 0 
+      ? variacoesProdutos.reduce((a, b) => a + b, 0) / variacoesProdutos.length 
+      : 0;
+
+    // Calcula confiabilidade baseada na consistência dos dados globais
+    const confiabilidade = this.calcularConfiabilidadeGlobal(aplicacoes.length, variacaoMedia, produtos);
+
+    return {
+      faseFenologica,
+      tipo,
+      produtos,
+      volumeCalda,
+      confiabilidade,
+      totalAplicacoes: aplicacoes.length,
+      setoresAnalisados: new Set(aplicacoes.map(a => a.setorId)).size
+    };
+  }
+
+  /**
+   * Calcula confiabilidade para padrões globais
+   */
+  private calcularConfiabilidadeGlobal(
+    totalAplicacoes: number, 
+    variacaoMedia: number, 
+    produtos: any[]
+  ): number {
+    let confiabilidade = 0.5; // Base
+
+    // Bonificação por quantidade de aplicações
+    if (totalAplicacoes >= 20) confiabilidade += 0.3;
+    else if (totalAplicacoes >= 10) confiabilidade += 0.2;
+    else if (totalAplicacoes >= 5) confiabilidade += 0.1;
+
+    // Bonificação por consistência (baixa variação)
+    if (variacaoMedia < 0.1) confiabilidade += 0.2;
+    else if (variacaoMedia < 0.2) confiabilidade += 0.1;
+
+    // Bonificação por diversidade de setores
+    const setoresUnicos = new Set(produtos.flatMap(p => p.setoresUsados)).size;
+    if (setoresUnicos >= 5) confiabilidade += 0.2;
+    else if (setoresUnicos >= 3) confiabilidade += 0.1;
+
+    // Bonificação por frequência de uso dos produtos
+    const produtosFrequentes = produtos.filter(p => p.frequencia > 0.7).length;
+    if (produtosFrequentes >= 3) confiabilidade += 0.1;
+
+    return Math.min(1.0, confiabilidade);
   }
 }
