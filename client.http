@@ -134,7 +134,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiZ
 
 ### 
 # @name GetSugestoesIASetor
-GET {{baseUrl}}/ai/sugestoes?setorId=setor-123
+GET {{baseUrl}}/ai/sugestoes?setorId=e4aceef2-47b6-4279-aa1b-1df9eaa8490a
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
 
 ### 
@@ -155,6 +155,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiO
 ### 
 # @name DebugIA
 GET {{baseUrl}}/ai/debug
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name DebugMotivosSugestoes
+GET {{baseUrl}}/ai/debug-motivos
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
 
 
