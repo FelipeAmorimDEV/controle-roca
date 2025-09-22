@@ -33,12 +33,23 @@ export async function testGlobalPatterns(
 
     console.log(`Aplicações globais encontradas: ${historicoGlobal.length}`);
 
+    // Separa por tipo para debug
+    const pulverizacoes = historicoGlobal.filter(h => h.tipo === 'pulverizacao');
+    const fertirrigacoes = historicoGlobal.filter(h => h.tipo === 'fertirrigacao');
+
     return reply.send({
       sucesso: true,
       fazendaId,
       faseFenologica: 'Brotação 1',
       totalAplicacoes: historicoGlobal.length,
-      aplicacoes: historicoGlobal.slice(0, 5), // Primeiras 5 para debug
+      resumo: {
+        pulverizacoes: pulverizacoes.length,
+        fertirrigacoes: fertirrigacoes.length
+      },
+      aplicacoes: {
+        pulverizacoes: pulverizacoes.slice(0, 3), // Primeiras 3 para debug
+        fertirrigacoes: fertirrigacoes.slice(0, 3) // Primeiras 3 para debug
+      },
       metadata: {
         timestamp: new Date().toISOString(),
         periodo: {

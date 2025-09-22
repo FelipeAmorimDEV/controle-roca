@@ -315,7 +315,7 @@ export class PrismaAISuggestionRepository implements AISuggestionRepository {
         setor: {
           fazenda_id: fazendaId
         },
-        createdAt: {
+        created_at: {
           gte: dataInicio,
           lte: dataFim
         }
@@ -335,8 +335,8 @@ export class PrismaAISuggestionRepository implements AISuggestionRepository {
     for (const fertirrigacao of fertirrigacoes) {
       historico.push({
         id: fertirrigacao.id,
-        setorId: fertirrigacao.setorId!,
-        dataAplicacao: fertirrigacao.createdAt,
+        setorId: fertirrigacao.setor_id!,
+        dataAplicacao: fertirrigacao.created_at,
         faseFenologica: faseFenologica, // Usa a fase fornecida
         tipo: 'fertirrigacao',
         produtos: fertirrigacao.produtos.map((produto: { produto_id: string; quantidade: number; produto: { name: string; unit: string } }) => ({
