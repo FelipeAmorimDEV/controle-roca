@@ -182,8 +182,190 @@ GET {{baseUrl}}/ai/sugestoes-globais?fazendaId=92b119ab-60b6-4319-b9f2-bcce90c33
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
 
 ### 
+# @name GetSugestoesGlobaisSetorQuery
+GET {{baseUrl}}/ai/sugestoes-globais?setorId=e4aceef2-47b6-4279-aa1b-1df9eaa8490a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name GetSugestoesGlobaisSemParametros
+GET {{baseUrl}}/ai/sugestoes-globais
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### ========================================
+### TESTES DE COMPARAÇÃO - GLOBAL vs INDIVIDUAL
+### ========================================
+
+### 
+# @name CompararAnaliseGlobalvsIndividual
+# Teste para comparar análise global vs individual para o mesmo setor
+GET {{baseUrl}}/ai/sugestoes-globais/e4aceef2-47b6-4279-aa1b-1df9eaa8490a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name CompararAnaliseIndividual
+# Teste individual para comparação
+GET {{baseUrl}}/ai/sugestoes/e4aceef2-47b6-4279-aa1b-1df9eaa8490a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### ========================================
+### TESTES DE PERFORMANCE - ANÁLISE GLOBAL
+### ========================================
+
+### 
+# @name TestePerformanceGlobalFazenda
+# Teste de performance para análise global de toda a fazenda
+GET {{baseUrl}}/ai/sugestoes-globais
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name TestePerformanceGlobalComPeriodo
+# Teste de performance com período específico
+GET {{baseUrl}}/ai/sugestoes-globais?dataInicio=2024-06-01&dataFim=2024-12-31
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### ========================================
+### TESTES DE ERRO - ANÁLISE GLOBAL
+### ========================================
+
+### 
+# @name TesteErroGlobalSemFazendaId
+# Teste de erro quando fazendaId não é fornecido
+GET {{baseUrl}}/ai/sugestoes-globais?setorId=e4aceef2-47b6-4279-aa1b-1df9eaa8490a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name TesteErroGlobalSetorInexistente
+# Teste de erro quando setor não existe
+GET {{baseUrl}}/ai/sugestoes-globais/00000000-0000-0000-0000-000000000000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name TesteErroGlobalDataInvalida
+# Teste de erro com data inválida
+GET {{baseUrl}}/ai/sugestoes-globais?dataInicio=2024-13-01&dataFim=2024-12-32
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### ========================================
+### TESTES ESPECÍFICOS POR FASE FENOLÓGICA
+### ========================================
+
+### 
+# @name TesteGlobalFaseBrotação
+# Teste para setores na fase de brotação
+GET {{baseUrl}}/ai/sugestoes-globais
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name TesteGlobalFaseFlorada
+# Teste para setores na fase de florada
+GET {{baseUrl}}/ai/sugestoes-globais
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name TesteGlobalFaseAmolecimento
+# Teste para setores na fase de amolecimento
+GET {{baseUrl}}/ai/sugestoes-globais
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### ========================================
+### TESTES DE CONFIABILIDADE - ANÁLISE GLOBAL
+### ========================================
+
+### 
+# @name TesteConfiabilidadeGlobalAlta
+# Teste para setores com muitos dados históricos
+GET {{baseUrl}}/ai/sugestoes-globais
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name TesteConfiabilidadeGlobalBaixa
+# Teste para setores com poucos dados históricos
+GET {{baseUrl}}/ai/sugestoes-globais
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### ========================================
+### TESTES DE INTEGRAÇÃO - ANÁLISE GLOBAL
+### ========================================
+
+### 
+# @name TesteIntegracaoGlobalComPadroes
+# Teste de integração com endpoint de padrões
+GET {{baseUrl}}/ai/padroes-aplicacao
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name TesteIntegracaoGlobalComDebug
+# Teste de integração com endpoint de debug
+GET {{baseUrl}}/ai/debug
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name TesteIntegracaoGlobalComDebugMotivos
+# Teste de integração com endpoint de debug motivos
+GET {{baseUrl}}/ai/debug-motivos
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### ========================================
+### TESTES DE STRESS - ANÁLISE GLOBAL
+### ========================================
+
+### 
+# @name TesteStressGlobalMultiplosSetores
+# Teste de stress com múltiplos setores
+GET {{baseUrl}}/ai/sugestoes-globais
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name TesteStressGlobalPeriodoLongo
+# Teste de stress com período longo
+GET {{baseUrl}}/ai/sugestoes-globais?dataInicio=2023-01-01&dataFim=2024-12-31
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### ========================================
+### TESTES DE VALIDAÇÃO - ANÁLISE GLOBAL
+### ========================================
+
+### 
+# @name ValidarEstruturaRespostaGlobal
+# Validação da estrutura de resposta da análise global
+GET {{baseUrl}}/ai/sugestoes-globais
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name ValidarConfiabilidadeRespostaGlobal
+# Validação da confiabilidade das sugestões globais
+GET {{baseUrl}}/ai/sugestoes-globais
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### ========================================
+### TESTES DE MONITORAMENTO - ANÁLISE GLOBAL
+### ========================================
+
+### 
+# @name MonitorarTempoRespostaGlobal
+# Monitoramento do tempo de resposta da análise global
+GET {{baseUrl}}/ai/sugestoes-globais
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name MonitorarUsoMemoriaGlobal
+# Monitoramento do uso de memória da análise global
+GET {{baseUrl}}/ai/sugestoes-globais
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
 # @name DebugIA
 GET {{baseUrl}}/ai/debug
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### ========================================
+### TESTE DE CORREÇÃO - PADRÕES GLOBAIS
+### ========================================
+
+### 
+# @name TesteGlobalPatterns
+# Teste simples para verificar se a correção do fazenda_id funcionou
+GET {{baseUrl}}/ai/test-global-patterns
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
 
 ### 

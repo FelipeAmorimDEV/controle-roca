@@ -236,7 +236,7 @@ export class PrismaAISuggestionRepository implements AISuggestionRepository {
     const aplicacoes = await this.prismaClient.aplicacao.findMany({
       where: {
         setor: {
-          fazendaId
+          fazenda_id: fazendaId
         },
         createdAt: {
           gte: dataInicio,
@@ -313,7 +313,7 @@ export class PrismaAISuggestionRepository implements AISuggestionRepository {
     const fertirrigacoes = await this.prismaClient.fertirrigacao.findMany({
       where: {
         setor: {
-          fazendaId
+          fazenda_id: fazendaId
         },
         createdAt: {
           gte: dataInicio,
