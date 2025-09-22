@@ -507,4 +507,31 @@ export class GerarSugestoesIAUsecase {
     const variacaoAplicada = (Math.random() - 0.5) * 2 * variacao * quantidadeMedia;
     return Math.max(0, quantidadeMedia + variacaoAplicada);
   }
+
+  /**
+   * Calcula confiabilidade geral baseada nas sugestões de fertirrigação e pulverização
+   */
+  private calcularConfiabilidadeGeral(
+    sugestaoFertirrigacao: any,
+    sugestaoPulverizacao: any
+  ): number {
+    let confiabilidadeTotal = 0;
+    let contador = 0;
+
+    if (sugestaoFertirrigacao && sugestaoFertirrigacao.confiabilidade) {
+      confiabilidadeTotal += sugestaoFertirrigacao.confiabilidade;
+      contador++;
+    }
+
+    if (sugestaoPulverizacao && sugestaoPulverizacao.confiabilidade) {
+      confiabilidadeTotal += sugestaoPulverizacao.confiabilidade;
+      contador++;
+    }
+
+    if (contador === 0) {
+      return 0;
+    }
+
+    return confiabilidadeTotal / contador;
+  }
 }

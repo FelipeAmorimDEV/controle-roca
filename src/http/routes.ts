@@ -88,6 +88,7 @@ import { testAIDebug } from './controllers/ai-suggestions/test-ai-debug'
 import { debugMotivosSugestoes } from './controllers/ai-suggestions/debug-motivos-sugestoes'
 import { debugFasesSetor } from './controllers/ai-suggestions/debug-fases-setor'
 import { testGlobalPatterns } from './controllers/ai-suggestions/test-global-patterns'
+import { testSugestoesGlobais } from './controllers/ai-suggestions/test-sugestoes-globais'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -337,6 +338,13 @@ app.get(
   '/ai/test-global-patterns',
   { onRequest: [verifyJWT] },
   testGlobalPatterns,
+)
+
+// Teste de sugestões globais
+app.get(
+  '/ai/test-sugestoes-globais',
+  { onRequest: [verifyJWT] },
+  testSugestoesGlobais,
 )
 }
 
