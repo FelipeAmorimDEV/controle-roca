@@ -85,6 +85,7 @@ import { getPadroesAplicacao } from './controllers/ai-suggestions/get-padroes-ap
 import { aplicarSugestaoIA } from './controllers/ai-suggestions/aplicar-sugestao-ia'
 import { testAIDebug } from './controllers/ai-suggestions/test-ai-debug'
 import { debugMotivosSugestoes } from './controllers/ai-suggestions/debug-motivos-sugestoes'
+import { debugFasesSetor } from './controllers/ai-suggestions/debug-fases-setor'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -310,6 +311,13 @@ app.get(
   '/ai/debug-motivos',
   { onRequest: [verifyJWT] },
   debugMotivosSugestoes,
+)
+
+// Debug fases de um setor específico
+app.get(
+  '/ai/debug-fases/:setorId',
+  { onRequest: [verifyJWT] },
+  debugFasesSetor,
 )
 }
 

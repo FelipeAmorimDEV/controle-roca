@@ -53,6 +53,12 @@ export class AISuggestionService {
     // Agrupa aplicações por fase fenológica e tipo
     const aplicacoesPorFase = new Map<string, HistoricoAplicacao[]>();
     
+    // Log de aplicações desconhecidas para debug
+    const aplicacoesDesconhecidas = historico.filter(app => app.faseFenologica === 'Desconhecida');
+    if (aplicacoesDesconhecidas.length > 0) {
+      console.log(`Atenção: ${aplicacoesDesconhecidas.length} aplicações ainda estão como 'Desconhecida'`);
+    }
+    
     historico.forEach(aplicacao => {
       const chave = `${aplicacao.faseFenologica}-${aplicacao.tipo}`;
       if (!aplicacoesPorFase.has(chave)) {
