@@ -161,29 +161,27 @@ export class GerarSugestoesIAUsecase {
     if (!dadosSetor.dataPoda) return dadosSetor.historicoAplicacoes;
 
     const historicoComFases = dadosSetor.historicoAplicacoes.map(aplicacao => {
-      // Calcula quantos dias atrás foi a aplicação
-      const diasAtras = Math.floor(
-        (dadosSetor.dataPoda!.getTime() - aplicacao.dataAplicacao.getTime()) / (1000 * 60 * 60 * 24)
+      // Calcula quantos dias após a poda foi a aplicação
+      const diasAposPoda = Math.floor(
+        (aplicacao.dataAplicacao.getTime() - dadosSetor.dataPoda!.getTime()) / (1000 * 60 * 60 * 24)
       );
 
-      // Se a aplicação foi antes da poda atual, calcula fase retroativa
-      if (diasAtras > 0) {
-        const faseRetroativa = this.calcularFaseRetroativa(dadosSetor.dataPoda!, diasAtras);
+      // Se a aplicação foi antes da poda (diasAposPoda < 0), calcula fase retroativa
+      if (diasAposPoda < 0) {
+        const faseRetroativa = this.calcularFaseRetroativa(dadosSetor.dataPoda!, Math.abs(diasAposPoda));
         return {
           ...aplicacao,
           faseFenologica: faseRetroativa || 'Desconhecida'
         };
       }
 
-      // Se a aplicação foi após a poda, calcula fase normal
-      const diasAposPoda = Math.floor(
-        (aplicacao.dataAplicacao.getTime() - dadosSetor.dataPoda!.getTime()) / (1000 * 60 * 60 * 24)
-      );
-
-      const { faseAtual } = calcularFaseSetor(dadosSetor.dataPoda!);
+      // Se a aplicação foi após a poda, calcula fase baseada nos dias após a poda
+      const { obterFaseAtual } = require('../utils/faseCalculator');
+      const fase = obterFaseAtual(diasAposPoda);
+      
       return {
         ...aplicacao,
-        faseFenologica: faseAtual?.nome || 'Desconhecida'
+        faseFenologica: fase?.nome || 'Desconhecida'
       };
     });
 
@@ -192,15 +190,35 @@ export class GerarSugestoesIAUsecase {
 
   /**
    * Calcula fase fenológica retroativa baseada na data de poda e dias atrás
+   * Para aplicações que ocorreram antes da poda atual
    */
   private calcularFaseRetroativa(dataPoda: Date, diasAtras: number): string | null {
-    const diasAposPoda = Math.floor((Date.now() - dataPoda.getTime()) / (1000 * 60 * 60 * 24));
-    const diasRetroativos = diasAposPoda - diasAtras;
+    // Para aplicações que ocorreram antes da poda, precisamos simular
+    // quantos dias após uma poda anterior essa aplicação teria ocorrido
     
-    if (diasRetroativos < 0) return null;
+    const CICLO_CULTIVO_DAYS = 120; // Média de tempo de cultivo
+    
+    // Calcula quantos ciclos completos se passaram
+    const ciclosCompletos = Math.floor(diasAtras / CICLO_CULTIVO_DAYS);
+    
+    if (ciclosCompletos === 0) {
+      // Se foi menos de um ciclo, não conseguimos calcular fase retroativa
+      return null;
+    }
+    
+    // Simula a data de poda anterior
+    const dataPodaAnterior = new Date(dataPoda);
+    dataPodaAnterior.setDate(dataPodaAnterior.getDate() - (ciclosCompletos * CICLO_CULTIVO_DAYS));
+    
+    // Calcula quantos dias após essa poda anterior a aplicação teria ocorrido
+    const diasAposPodaAnterior = diasAtras - (ciclosCompletos * CICLO_CULTIVO_DAYS);
+    
+    if (diasAposPodaAnterior < 0 || diasAposPodaAnterior > 120) {
+      return null; // Fora do ciclo de cultivo
+    }
     
     const { obterFaseAtual } = require('../utils/faseCalculator');
-    const fase = obterFaseAtual(diasRetroativos);
+    const fase = obterFaseAtual(diasAposPodaAnterior);
     
     return fase?.nome || null;
   }
