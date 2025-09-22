@@ -87,18 +87,40 @@ export class PrismaAISuggestionRepository implements AISuggestionRepository {
         produtosAplicados = [];
       }
       
+      // Busca nomes dos produtos no banco
+      const produtosComNomes = await Promise.all(
+        produtosAplicados.map(async (produto: { produto: string; dosagem: number }) => {
+          try {
+            const produtoInfo = await this.prismaClient.product.findUnique({
+              where: { id: produto.produto },
+              select: { name: true, unit: true }
+            });
+            
+            return {
+              produtoId: produto.produto,
+              nome: produtoInfo?.name || produto.produto, // Usa nome do banco ou ID como fallback
+              quantidade: produto.dosagem,
+              unidade: produtoInfo?.unit || 'L' // Usa unidade do banco ou 'L' como fallback
+            };
+          } catch (error) {
+            console.warn(`Erro ao buscar produto ${produto.produto}:`, error);
+            return {
+              produtoId: produto.produto,
+              nome: produto.produto, // Fallback para ID
+              quantidade: produto.dosagem,
+              unidade: 'L'
+            };
+          }
+        })
+      );
+      
       historico.push({
         id: aplicacao.id,
         setorId: aplicacao.setorId!,
         dataAplicacao: aplicacao.createdAt,
         faseFenologica: 'Desconhecida', // Será calculada posteriormente
         tipo: 'pulverizacao',
-        produtos: produtosAplicados.map((produto: { produto: string; dosagem: number }) => ({
-          produtoId: produto.produto,
-          nome: produto.produto, // Nome será buscado do banco se necessário
-          quantidade: produto.dosagem,
-          unidade: 'L' // Assumindo litros para pulverização
-        })),
+        produtos: produtosComNomes,
         volumeCalda: aplicacao.volumeCalda
       });
     }
