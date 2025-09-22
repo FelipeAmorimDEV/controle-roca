@@ -113,8 +113,14 @@ export class AISuggestionService {
         ? volumesCalda.reduce((a, b) => a + b, 0) / volumesCalda.length 
         : undefined;
 
+      // Calcula variação média dos produtos para confiabilidade
+      const variacoesProdutos = produtos.map(p => p.variacao);
+      const variacaoMedia = variacoesProdutos.length > 0 
+        ? variacoesProdutos.reduce((a, b) => a + b, 0) / variacoesProdutos.length 
+        : 0;
+
       // Calcula confiabilidade baseada na consistência dos dados
-      const confiabilidade = this.calcularConfiabilidade(aplicacoes.length, variacao);
+      const confiabilidade = this.calcularConfiabilidade(aplicacoes.length, variacaoMedia);
 
       padroes.set(chave, {
         faseFenologica,
