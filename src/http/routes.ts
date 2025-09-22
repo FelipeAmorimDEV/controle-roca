@@ -283,6 +283,11 @@ export async function estoqueRoutes(app: FastifyInstance) {
     getSugestoesIA,
   )
   app.get(
+    '/ai/sugestoes/:setorId',
+    { onRequest: [verifyJWT] },
+    getSugestoesIA,
+  )
+  app.get(
     '/ai/padroes-aplicacao',
     { onRequest: [verifyJWT] },
     getPadroesAplicacao,

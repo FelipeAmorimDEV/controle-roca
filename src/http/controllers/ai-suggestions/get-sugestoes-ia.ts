@@ -6,10 +6,11 @@ import { prisma } from '../../../prisma';
 
 interface GetSugestoesIAParams {
   setorId?: string;
-  fazendaId?: string;
 }
 
 interface GetSugestoesIAQuery {
+  setorId?: string;
+  fazendaId?: string;
   dataInicio?: string;
   dataFim?: string;
 }
@@ -22,8 +23,20 @@ export async function getSugestoesIA(
   reply: FastifyReply
 ) {
   try {
-    const { setorId, fazendaId } = request.params;
-    const { dataInicio, dataFim } = request.query;
+    const { setorId: setorIdParam } = request.params;
+    const { setorId: setorIdQuery, fazendaId, dataInicio, dataFim } = request.query;
+    
+    // Prioriza setorId do path parameter, depois do query parameter
+    const setorId = setorIdParam || setorIdQuery;
+
+    console.log('Parâmetros recebidos:', {
+      setorIdParam,
+      setorIdQuery,
+      setorIdFinal: setorId,
+      fazendaId,
+      dataInicio,
+      dataFim
+    });
 
     // Extrai fazendaId do token JWT se não fornecida como parâmetro
     let fazendaIdFinal = fazendaId;

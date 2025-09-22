@@ -51,10 +51,16 @@ export async function debugMotivosSugestoes(
         let faseAtual = null;
         let diasAposPoda = 0;
         if (dadosSetor.dataPoda) {
-          const { calcularFaseSetor } = require('../../utils/faseCalculator');
-          const { faseAtual: fase, diasAposPoda: dias } = calcularFaseSetor(dadosSetor.dataPoda);
-          faseAtual = fase?.nome || null;
-          diasAposPoda = dias;
+          try {
+            const { calcularFaseSetor } = require('../../../utils/faseCalculator');
+            const { faseAtual: fase, diasAposPoda: dias } = calcularFaseSetor(dadosSetor.dataPoda);
+            faseAtual = fase?.nome || null;
+            diasAposPoda = dias;
+          } catch (error) {
+            console.error('Erro ao calcular fase:', error);
+            faseAtual = null;
+            diasAposPoda = 0;
+          }
         }
 
         // Conta aplicações por fase e tipo
