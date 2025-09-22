@@ -25,11 +25,18 @@ export async function getSugestoesIA(
     const { setorId, fazendaId } = request.params;
     const { dataInicio, dataFim } = request.query;
 
-    // Validação de parâmetros
-    if (!setorId && !fazendaId) {
-      return reply.status(400).send({
-        error: 'É necessário fornecer setorId ou fazendaId'
-      });
+    // Extrai fazendaId do token JWT se não fornecida como parâmetro
+    let fazendaIdFinal = fazendaId;
+    if (!fazendaId && !setorId) {
+      // Tenta extrair do token JWT
+      const user = (request as any).user;
+      if (user && user.fazenda_id) {
+        fazendaIdFinal = user.fazenda_id;
+      } else {
+        return reply.status(400).send({
+          error: 'É necessário fornecer setorId ou fazendaId, ou estar autenticado com fazenda válida'
+        });
+      }
     }
 
     // Converte datas se fornecidas
@@ -65,7 +72,7 @@ export async function getSugestoesIA(
     // Executa o use case
     const resultado = await gerarSugestoesIAUsecase.execute({
       setorId,
-      fazendaId,
+      fazendaId: fazendaIdFinal,
       dataInicio: dataInicioDate,
       dataFim: dataFimDate
     });

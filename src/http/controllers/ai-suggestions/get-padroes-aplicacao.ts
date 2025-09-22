@@ -5,7 +5,7 @@ import { prisma } from '../../../prisma';
 import { calcularFaseSetor } from '../../../utils/faseCalculator';
 
 interface GetPadroesAplicacaoQuery {
-  fazendaId: string;
+  fazendaId?: string;
   dataInicio?: string;
   dataFim?: string;
 }
@@ -19,10 +19,18 @@ export async function getPadroesAplicacao(
   try {
     const { fazendaId, dataInicio, dataFim } = request.query;
 
+    // Extrai fazendaId do token JWT se não fornecida como parâmetro
+    let fazendaIdFinal = fazendaId;
     if (!fazendaId) {
-      return reply.status(400).send({
-        error: 'fazendaId é obrigatório'
-      });
+      // Tenta extrair do token JWT
+      const user = (request as any).user;
+      if (user && user.fazenda_id) {
+        fazendaIdFinal = user.fazenda_id;
+      } else {
+        return reply.status(400).send({
+          error: 'fazendaId é obrigatório ou é necessário estar autenticado com fazenda válida'
+        });
+      }
     }
 
     // Converte datas se fornecidas
@@ -57,7 +65,7 @@ export async function getPadroesAplicacao(
 
     // Busca dados de todos os setores da fazenda
     const dadosSetores = await aiSuggestionRepository.buscarHistoricoCompletoFazenda(
-      fazendaId,
+      fazendaIdFinal,
       dataInicioFinal,
       dataFimFinal
     );

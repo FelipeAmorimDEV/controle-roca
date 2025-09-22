@@ -127,3 +127,147 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiZ
 
 
 // PUT /tratores/:tratarId/horas
+
+### ===========================================
+### SISTEMA DE IA - SUGESTÕES DE APLICAÇÃO
+### ===========================================
+
+### 
+# @name GetSugestoesIASetor
+GET {{baseUrl}}/ai/sugestoes?setorId=setor-123
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name GetSugestoesIAFazenda
+  GET {{baseUrl}}/ai/sugestoes?fazendaId=92b119ab-60b6-4319-b9f2-bcce90c33a9a&setorId=setor-123
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name GetSugestoesIAComPeriodo
+GET {{baseUrl}}/ai/sugestoes?fazendaId=92b119ab-60b6-4319-b9f2-bcce90c33a9a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name GetSugestoesIASemParametros
+GET {{baseUrl}}/ai/sugestoes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+
+### 
+# @name GetPadroesAplicacao
+GET {{baseUrl}}/ai/padroes-aplicacao?fazendaId=e3a58212-de11-4142-945c-e0d8384efa3e
+
+### 
+# @name GetPadroesAplicacaoSemParametros
+GET {{baseUrl}}/ai/padroes-aplicacao
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiOTJiMTE5YWItNjBiNi00MzE5LWI5ZjItYmNjZTkwYzMzYTlhIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6IjllYTcyZGYwLTgxMTAtNDQwZS1iZDM5LTE0NjEzZTI5ZjdlNyIsImlhdCI6MTc1ODQ5NzkxMn0.aIDuBcZBObKHe0zzEai85R84dcVXu3vzn7fgJT9aN60
+
+### 
+# @name GetPadroesAplicacaoComPeriodo
+GET {{baseUrl}}/ai/padroes-aplicacao?fazendaId=e3a58212-de11-4142-945c-e0d8384efa3e&dataInicio=2024-01-01&dataFim=2024-12-31
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiZTNhNTgyMTItZGUxMS00MTQyLTk0NWMtZTBkODM4NGVmYTNlIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6ImM3ZWNlMDRmLTBlYzItNDFkNS04ZTdiLTcxN2Y4N2I4YTQ3NCIsImlhdCI6MTc1NzEwNjY3OH0.haonTXGmCMSDAOnG2-2a8-P_9LByHGVmHVfqCRRDmqI
+
+### 
+# @name AplicarSugestaoFertirrigacao
+POST {{baseUrl}}/ai/sugestoes/setor-123/aplicar
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiZTNhNTgyMTItZGUxMS00MTQyLTk0NWMtZTBkODM4NGVmYTNlIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6ImM3ZWNlMDRmLTBlYzItNDFkNS04ZTdiLTcxN2Y4N2I4YTQ3NCIsImlhdCI6MTc1NzEwNjY3OH0.haonTXGmCMSDAOnG2-2a8-P_9LByHGVmHVfqCRRDmqI
+Content-Type: application/json
+
+{
+  "tipo": "fertirrigacao",
+  "sugestaoId": "fert-1234567890",
+  "observacoes": "Aplicação baseada em sugestão de IA - Brotação 2"
+}
+
+### 
+# @name AplicarSugestaoPulverizacao
+POST {{baseUrl}}/ai/sugestoes/setor-124/aplicar
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiZTNhNTgyMTItZGUxMS00MTQyLTk0NWMtZTBkODM4NGVmYTNlIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6ImM3ZWNlMDRmLTBlYzItNDFkNS04ZTdiLTcxN2Y4N2I4YTQ3NCIsImlhdCI6MTc1NzEwNjY3OH0.haonTXGmCMSDAOnG2-2a8-P_9LByHGVmHVfqCRRDmqI
+Content-Type: application/json
+
+{
+  "tipo": "pulverizacao",
+  "sugestaoId": "pulv-1234567890",
+  "observacoes": "Aplicação preventiva na fase de florada"
+}
+
+### 
+# @name AplicarSugestaoSemObservacoes
+POST {{baseUrl}}/ai/sugestoes/setor-125/aplicar
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiZTNhNTgyMTItZGUxMS00MTQyLTk0NWMtZTBkODM4NGVmYTNlIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6ImM3ZWNlMDRmLTBlYzItNDFkNS04ZTdiLTcxN2Y4N2I4YTQ3NCIsImlhdCI6MTc1NzEwNjY3OH0.haonTXGmCMSDAOnG2-2a8-P_9LByHGVmHVfqCRRDmqI
+Content-Type: application/json
+
+{
+  "tipo": "fertirrigacao",
+  "sugestaoId": "fert-9876543210"
+}
+
+### ===========================================
+### TESTES DE VALIDAÇÃO E ERRO
+### ===========================================
+
+### 
+# @name TesteErroSetorInexistente
+GET {{baseUrl}}/ai/sugestoes?setorId=setor-inexistente
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiZTNhNTgyMTItZGUxMS00MTQyLTk0NWMtZTBkODM4NGVmYTNlIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6ImM3ZWNlMDRmLTBlYzItNDFkNS04ZTdiLTcxN2Y4N2I4YTQ3NCIsImlhdCI6MTc1NzEwNjY3OH0.haonTXGmCMSDAOnG2-2a8-P_9LByHGVmHVfqCRRDmqI
+
+### 
+# @name TesteErroFazendaInexistente
+GET {{baseUrl}}/ai/sugestoes?fazendaId=fazenda-inexistente
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiZTNhNTgyMTItZGUxMS00MTQyLTk0NWMtZTBkODM4NGVmYTNlIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6ImM3ZWNlMDRmLTBlYzItNDFkNS04ZTdiLTcxN2Y4N2I4YTQ3NCIsImlhdCI6MTc1NzEwNjY3OH0.haonTXGmCMSDAOnG2-2a8-P_9LByHGVmHVfqCRRDmqI
+
+### 
+# @name TesteErroSemParametros
+GET {{baseUrl}}/ai/sugestoes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiZTNhNTgyMTItZGUxMS00MTQyLTk0NWMtZTBkODM4NGVmYTNlIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6ImM3ZWNlMDRmLTBlYzItNDFkNS04ZTdiLTcxN2Y4N2I4YTQ3NCIsImlhdCI6MTc1NzEwNjY3OH0.haonTXGmCMSDAOnG2-2a8-P_9LByHGVmHVfqCRRDmqI
+
+### 
+# @name TesteErroDataInvalida
+GET {{baseUrl}}/ai/sugestoes?fazendaId=e3a58212-de11-4142-945c-e0d8384efa3e&dataInicio=2024-13-01&dataFim=2024-12-31
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiZTNhNTgyMTItZGUxMS00MTQyLTk0NWMtZTBkODM4NGVmYTNlIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6ImM3ZWNlMDRmLTBlYzItNDFkNS04ZTdiLTcxN2Y4N2I4YTQ3NCIsImlhdCI6MTc1NzEwNjY3OH0.haonTXGmCMSDAOnG2-2a8-P_9LByHGVmHVfqCRRDmqI
+
+### 
+# @name TesteErroAplicarSugestaoInexistente
+POST {{baseUrl}}/ai/sugestoes/setor-inexistente/aplicar
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiZTNhNTgyMTItZGUxMS00MTQyLTk0NWMtZTBkODM4NGVmYTNlIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6ImM3ZWNlMDRmLTBlYzItNDFkNS04ZTdiLTcxN2Y4N2I4YTQ3NCIsImlhdCI6MTc1NzEwNjY3OH0.haonTXGmCMSDAOnG2-2a8-P_9LByHGVmHVfqCRRDmqI
+Content-Type: application/json
+
+{
+  "tipo": "fertirrigacao",
+  "sugestaoId": "sugestao-inexistente"
+}
+
+### 
+# @name TesteErroTipoInvalido
+POST {{baseUrl}}/ai/sugestoes/setor-123/aplicar
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiZTNhNTgyMTItZGUxMS00MTQyLTk0NWMtZTBkODM4NGVmYTNlIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6ImM3ZWNlMDRmLTBlYzItNDFkNS04ZTdiLTcxN2Y4N2I4YTQ3NCIsImlhdCI6MTc1NzEwNjY3OH0.haonTXGmCMSDAOnG2-2a8-P_9LByHGVmHVfqCRRDmqI
+Content-Type: application/json
+
+{
+  "tipo": "tipo_invalido",
+  "sugestaoId": "fert-1234567890"
+}
+
+### 
+# @name TesteErroSemTipo
+POST {{baseUrl}}/ai/sugestoes/setor-123/aplicar
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiZTNhNTgyMTItZGUxMS00MTQyLTk0NWMtZTBkODM4NGVmYTNlIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6ImM3ZWNlMDRmLTBlYzItNDFkNS04ZTdiLTcxN2Y4N2I4YTQ3NCIsImlhdCI6MTc1NzEwNjY3OH0.haonTXGmCMSDAOnG2-2a8-P_9LByHGVmHVfqCRRDmqI
+Content-Type: application/json
+
+{
+  "sugestaoId": "fert-1234567890"
+}
+
+### ===========================================
+### TESTES DE PERFORMANCE E LIMITES
+### ===========================================
+
+### 
+# @name TesteSugestoesComPeriodoLongo
+GET {{baseUrl}}/ai/sugestoes?fazendaId=e3a58212-de11-4142-945c-e0d8384efa3e&dataInicio=2020-01-01&dataFim=2024-12-31
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiZTNhNTgyMTItZGUxMS00MTQyLTk0NWMtZTBkODM4NGVmYTNlIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6ImM3ZWNlMDRmLTBlYzItNDFkNS04ZTdiLTcxN2Y4N2I4YTQ3NCIsImlhdCI6MTc1NzEwNjY3OH0.haonTXGmCMSDAOnG2-2a8-P_9LByHGVmHVfqCRRDmqI
+
+### 
+# @name TestePadroesComPeriodoLongo
+GET {{baseUrl}}/ai/padroes-aplicacao?fazendaId=e3a58212-de11-4142-945c-e0d8384efa3e&dataInicio=2020-01-01&dataFim=2024-12-31
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYXplbmRhX2lkIjoiZTNhNTgyMTItZGUxMS00MTQyLTk0NWMtZTBkODM4NGVmYTNlIiwiZmF6ZW5kYU5vbWUiOiJGYXplbmRhIE5pY29sZSIsInN1YiI6ImM3ZWNlMDRmLTBlYzItNDFkNS04ZTdiLTcxN2Y4N2I4YTQ3NCIsImlhdCI6MTc1NzEwNjY3OH0.haonTXGmCMSDAOnG2-2a8-P_9LByHGVmHVfqCRRDmqI
