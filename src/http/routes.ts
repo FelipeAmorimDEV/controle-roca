@@ -83,6 +83,7 @@ import { getRelatorioRentabilidade } from './controllers/relatorios/get-relatori
 import { getSugestoesIA } from './controllers/ai-suggestions/get-sugestoes-ia'
 import { getPadroesAplicacao } from './controllers/ai-suggestions/get-padroes-aplicacao'
 import { aplicarSugestaoIA } from './controllers/ai-suggestions/aplicar-sugestao-ia'
+import { testAIDebug } from './controllers/ai-suggestions/test-ai-debug'
 
 export async function estoqueRoutes(app: FastifyInstance) {
   app.post('/products', { onRequest: [verifyJWT] }, createProduct)
@@ -289,6 +290,13 @@ export async function estoqueRoutes(app: FastifyInstance) {
     '/ai/sugestoes/:setorId/aplicar',
     { onRequest: [verifyJWT] },
     aplicarSugestaoIA,
+  )
+  
+  // Debug IA
+  app.get(
+    '/ai/debug',
+    { onRequest: [verifyJWT] },
+    testAIDebug,
   )
 }
 

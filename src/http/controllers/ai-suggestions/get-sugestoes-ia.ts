@@ -69,6 +69,13 @@ export async function getSugestoesIA(
       aiSuggestionRepository
     );
 
+    console.log('Executando use case com parâmetros:', {
+      setorId,
+      fazendaId: fazendaIdFinal,
+      dataInicio: dataInicioDate,
+      dataFim: dataFimDate
+    });
+
     // Executa o use case
     const resultado = await gerarSugestoesIAUsecase.execute({
       setorId,
@@ -77,6 +84,8 @@ export async function getSugestoesIA(
       dataFim: dataFimDate
     });
 
+    console.log('Resultado do use case:', resultado);
+
     return reply.status(200).send({
       success: true,
       data: resultado
@@ -84,6 +93,7 @@ export async function getSugestoesIA(
 
   } catch (error) {
     console.error('Erro ao gerar sugestões de IA:', error);
+    console.error('Stack trace:', error instanceof Error ? error.stack : 'No stack trace');
     return reply.status(500).send({
       error: 'Erro interno do servidor',
       message: error instanceof Error ? error.message : 'Erro desconhecido'

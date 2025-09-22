@@ -25,6 +25,7 @@ export class PrismaAISuggestionRepository implements AISuggestionRepository {
     dataInicio: Date, 
     dataFim: Date
   ): Promise<HistoricoAplicacao[]> {
+    console.log('Buscando histórico de aplicações para setor:', setorId);
     const historico: HistoricoAplicacao[] = [];
 
     // Busca aplicações de pulverização
@@ -44,6 +45,11 @@ export class PrismaAISuggestionRepository implements AISuggestionRepository {
         }
       }
     });
+
+    console.log('Aplicações encontradas:', aplicacoes.length);
+    if (aplicacoes.length > 0) {
+      console.log('Primeira aplicação produtosAplicados:', typeof aplicacoes[0].produtosAplicados, aplicacoes[0].produtosAplicados);
+    }
 
     // Busca fertirrigações
     const fertirrigacoes = await this.prismaClient.fertirrigacao.findMany({
@@ -65,7 +71,21 @@ export class PrismaAISuggestionRepository implements AISuggestionRepository {
 
     // Converte aplicações para formato padronizado
     for (const aplicacao of aplicacoes) {
-      const produtosAplicados = JSON.parse(aplicacao.produtosAplicados as string);
+      let produtosAplicados: any[] = [];
+      
+      try {
+        // Verifica se produtosAplicados é string ou já é objeto
+        if (typeof aplicacao.produtosAplicados === 'string') {
+          produtosAplicados = JSON.parse(aplicacao.produtosAplicados);
+        } else if (Array.isArray(aplicacao.produtosAplicados)) {
+          produtosAplicados = aplicacao.produtosAplicados;
+        } else if (aplicacao.produtosAplicados && typeof aplicacao.produtosAplicados === 'object') {
+          produtosAplicados = [aplicacao.produtosAplicados];
+        }
+      } catch (error) {
+        console.warn('Erro ao fazer parse de produtosAplicados:', error);
+        produtosAplicados = [];
+      }
       
       historico.push({
         id: aplicacao.id,
