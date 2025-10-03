@@ -265,6 +265,7 @@ model Product {
   unit                 String
   price                Float                  @default(0)
   quantity             Float?                 @default(0)
+  carencia Int @default(50)
   saida                Saida[]
   entrada              Entrada[]
   Tipo                 Tipo?                  @relation(fields: [tipoId], references: [id])

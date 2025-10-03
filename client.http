@@ -1,4 +1,4 @@
-@baseUrl = https://qrcode-caixa-api.onrender.com
+@baseUrl = http://localhost:3333
 
 
 
